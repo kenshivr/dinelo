@@ -1,12 +1,8 @@
-import { PageHeader } from "@/components/page-header";
+import { DashView } from "@/components/dash/dash-view";
+import { categorias, medios, movimientos, perfiles } from "@/lib/mock-data";
 
 export default function DashPage() {
   return (
-    <>
-      <PageHeader title="Dashboard" />
-      <div className="nbs mt-4 p-6 text-center text-sm font-extrabold text-muted-foreground">
-        🚧 Próximamente
-      </div>
-    </>
+    <DashView movimientos={movimientos} categorias={categorias} medios={medios} perfiles={perfiles} />
   );
 }

@@ -102,15 +102,6 @@
 }
 
 @layer components {
-  /* fills de bloque: constantes en ambos temas, texto y borde SIEMPRE negros */
-  .f-y { background: #facc15; }
-  .f-p { background: #f9a8d4; }
-  .f-g { background: #bbf7d0; }
-  .f-gg { background: #4ade80; }
-  .f-b { background: #93c5fd; }
-  .f-r { background: #fca5a5; }
-  .f-y, .f-p, .f-g, .f-gg, .f-b, .f-r { color: #111; border-color: #111; }
-
   /* bloque flotante: borde 2px + sombra dura */
   .nbs {
     background: var(--card);
@@ -128,6 +119,124 @@
     place-items: center;
     font-weight: 900;
     font-size: 13px;
+  }
+  .av.sm {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+  .av.big {
+    width: 46px;
+    height: 46px;
+    font-size: 18px;
+  }
+
+  /* tarjeta fila: Cuenta y las tarjetas CRUD de Conf */
+  .crow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+  }
+
+  /* botón mini de fila: ✎ y 🗑 en Historial y Conf */
+  .mini {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--card);
+    box-shadow: 2px 2px 0 var(--sh);
+    flex: none;
+  }
+  .mini svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* input de formulario: diálogos y Login */
+  .finput {
+    padding: 13px 14px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* botón de bloque: diálogos y Login */
+  .btn {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--sh);
+    padding: 14px 0;
+    text-align: center;
+    font-weight: 900;
+    font-size: 15px;
+    background: var(--card);
+  }
+  .btn.sm {
+    padding: 11px 0;
+    font-size: 13.5px;
+  }
+
+  /* molde de todos los diálogos de la app */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  .dialog {
+    width: 100%;
+    max-width: 400px;
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 6px 6px 0 var(--sh);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* segmentado: amarillo = opción activa (mismo patrón que usará Conf → Tema) */
+  .seg {
+    display: flex;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 3px 3px 0 var(--sh);
+  }
+  .seg button {
+    flex: 1;
+    padding: 9px 0;
+    font-size: 12px;
+    font-weight: 800;
+    background: var(--card);
+  }
+  .seg button.on {
+    background: #facc15;
+    color: #111;
+  }
+
+  /* dash: siempre llevan fill de color → borde negro fijo en ambos temas */
+  .stat {
+    border: 2px solid #111;
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--sh);
+    padding: 10px 12px;
+  }
+  .bfill {
+    height: 14px;
+    border: 2px solid #111;
+    border-radius: 6px;
+    box-shadow: 2px 2px 0 var(--sh);
   }
 
   .lbl {
@@ -162,7 +271,9 @@
   }
   .drow.on { background: #facc15; color: #111; }
 
-  /* CTA anclado: full-bleed, sin sombra, alto para no chocar con el círculo del nav */
+  /* CTA anclado: full-bleed, sin sombra, alto para no chocar con el círculo del nav.
+     El margin-bottom negativo anula el pb-11 del main (igual que -mx anula su px)
+     para que el dock siga PEGADO al navbar mientras las vistas sin dock respiran. */
   .dock {
     border: 2px solid var(--border);
     border-bottom: none;
@@ -172,6 +283,7 @@
     font-weight: 900;
     font-size: 16px;
     padding: 15px 0 26px;
+    margin-bottom: -44px;
   }
 
   /* nav inferior: anclado, sin sombra; el círculo amarillo es la tab ACTIVA */
@@ -210,4 +322,42 @@
     box-shadow: 3px 3px 0 var(--sh);
   }
   .nc svg { width: 24px; height: 24px; }
+
+  /* cuadrito identificador de fila: color de categoría o tag G/I */
+  .tag {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #111;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 10.5px;
+    font-weight: 900;
+    flex: none;
+  }
+
+  /* swatch del selector de color (editor de categoría) */
+  .sw2 {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #111;
+    border-radius: 10px;
+    box-shadow: 2px 2px 0 var(--sh);
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 15px;
+  }
+
+  /* fills de bloque: constantes en ambos temas, texto y borde SIEMPRE negros.
+     VAN AL FINAL de la capa a propósito: a igual especificidad gana la última
+     regla, y el fill debe pisar el background de .chip/.dock/.btn/etc. —
+     si se mueven arriba, la selección amarilla y los CTAs de color se apagan. */
+  .f-y { background: #facc15; }
+  .f-p { background: #f9a8d4; }
+  .f-g { background: #bbf7d0; }
+  .f-gg { background: #4ade80; }
+  .f-b { background: #93c5fd; }
+  .f-r { background: #fca5a5; }
+  .f-y, .f-p, .f-g, .f-gg, .f-b, .f-r { color: #111; border-color: #111; }
 }

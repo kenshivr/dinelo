@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 const icons = {
   cuenta: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" />
-      <path d="M9.5 8.5h5M9.5 12h5" />
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M5 20c.8-3.5 3.4-5.4 7-5.4s6.2 1.9 7 5.4" />
     </svg>
   ),
   conf: (
