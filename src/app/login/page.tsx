@@ -1,6 +1,8 @@
-import Link from "next/link";
+import { entrar } from "./acciones";
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: PageProps<"/login">) {
+  const { error } = await searchParams;
+
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-3 px-[18px] pb-[calc(env(safe-area-inset-bottom)+18px)] pt-[calc(env(safe-area-inset-top)+12px)]">
       <div className="mt-11 mb-4 flex flex-col items-center gap-2.5">
@@ -10,27 +12,38 @@ export default function LoginPage() {
         <span className="text-xs font-bold text-muted-foreground">gastos y ahorros, de a dos 💛</span>
       </div>
 
-      <span className="lbl">Correo</span>
-      <input
-        className="nbs finput outline-none"
-        type="email"
-        inputMode="email"
-        autoComplete="email"
-        placeholder="tu@correo.com"
-      />
+      <form action={entrar} className="flex flex-col gap-3">
+        <span className="lbl">Correo</span>
+        <input
+          className="nbs finput outline-none"
+          type="email"
+          name="correo"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="tu@correo.com"
+          required
+        />
 
-      <span className="lbl">Contraseña</span>
-      <input
-        className="nbs finput outline-none"
-        type="password"
-        autoComplete="current-password"
-        placeholder="•••••••••"
-      />
+        <span className="lbl">Contraseña</span>
+        <input
+          className="nbs finput outline-none"
+          type="password"
+          name="contrasena"
+          autoComplete="current-password"
+          placeholder="•••••••••"
+          required
+        />
 
-      {/* fase 2: submit real contra Supabase Auth; por ahora pasa directo a Gastos */}
-      <Link href="/gastos" className="btn f-y mt-2.5">
-        Entrar
-      </Link>
+        {error && (
+          <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+            Correo o contraseña incorrectos
+          </div>
+        )}
+
+        <button type="submit" className="btn f-y mt-2.5">
+          Entrar
+        </button>
+      </form>
 
       <span className="text-center text-xs font-bold text-muted-foreground">
         ¿Olvidaste tu contraseña?

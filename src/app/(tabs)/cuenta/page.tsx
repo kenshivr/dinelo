@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { chevronDer } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { perfiles } from "@/lib/mock-data";
+import { salir } from "./acciones";
 
 export default function CuentaPage() {
   const perfil = perfiles[0]; // fase 2: el usuario logueado
@@ -57,7 +58,9 @@ export default function CuentaPage() {
         {chevronDer}
       </Link>
 
-      <button className="dock -mx-[18px] mt-auto text-negative">Cerrar sesión</button>
+      <form action={salir} className="-mx-[18px] mt-auto">
+        <button className="dock w-full text-negative">Cerrar sesión</button>
+      </form>
     </>
   );
 }
