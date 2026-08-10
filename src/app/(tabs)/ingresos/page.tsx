@@ -1,12 +1,6 @@
-import { PageHeader } from "@/components/page-header";
+import { IngresosForm } from "@/components/ingresos/ingresos-form";
+import { medios, frecuentes } from "@/lib/mock-data";
 
 export default function IngresosPage() {
-  return (
-    <>
-      <PageHeader title="Registrar ingreso" conFecha />
-      <div className="nbs mt-4 p-6 text-center text-sm font-extrabold text-muted-foreground">
-        🚧 Próximamente
-      </div>
-    </>
-  );
+  return <IngresosForm medios={medios} frecuentes={frecuentes.filter((f) => f.tipo === "I")} />;
 }
