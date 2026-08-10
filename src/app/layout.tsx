@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: "DiNelo",
   description: "Gastos e ingresos de B & N",
   applicationName: "DiNelo",
+  appleWebApp: {
+    capable: true,
+    title: "DiNelo",
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {
