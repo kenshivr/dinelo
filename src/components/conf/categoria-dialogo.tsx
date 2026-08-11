@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Dialogo } from "@/components/dialogo";
-import type { Categoria, ColorBloque } from "@/lib/mock-data";
+import type { Categoria, ColorBloque } from "@/lib/tipos";
 
 type Props = {
   categoria: Categoria | null; // null = nueva
-  onGuardar: (categoria: Categoria) => void;
+  onGuardar: (datos: { nombre: string; color: ColorBloque }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
@@ -17,11 +17,18 @@ const COLORES: ColorBloque[] = ["f-p", "f-y", "f-b", "f-gg", "f-r", "f-g"];
 export function CategoriaDialogo({ categoria, onGuardar, onCerrar }: Props) {
   const [nombre, setNombre] = useState(categoria?.nombre ?? "");
   const [color, setColor] = useState<ColorBloque>(categoria?.color ?? "f-y");
+  const [guardando, setGuardando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const listo = nombre.trim() !== "";
 
-  function guardar() {
-    onGuardar({ id: categoria?.id ?? crypto.randomUUID(), nombre: nombre.trim(), color });
+  async function guardar() {
+    setGuardando(true);
+    const e = await onGuardar({ nombre: nombre.trim(), color });
+    if (e) {
+      setError(e);
+      setGuardando(false);
+    }
   }
 
   return (
@@ -43,11 +50,17 @@ export function CategoriaDialogo({ categoria, onGuardar, onCerrar }: Props) {
         ))}
       </div>
 
+      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>
           Cancelar
         </button>
-        <button className="btn sm f-gg flex-1 disabled:opacity-60" disabled={!listo} onClick={guardar}>
+        <button
+          className="btn sm f-gg flex-1 disabled:opacity-60"
+          disabled={!listo || guardando}
+          onClick={guardar}
+        >
           Guardar
         </button>
       </div>

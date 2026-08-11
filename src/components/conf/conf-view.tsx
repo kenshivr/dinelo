@@ -10,12 +10,20 @@ import { ConfirmarBorrado } from "@/components/confirmar-borrado";
 import { CategoriaDialogo } from "@/components/conf/categoria-dialogo";
 import { MedioDialogo } from "@/components/conf/medio-dialogo";
 import { FrecuenteDialogo } from "@/components/conf/frecuente-dialogo";
-import type { Categoria, Frecuente, Medio } from "@/lib/mock-data";
+import {
+  borrarCategoria,
+  borrarFrecuente,
+  borrarMedio,
+  guardarCategoria,
+  guardarFrecuente,
+  guardarMedio,
+} from "@/app/(tabs)/conf/acciones";
+import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
 
 type Props = {
-  categoriasIniciales: Categoria[];
-  mediosIniciales: Medio[];
-  frecuentesIniciales: Frecuente[];
+  categorias: Categoria[];
+  medios: Medio[];
+  frecuentes: Frecuente[];
 };
 
 type Borrando = {
@@ -25,26 +33,26 @@ type Borrando = {
   coleccion: "categorias" | "medios" | "frecuentes";
 };
 
-export function ConfView({ categoriasIniciales, mediosIniciales, frecuentesIniciales }: Props) {
+const ACCION_BORRAR = {
+  categorias: borrarCategoria,
+  medios: borrarMedio,
+  frecuentes: borrarFrecuente,
+} as const;
+
+export function ConfView({ categorias, medios, frecuentes }: Props) {
   const { theme, setTheme } = useTheme();
   const hidratado = useHidratado();
-
-  // fase 2: los cambios van a Supabase; por ahora viven en memoria local
-  const [categorias, setCategorias] = useState(categoriasIniciales);
-  const [medios, setMedios] = useState(mediosIniciales);
-  const [frecuentes, setFrecuentes] = useState(frecuentesIniciales);
 
   const [catDialogo, setCatDialogo] = useState<Categoria | "nueva" | null>(null);
   const [medioDialogo, setMedioDialogo] = useState<Medio | "nuevo" | null>(null);
   const [frecDialogo, setFrecDialogo] = useState<Frecuente | "nuevo" | null>(null);
   const [borrando, setBorrando] = useState<Borrando | null>(null);
 
-  function borrar() {
-    if (!borrando) return;
-    if (borrando.coleccion === "categorias") setCategorias(categorias.filter((c) => c.id !== borrando.id));
-    if (borrando.coleccion === "medios") setMedios(medios.filter((m) => m.id !== borrando.id));
-    if (borrando.coleccion === "frecuentes") setFrecuentes(frecuentes.filter((f) => f.id !== borrando.id));
-    setBorrando(null);
+  async function borrar() {
+    if (!borrando) return null;
+    const error = await ACCION_BORRAR[borrando.coleccion](borrando.id);
+    if (!error) setBorrando(null);
+    return error;
   }
 
   return (
@@ -160,11 +168,12 @@ export function ConfView({ categoriasIniciales, mediosIniciales, frecuentesInici
         <CategoriaDialogo
           key={catDialogo === "nueva" ? "nueva" : catDialogo.id}
           categoria={catDialogo === "nueva" ? null : catDialogo}
-          onGuardar={(cat) => {
-            setCategorias(
-              catDialogo === "nueva" ? [...categorias, cat] : categorias.map((c) => (c.id === cat.id ? cat : c)),
+          onGuardar={async (datos) => {
+            const error = await guardarCategoria(
+              catDialogo === "nueva" ? datos : { ...datos, id: catDialogo.id },
             );
-            setCatDialogo(null);
+            if (!error) setCatDialogo(null);
+            return error;
           }}
           onCerrar={() => setCatDialogo(null)}
         />
@@ -174,11 +183,12 @@ export function ConfView({ categoriasIniciales, mediosIniciales, frecuentesInici
         <MedioDialogo
           key={medioDialogo === "nuevo" ? "nuevo" : medioDialogo.id}
           medio={medioDialogo === "nuevo" ? null : medioDialogo}
-          onGuardar={(medio) => {
-            setMedios(
-              medioDialogo === "nuevo" ? [...medios, medio] : medios.map((m) => (m.id === medio.id ? medio : m)),
+          onGuardar={async (datos) => {
+            const error = await guardarMedio(
+              medioDialogo === "nuevo" ? datos : { ...datos, id: medioDialogo.id },
             );
-            setMedioDialogo(null);
+            if (!error) setMedioDialogo(null);
+            return error;
           }}
           onCerrar={() => setMedioDialogo(null)}
         />
@@ -188,11 +198,12 @@ export function ConfView({ categoriasIniciales, mediosIniciales, frecuentesInici
         <FrecuenteDialogo
           key={frecDialogo === "nuevo" ? "nuevo" : frecDialogo.id}
           frecuente={frecDialogo === "nuevo" ? null : frecDialogo}
-          onGuardar={(frec) => {
-            setFrecuentes(
-              frecDialogo === "nuevo" ? [...frecuentes, frec] : frecuentes.map((f) => (f.id === frec.id ? frec : f)),
+          onGuardar={async (datos) => {
+            const error = await guardarFrecuente(
+              frecDialogo === "nuevo" ? datos : { ...datos, id: frecDialogo.id },
             );
-            setFrecDialogo(null);
+            if (!error) setFrecDialogo(null);
+            return error;
           }}
           onCerrar={() => setFrecDialogo(null)}
         />
