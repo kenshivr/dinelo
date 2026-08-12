@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { conSesion } from "@/lib/supabase/sesion";
 
 // Devuelve el mensaje de error a mostrar, o null si todo salió bien.
@@ -20,5 +21,6 @@ export async function registrarIngreso(datos: {
     fecha: datos.fecha,
   });
   if (error) return "No se pudo registrar. Intenta de nuevo.";
+  revalidatePath("/dash"); // el Dash lee movimientos: sin esto mostraría cache viejo
   return null;
 }

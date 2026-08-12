@@ -1,33 +1,29 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ayerDe, fechaDe, nombreMes, useHoy } from "@/lib/fechas";
+import { diasEnMes, sumarMes } from "@/lib/mes";
 import { capitalizar, fmtMonto } from "@/lib/formato";
 import { PageHeader } from "@/components/page-header";
 import { GraficaPastel, type Rebanada } from "@/components/dash/grafica-pastel";
 import { GraficaDias } from "@/components/dash/grafica-dias";
-import { colorBloque, type Categoria, type ColorBloque, type Medio, type Movimiento, type Perfil } from "@/lib/mock-data";
+import { colorBloque, type Categoria, type ColorBloque, type Medio, type Movimiento, type Perfil } from "@/lib/tipos";
+
+// El Dash solo pinta la identidad del perfil; email y "desde" son de Cuenta
+type PerfilDash = Pick<Perfil, "id" | "nombre" | "inicial" | "color">;
 
 type Props = {
-  movimientos: Movimiento[];
+  mes: string; // yyyy-mm — el server ya trajo SOLO los movimientos de este mes
+  esDefault: boolean; // la URL venía sin ?mes=: el server usó su mes actual (UTC)
+  movimientos: Movimiento[]; // orden: fecha desc, created_at desc
   categorias: Categoria[];
   medios: Medio[];
-  perfiles: Perfil[];
+  perfiles: PerfilDash[];
 };
 
 const formatoCorto = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
-
-function sumarMes(mes: string, delta: number) {
-  const [a, m] = mes.split("-").map(Number);
-  const total = a * 12 + m - 1 + delta;
-  return `${Math.floor(total / 12)}-${String((total % 12) + 1).padStart(2, "0")}`;
-}
-
-function diasEnMes(mes: string) {
-  const [a, m] = mes.split("-").map(Number);
-  return new Date(a, m, 0).getDate();
-}
 
 // La barra más larga ocupa 88% del track, como en el mock
 const ANCHO_BARRA_MAX = 88;
@@ -36,21 +32,27 @@ const ANCHO_BARRA_MAX = 88;
 // pares más distinguibles para daltonismo según el validador de paleta
 const PALETA_CONCEPTOS: ColorBloque[] = ["f-g", "f-b", "f-y", "f-p", "f-gg", "f-r"];
 
-export function DashView({ movimientos, categorias, medios, perfiles }: Props) {
+export function DashView({ mes, esDefault, movimientos, categorias, medios, perfiles }: Props) {
   const hoy = useHoy();
-  const [mesElegido, setMesElegido] = useState("");
+  const router = useRouter();
+  const [cambiando, startTransition] = useTransition();
   const [tipoVista, setTipoVista] = useState<"gasto" | "ingreso">("gasto");
 
-  // arranca en el mes del último movimiento (determinista entre server y cliente);
-  // sin movimientos, cae al mes actual ya hidratado
-  const ultimaFecha = movimientos.reduce((max, m) => (m.fecha > max ? m.fecha : max), "");
-  const mes = mesElegido || ultimaFecha.slice(0, 7) || hoy.slice(0, 7);
+  // El server no conoce la zona horaria del teléfono: si entró sin ?mes= y acá
+  // todavía es el mes anterior (tarde del último día), se corrige solo.
+  const mesCliente = hoy ? hoy.slice(0, 7) : null;
+  useEffect(() => {
+    if (esDefault && mesCliente && mesCliente !== mes) {
+      router.replace(`/dash?mes=${mesCliente}`, { scroll: false });
+    }
+  }, [esDefault, mesCliente, mes, router]);
 
-  if (!mes) return <PageHeader title="Dashboard" ambos />;
+  function irAlMes(nuevo: string) {
+    startTransition(() => router.replace(`/dash?mes=${nuevo}`, { scroll: false }));
+  }
 
-  const delMes = movimientos.filter((m) => m.fecha.startsWith(mes));
-  const gastosMes = delMes.filter((m) => m.tipo === "gasto");
-  const totalIngresos = delMes.filter((m) => m.tipo === "ingreso").reduce((s, m) => s + m.monto, 0);
+  const gastosMes = movimientos.filter((m) => m.tipo === "gasto");
+  const totalIngresos = movimientos.filter((m) => m.tipo === "ingreso").reduce((s, m) => s + m.monto, 0);
   const totalGastos = gastosMes.reduce((s, m) => s + m.monto, 0);
 
   const porCategoria = categorias
@@ -62,10 +64,11 @@ export function DashView({ movimientos, categorias, medios, perfiles }: Props) {
     .sort((a, b) => b.total - a.total);
   const mayor = porCategoria[0]?.total ?? 0;
 
-  const recientes = [...delMes].sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 6);
+  // últimos 8 del mes (decisión 2026-08-12); el detalle completo vive en Historial
+  const recientes = movimientos.slice(0, 8);
 
   const movsDe = (perfilId: string) =>
-    delMes.filter((m) => m.perfilId === perfilId && m.tipo === tipoVista);
+    movimientos.filter((m) => m.perfilId === perfilId && m.tipo === tipoVista);
 
   function rebanadasDe(perfilId: string): Rebanada[] {
     const movs = movsDe(perfilId);
@@ -115,12 +118,21 @@ export function DashView({ movimientos, categorias, medios, perfiles }: Props) {
   const colorTipo = tipoVista === "gasto" ? colorBloque["f-p"] : colorBloque["f-g"];
 
   const selectorMes = (
-    <span className="flex items-baseline gap-1.5 text-xs font-bold text-muted-foreground">
-      <button className="px-1" onClick={() => setMesElegido(sumarMes(mes, -1))}>
+    <span
+      className={cn(
+        "flex items-baseline gap-1.5 text-xs font-bold text-muted-foreground",
+        cambiando && "opacity-50",
+      )}
+    >
+      <button className="px-1" onClick={() => irAlMes(sumarMes(mes, -1))}>
         ‹
       </button>
       <span className="min-w-24 text-center">{labelMes}</span>
-      <button className="px-1" onClick={() => setMesElegido(sumarMes(mes, 1))}>
+      <button
+        className="px-1 disabled:opacity-40"
+        disabled={!mesCliente || mes >= mesCliente}
+        onClick={() => irAlMes(sumarMes(mes, 1))}
+      >
         ›
       </button>
     </span>
@@ -135,7 +147,7 @@ export function DashView({ movimientos, categorias, medios, perfiles }: Props) {
         <Stat titulo="Gastos" monto={totalGastos} color="f-p" />
       </div>
 
-      {delMes.length === 0 ? (
+      {movimientos.length === 0 ? (
         <div className="nbs flex flex-col items-center gap-2 px-4 py-9 text-center">
           <span className="text-[42px]">🌵</span>
           <b className="text-[15px] font-black">Sin movimientos en {nombre}</b>
