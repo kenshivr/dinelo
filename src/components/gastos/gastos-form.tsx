@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { ConceptoCombobox } from "@/components/captura/concepto-combobox";
 import { MontoInput } from "@/components/captura/monto-input";
-import type { Categoria, Frecuente, Medio } from "@/lib/mock-data";
+import { useToast } from "@/components/toast";
+import { registrarGasto } from "@/app/(tabs)/gastos/acciones";
+import { fechaLocal } from "@/lib/fechas";
+import { enumerar } from "@/lib/texto";
+import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
 
 type Props = {
   categorias: Categoria[];
@@ -20,13 +25,36 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
   const [categoriaId, setCategoriaId] = useState<string | null>(null);
   const [medioId, setMedioId] = useState<string | null>(null);
   const [medioAbierto, setMedioAbierto] = useState(false);
+  const [registrando, setRegistrando] = useState(false);
+  const toast = useToast();
 
   const medio = medios.find((m) => m.id === medioId);
-  const listo = concepto.trim() !== "" && monto !== "" && categoriaId !== null && medioId !== null;
 
-  function registrar() {
-    // Fase 2: server action → Supabase. Por ahora solo limpia el formulario.
-    console.log("movimiento", { tipo: "gasto", concepto, monto, categoriaId, medioId });
+  async function registrar() {
+    const faltantes: string[] = [];
+    if (concepto.trim() === "") faltantes.push("el concepto");
+    if (!(Number(monto) > 0)) faltantes.push("el monto");
+    if (categoriaId === null) faltantes.push("la categoría");
+    if (medioId === null) faltantes.push("el medio");
+    if (categoriaId === null || medioId === null || faltantes.length > 0) {
+      toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
+      return;
+    }
+
+    setRegistrando(true);
+    const e = await registrarGasto({
+      concepto: concepto.trim(),
+      monto: Number(monto),
+      categoriaId,
+      medioId,
+      fecha: fechaLocal(new Date()), // la fecha del teléfono, no la del server (UTC)
+    });
+    setRegistrando(false);
+    if (e) {
+      toast(e, "error");
+      return;
+    }
+    toast("¡Gasto registrado!");
     setConcepto("");
     setMonto("");
     setCategoriaId(null);
@@ -47,28 +75,40 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
       <MontoInput value={monto} onChange={setMonto} />
 
       <span className="lbl">Categoría</span>
-      <div className="flex flex-wrap gap-2">
-        {categorias.map((c) => (
-          <button
-            key={c.id}
-            className={cn("chip", categoriaId === c.id && "f-y")}
-            onClick={() => setCategoriaId(c.id)}
-          >
-            {c.nombre}
-          </button>
-        ))}
-      </div>
+      {categorias.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {categorias.map((c) => (
+            <button
+              key={c.id}
+              className={cn("chip", categoriaId === c.id && "f-y")}
+              onClick={() => setCategoriaId(c.id)}
+            >
+              {c.nombre}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <Link href="/conf" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+          Todavía no hay categorías — crealas en Conf →
+        </Link>
+      )}
 
       <span className="lbl">¿De dónde salió?</span>
-      <button
-        className="nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold"
-        onClick={() => setMedioAbierto(!medioAbierto)}
-      >
-        <span className={cn(!medio && "text-muted-foreground")}>
-          {medio ? `${medio.emoji}  ${medio.nombre}` : "Elegí un medio"}
-        </span>
-        {chevron}
-      </button>
+      {medios.length > 0 ? (
+        <button
+          className="nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold"
+          onClick={() => setMedioAbierto(!medioAbierto)}
+        >
+          <span className={cn(!medio && "text-muted-foreground")}>
+            {medio ? `${medio.emoji}  ${medio.nombre}` : "Elegí un medio"}
+          </span>
+          {chevron}
+        </button>
+      ) : (
+        <Link href="/conf" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+          Todavía no hay medios — crealos en Conf →
+        </Link>
+      )}
 
       {medioAbierto && (
         <div className="nbs p-[7px]">
@@ -87,8 +127,12 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
         </div>
       )}
 
-      <button className="dock f-gg -mx-[18px] mt-auto disabled:opacity-60" disabled={!listo} onClick={registrar}>
-        Registrar gasto
+      <button
+        className="dock f-gg -mx-[18px] mt-auto disabled:opacity-60"
+        disabled={registrando}
+        onClick={registrar}
+      >
+        {registrando ? "Registrando…" : "Registrar gasto"}
       </button>
     </>
   );

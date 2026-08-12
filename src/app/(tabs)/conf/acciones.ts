@@ -1,18 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { crearClienteServidor } from "@/lib/supabase/servidor";
+import { conSesion } from "@/lib/supabase/sesion";
 import type { ColorBloque } from "@/lib/tipos";
-
-// Cada action verifica la sesión ADENTRO: son POSTs a su propia ruta,
-// el proxy no alcanza como única guardia.
-async function conSesion() {
-  const supabase = await crearClienteServidor();
-  const { data } = await supabase.auth.getUser();
-  if (!data.user) redirect("/login");
-  return { supabase, userId: data.user.id };
-}
 
 // Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";

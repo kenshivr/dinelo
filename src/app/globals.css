@@ -349,6 +349,25 @@
     font-size: 15px;
   }
 
+  /* aviso flotante: siempre lleva fill f-* (verde éxito / rojo error) → borde
+     negro fijo como .stat; z sobre el overlay de los diálogos (50) */
+  .toast {
+    border: 2px solid #111;
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--sh);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+    animation: toast-in 0.18s ease-out;
+  }
+  @keyframes toast-in {
+    from {
+      translate: 0 -14px;
+      opacity: 0;
+    }
+  }
+
   /* fills de bloque: constantes en ambos temas, texto y borde SIEMPRE negros.
      VAN AL FINAL de la capa a propósito: a igual especificidad gana la última
      regla, y el fill debe pisar el background de .chip/.dock/.btn/etc. —
