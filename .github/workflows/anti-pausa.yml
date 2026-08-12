@@ -1,0 +1,23 @@
+# Supabase free PAUSA el proyecto tras ~7 días sin actividad en la API.
+# Dos pings por semana (lunes y jueves) = actividad garantizada con margen:
+# un solo ping semanal queda justo en el borde si una corrida falla o se atrasa.
+name: anti-pausa
+
+on:
+  schedule:
+    - cron: "0 12 * * 1,4" # lunes y jueves, 12:00 UTC
+  workflow_dispatch: # botón "Run workflow" para probarlo a mano
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping a Supabase
+        # Query real a la base (RLS devuelve [] al rol anon — no importa, cuenta
+        # como actividad). --fail hace tronar el job si la respuesta no es 2xx,
+        # y GitHub avisa por correo cuando un workflow programado falla.
+        run: |
+          curl --fail --silent --show-error \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/categorias?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
