@@ -21,3 +21,24 @@ jobs:
             "${{ secrets.SUPABASE_URL }}/rest/v1/categorias?select=id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+
+  # En repos PÚBLICOS, GitHub desactiva los schedules tras 60 días sin actividad.
+  # Este job cuida al propio workflow: si el repo lleva 50+ días quieto (app
+  # terminada, sin commits), un commit vacío del bot reinicia el contador.
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commit vacío si el repo lleva 50+ días quieto
+        run: |
+          dias=$(( ($(date +%s) - $(git log -1 --format=%ct)) / 86400 ))
+          if [ "$dias" -ge 50 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "chore: keepalive automatico (repo quieto ${dias} dias)"
+            git push
+          else
+            echo "Última actividad hace ${dias} días — no hace falta keepalive"
+          fi

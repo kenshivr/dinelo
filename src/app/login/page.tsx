@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { entrar } from "./acciones";
 
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
@@ -36,7 +37,9 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
         {error && (
           <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
-            Correo o contraseña incorrectos
+            {error === "enlace"
+              ? "El enlace expiró o ya se usó. Pedí otro."
+              : "Correo o contraseña incorrectos"}
           </div>
         )}
 
@@ -45,9 +48,9 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         </button>
       </form>
 
-      <span className="text-center text-xs font-bold text-muted-foreground">
+      <Link href="/recuperar" className="text-center text-xs font-bold text-muted-foreground">
         ¿Olvidaste tu contraseña?
-      </span>
+      </Link>
 
       <span className="mt-auto text-center text-[10.5px] font-bold text-muted-foreground">
         DiNelo v1 · solo para B &amp; N

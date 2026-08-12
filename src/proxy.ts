@@ -32,9 +32,12 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const enLogin = request.nextUrl.pathname.startsWith("/login");
+  const ruta = request.nextUrl.pathname;
+  const enLogin = ruta.startsWith("/login");
+  // recuperar contraseña y el destino de los enlaces de correo van SIN sesión
+  const esPublica = enLogin || ruta.startsWith("/recuperar") || ruta.startsWith("/auth");
 
-  if (!user && !enLogin) {
+  if (!user && !esPublica) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     const redireccion = NextResponse.redirect(url);

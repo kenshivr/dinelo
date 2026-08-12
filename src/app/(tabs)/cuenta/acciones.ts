@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
+import { conSesion } from "@/lib/supabase/sesion";
 
 export async function salir() {
   const supabase = await crearClienteServidor();
@@ -10,4 +11,56 @@ export async function salir() {
 
   revalidatePath("/", "layout");
   redirect("/login");
+}
+
+// Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
+
+export async function cambiarContrasena(nueva: string) {
+  const { supabase } = await conSesion();
+  const { error } = await supabase.auth.updateUser({ password: nueva });
+  if (!error) return null;
+  if (error.code === "same_password") return "La nueva contraseña es igual a la actual.";
+  if (error.code === "weak_password") return "Muy débil: usa al menos 6 caracteres.";
+  return "No se pudo cambiar. Intenta de nuevo.";
+}
+
+// El correo NO cambia de inmediato: Supabase manda enlaces de confirmación
+// (al actual y al nuevo — "secure email change"); null = enlaces enviados.
+export async function cambiarCorreo(nuevo: string) {
+  const { supabase } = await conSesion();
+  const { error } = await supabase.auth.updateUser({ email: nuevo });
+  if (!error) return null;
+  if (error.code === "email_exists") return "Ese correo ya está en uso.";
+  return "No se pudo cambiar. Intenta de nuevo.";
+}
+
+// Recibe la foto YA redimensionada por el teléfono (~15 KB) y la sube con la
+// sesión del server: el cliente browser iba como anon y el RLS lo rechazaba.
+// ?v= rompe el cache al reemplazar la foto (misma URL, contenido nuevo).
+export async function subirAvatar(datos: FormData) {
+  const archivo = datos.get("archivo");
+  if (!(archivo instanceof File)) return "No se pudo leer la foto.";
+
+  const { supabase, userId } = await conSesion();
+  const { error } = await supabase.storage
+    .from("avatares")
+    .upload(`${userId}.jpg`, archivo, { upsert: true, contentType: "image/jpeg" });
+  if (error) {
+    console.error("Storage rechazó la subida:", error);
+    return "No se pudo subir la foto. Intenta de nuevo.";
+  }
+
+  const { data } = supabase.storage.from("avatares").getPublicUrl(`${userId}.jpg`);
+  const { error: errorPerfil } = await supabase
+    .from("profiles")
+    .update({ avatar_url: `${data.publicUrl}?v=${Date.now()}` })
+    .eq("id", userId);
+  if (errorPerfil) {
+    console.error("No se pudo escribir avatar_url:", errorPerfil);
+    return "No se pudo guardar la foto. Intenta de nuevo.";
+  }
+
+  // layout completo: el avatar también vive en el header de TODAS las tabs
+  revalidatePath("/", "layout");
+  return null;
 }

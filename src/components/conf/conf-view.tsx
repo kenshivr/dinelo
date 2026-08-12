@@ -58,7 +58,6 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
   return (
     <>
       <PageHeader
-        sinAvatar
         title="Configuración"
         derecha={<span className="text-xs font-bold text-muted-foreground">categorías compartidas</span>}
       />

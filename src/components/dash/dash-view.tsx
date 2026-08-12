@@ -140,7 +140,7 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, perf
 
   return (
     <>
-      <PageHeader title="Dashboard" ambos derecha={selectorMes} />
+      <PageHeader title="Dashboard" derecha={selectorMes} />
 
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>

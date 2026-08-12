@@ -5,7 +5,6 @@ export default function Cargando() {
   return (
     <>
       <PageHeader
-        sinAvatar
         title="Configuración"
         derecha={<span className="text-xs font-bold text-muted-foreground">categorías compartidas</span>}
       />

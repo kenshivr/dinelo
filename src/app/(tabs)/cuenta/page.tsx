@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { chevronDer } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
+import { MisDatos } from "@/components/cuenta/mis-datos";
+import { CambiarFoto } from "@/components/cuenta/cambiar-foto";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { salir } from "./acciones";
 
@@ -15,7 +17,7 @@ export default async function CuentaPage() {
 
   const { data: perfil } = await supabase
     .from("profiles")
-    .select("nombre, inicial, color, created_at")
+    .select("nombre, inicial, color, avatar_url, created_at")
     .eq("id", auth.user.id)
     .single();
   if (!perfil) redirect("/login"); // sin perfil sembrado no hay cuenta que mostrar
@@ -33,35 +35,23 @@ export default async function CuentaPage() {
       />
 
       <div className="nbs crow px-3.5 py-3">
-        <span className={cn("av big", perfil.color)}>{perfil.inicial}</span>
+        {perfil.avatar_url ? (
+          // eslint-disable-next-line @next/next/no-img-element -- 46px; next/image pide config de dominio remoto
+          <img src={perfil.avatar_url} alt="tu foto" className="av big object-cover" />
+        ) : (
+          <span className={cn("av big", perfil.color)}>{perfil.inicial}</span>
+        )}
         <span className="min-w-0 flex-1">
           <b className="block text-[15.5px] font-black">{perfil.nombre}</b>
           <span className="text-[11px] font-bold text-muted-foreground">
             miembro desde {desde}
           </span>
         </span>
-        <button className="rounded-lg border-2 bg-card px-[11px] py-[7px] text-[11px] font-extrabold shadow-[2px_2px_0_var(--sh)]">
-          📷 Cambiar foto
-        </button>
+        <CambiarFoto />
       </div>
 
       <span className="lbl">Mis datos</span>
-      <button className="nbs crow text-left">
-        <span className="text-[17px]">✉️</span>
-        <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold">Correo</b>
-          <span className="text-[10.5px] font-bold text-muted-foreground">{auth.user.email}</span>
-        </span>
-        {chevronDer}
-      </button>
-      <button className="nbs crow text-left">
-        <span className="text-[17px]">🔒</span>
-        <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold">Contraseña</b>
-          <span className="text-[10.5px] font-bold text-muted-foreground">•••••••••</span>
-        </span>
-        {chevronDer}
-      </button>
+      <MisDatos email={auth.user.email ?? ""} />
 
       <span className="lbl">Movimientos</span>
       <Link href="/cuenta/historial" className="nbs crow">

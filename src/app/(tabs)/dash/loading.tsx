@@ -6,7 +6,6 @@ export default function Cargando() {
     <>
       <PageHeader
         title="Dashboard"
-        ambos
         derecha={<span className="h-4 w-24 animate-pulse rounded bg-muted" />}
       />
       <div className="grid grid-cols-2 gap-2.5">
