@@ -1,12 +1,29 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { chevronDer } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
-import { perfiles } from "@/lib/mock-data";
+import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { salir } from "./acciones";
 
-export default function CuentaPage() {
-  const perfil = perfiles[0]; // fase 2: el usuario logueado
+const formatoDesde = new Intl.DateTimeFormat("es-MX", { month: "short", year: "numeric" });
+
+export default async function CuentaPage() {
+  const supabase = await crearClienteServidor();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) redirect("/login");
+
+  const { data: perfil } = await supabase
+    .from("profiles")
+    .select("nombre, inicial, color, created_at")
+    .eq("id", auth.user.id)
+    .single();
+  if (!perfil) redirect("/login"); // sin perfil sembrado no hay cuenta que mostrar
+
+  const desde = formatoDesde
+    .format(new Date(perfil.created_at))
+    .replaceAll(".", "")
+    .replace(" de ", " ");
 
   return (
     <>
@@ -20,7 +37,7 @@ export default function CuentaPage() {
         <span className="min-w-0 flex-1">
           <b className="block text-[15.5px] font-black">{perfil.nombre}</b>
           <span className="text-[11px] font-bold text-muted-foreground">
-            miembro desde {perfil.desde}
+            miembro desde {desde}
           </span>
         </span>
         <button className="rounded-lg border-2 bg-card px-[11px] py-[7px] text-[11px] font-extrabold shadow-[2px_2px_0_var(--sh)]">
@@ -33,7 +50,7 @@ export default function CuentaPage() {
         <span className="text-[17px]">✉️</span>
         <span className="min-w-0 flex-1">
           <b className="block truncate text-[13px] font-extrabold">Correo</b>
-          <span className="text-[10.5px] font-bold text-muted-foreground">{perfil.email}</span>
+          <span className="text-[10.5px] font-bold text-muted-foreground">{auth.user.email}</span>
         </span>
         {chevronDer}
       </button>

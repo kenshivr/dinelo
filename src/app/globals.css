@@ -368,6 +368,20 @@
     }
   }
 
+  /* esqueleto de carga (loading.tsx): bloque neutro que pulsa mientras el server responde */
+  .ske {
+    background: var(--muted);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--sh);
+    animation: ske-pulso 1.5s ease-in-out infinite;
+  }
+  @keyframes ske-pulso {
+    50% {
+      opacity: 0.55;
+    }
+  }
+
   /* fills de bloque: constantes en ambos temas, texto y borde SIEMPRE negros.
      VAN AL FINAL de la capa a propósito: a igual especificidad gana la última
      regla, y el fill debe pisar el background de .chip/.dock/.btn/etc. —
