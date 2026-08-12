@@ -33,3 +33,26 @@ export type Movimiento = {
   medioId: string;
   fecha: string; // yyyy-mm-dd
 };
+
+// Fila de la tabla movimientos (snake_case) → tipo del dominio
+export function movimientoDeFila(fila: {
+  id: string;
+  user_id: string;
+  tipo: string;
+  concepto: string;
+  monto: number;
+  categoria_id: string | null;
+  medio_id: string;
+  fecha: string;
+}): Movimiento {
+  return {
+    id: fila.id,
+    perfilId: fila.user_id,
+    tipo: fila.tipo as Movimiento["tipo"],
+    concepto: fila.concepto,
+    monto: fila.monto,
+    categoriaId: fila.categoria_id ?? undefined,
+    medioId: fila.medio_id,
+    fecha: fila.fecha,
+  };
+}

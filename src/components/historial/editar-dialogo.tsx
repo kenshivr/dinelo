@@ -4,13 +4,13 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { Dialogo } from "@/components/dialogo";
-import type { Categoria, Medio, Movimiento } from "@/lib/mock-data";
+import type { Categoria, Medio, Movimiento } from "@/lib/tipos";
 
 type Props = {
   movimiento: Movimiento;
   categorias: Categoria[];
   medios: Medio[];
-  onGuardar: (editado: Movimiento) => void;
+  onGuardar: (editado: Movimiento) => Promise<string | null>;
   onCerrar: () => void;
 };
 
@@ -21,6 +21,8 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
   const [medioId, setMedioId] = useState(movimiento.medioId);
   const [medioAbierto, setMedioAbierto] = useState(false);
   const [fecha, setFecha] = useState(movimiento.fecha);
+  const [guardando, setGuardando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const esGasto = movimiento.tipo === "gasto";
   const medio = medios.find((m) => m.id === medioId);
@@ -30,8 +32,9 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
     fecha !== "" &&
     (!esGasto || categoriaId !== null);
 
-  function guardar() {
-    onGuardar({
+  async function guardar() {
+    setGuardando(true);
+    const e = await onGuardar({
       ...movimiento,
       concepto: concepto.trim(),
       monto: Number(monto),
@@ -39,6 +42,10 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
       fecha,
       ...(esGasto && categoriaId ? { categoriaId } : {}),
     });
+    if (e) {
+      setError(e);
+      setGuardando(false);
+    }
   }
 
   return (
@@ -116,11 +123,17 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
         />
       </label>
 
+      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>
           Cancelar
         </button>
-        <button className="btn sm f-gg flex-1 disabled:opacity-60" disabled={!listo} onClick={guardar}>
+        <button
+          className="btn sm f-gg flex-1 disabled:opacity-60"
+          disabled={!listo || guardando}
+          onClick={guardar}
+        >
           Guardar
         </button>
       </div>

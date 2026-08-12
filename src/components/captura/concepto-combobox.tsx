@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
-import type { Frecuente } from "@/lib/mock-data";
+import type { Frecuente } from "@/lib/tipos";
 
 type Props = {
   value: string;

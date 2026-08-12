@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { DashView } from "@/components/dash/dash-view";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { sumarMes } from "@/lib/mes";
-import type { Categoria, Medio, Movimiento } from "@/lib/tipos";
+import { movimientoDeFila, type Categoria, type Medio } from "@/lib/tipos";
 
 export default async function DashPage({ searchParams }: PageProps<"/dash">) {
   const { mes: mesParam } = await searchParams;
@@ -29,22 +29,11 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       .order("created_at", { ascending: false }),
   ]);
 
-  const movimientos: Movimiento[] = (movs.data ?? []).map((m) => ({
-    id: m.id,
-    perfilId: m.user_id,
-    tipo: m.tipo as Movimiento["tipo"],
-    concepto: m.concepto,
-    monto: m.monto,
-    categoriaId: m.categoria_id ?? undefined,
-    medioId: m.medio_id,
-    fecha: m.fecha,
-  }));
-
   return (
     <DashView
       mes={mes}
       esDefault={mesValido === null}
-      movimientos={movimientos}
+      movimientos={(movs.data ?? []).map(movimientoDeFila)}
       categorias={(categorias.data ?? []) as Categoria[]}
       medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
       perfiles={perfiles.data ?? []}

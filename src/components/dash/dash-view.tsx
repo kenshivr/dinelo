@@ -142,6 +142,9 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, perf
     <>
       <PageHeader title="Dashboard" ambos derecha={selectorMes} />
 
+      {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
+      <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
+
       <div className="grid grid-cols-2 gap-2.5">
         <Stat titulo="Ingresos" monto={totalIngresos} color="f-g" />
         <Stat titulo="Gastos" monto={totalGastos} color="f-p" />
@@ -248,6 +251,7 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, perf
           </div>
         </>
       )}
+      </div>
     </>
   );
 }
