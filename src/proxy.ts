@@ -38,6 +38,7 @@ export async function proxy(request: NextRequest) {
   // y la página offline (el navegador los pide sin contexto de app) van SIN sesión
   const esPublica =
     enLogin ||
+    ruta.startsWith("/registro") ||
     ruta.startsWith("/recuperar") ||
     ruta.startsWith("/auth") ||
     ruta.startsWith("/serwist") ||

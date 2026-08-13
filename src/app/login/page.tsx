@@ -51,6 +51,9 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       <Link href="/recuperar" className="text-center text-xs font-bold text-muted-foreground">
         ¿Olvidaste tu contraseña?
       </Link>
+      <Link href="/registro" className="text-center text-xs font-bold text-muted-foreground">
+        ¿No tenés cuenta? <b className="font-black">Registrate</b>
+      </Link>
 
       <span className="mt-auto text-center text-[10.5px] font-bold text-muted-foreground">
         DiNelo v1
