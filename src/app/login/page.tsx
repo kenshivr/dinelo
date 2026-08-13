@@ -38,7 +38,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         {error && (
           <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
             {error === "enlace"
-              ? "El enlace expiró o ya se usó. Pedí otro."
+              ? "El enlace expiró o ya se usó. Pide otro."
               : "Correo o contraseña incorrectos"}
           </div>
         )}
@@ -52,7 +52,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         ¿Olvidaste tu contraseña?
       </Link>
       <Link href="/registro" className="text-center text-xs font-bold text-muted-foreground">
-        ¿No tenés cuenta? <b className="font-black">Registrate</b>
+        ¿No tienes cuenta? <b className="font-black">Regístrate</b>
       </Link>
 
       <span className="mt-auto text-center text-[10.5px] font-bold text-muted-foreground">

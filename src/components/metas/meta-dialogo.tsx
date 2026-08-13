@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { conComas, limpiarMonto } from "@/lib/formato";
 import { Dialogo } from "@/components/dialogo";
 import type { Meta } from "@/lib/tipos";
 
@@ -55,8 +56,8 @@ export function MetaDialogo({ meta, onGuardar, onCerrar }: Props) {
         $
         <input
           className="min-w-0 flex-1 bg-transparent outline-none"
-          value={objetivo}
-          onChange={(e) => setObjetivo(e.target.value.replace(/[^\d.]/g, ""))}
+          value={conComas(objetivo)}
+          onChange={(e) => setObjetivo(limpiarMonto(e.target.value))}
           inputMode="decimal"
           placeholder="0"
         />

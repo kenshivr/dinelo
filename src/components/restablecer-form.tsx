@@ -37,7 +37,7 @@ export function RestablecerForm() {
         autoComplete="new-password"
       />
 
-      <span className="lbl">Repetila</span>
+      <span className="lbl">Repítela</span>
       <input
         className="nbs finput outline-none"
         type="password"

@@ -30,7 +30,7 @@ export function SelectorEmoji({ value, onChange }: Props) {
         {value ? (
           <span className="text-[17px]">{value}</span>
         ) : (
-          <span className="text-sm text-muted-foreground">Elegí un emoji</span>
+          <span className="text-sm text-muted-foreground">Elige un emoji</span>
         )}
         {chevron}
       </button>

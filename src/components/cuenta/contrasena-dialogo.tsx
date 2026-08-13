@@ -37,7 +37,7 @@ export function ContrasenaDialogo({ onGuardar, onCerrar }: Props) {
         autoComplete="new-password"
       />
 
-      <span className="lbl">Repetila</span>
+      <span className="lbl">Repítela</span>
       <input
         className="nbs finput outline-none"
         type="password"

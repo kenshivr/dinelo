@@ -46,7 +46,7 @@ export function MetasView({ metas, aportes, medios }: Props) {
           <span className="text-3xl">🎯</span>
           <b className="text-sm font-extrabold">Todavía no hay metas</b>
           <span className="text-xs font-bold text-muted-foreground">
-            Una meta es un objetivo con monto — creá la primera acá abajo.
+            Una meta es un objetivo con monto — crea la primera aquí abajo.
           </span>
         </div>
       )}

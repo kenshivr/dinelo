@@ -20,10 +20,10 @@ export default async function RegistroPage({
       {enviado ? (
         <div className="nbs flex flex-col items-center gap-2 px-4 py-9 text-center">
           <span className="text-[42px]">💌</span>
-          <b className="text-[15px] font-black">Revisá tu correo</b>
+          <b className="text-[15px] font-black">Revisa tu correo</b>
           <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-            Te mandamos un enlace para confirmar tu cuenta. Abrilo en este mismo
-            teléfono y entrás directo a la app.
+            Te mandamos un enlace para confirmar tu cuenta. Ábrelo en este mismo
+            teléfono y entras directo a la app.
           </span>
         </div>
       ) : (
@@ -33,7 +33,7 @@ export default async function RegistroPage({
             className="nbs finput outline-none"
             name="nombre"
             autoComplete="name"
-            placeholder="¿Cómo te llamás?"
+            placeholder="¿Cómo te llamas?"
             required
           />
 

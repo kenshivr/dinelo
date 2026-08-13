@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
+import { conComas, limpiarMonto } from "@/lib/formato";
 import { Dialogo } from "@/components/dialogo";
 import type { Categoria, Medio, Movimiento } from "@/lib/tipos";
 
@@ -62,8 +63,8 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
         $
         <input
           className="min-w-0 flex-1 bg-transparent outline-none"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value.replace(/[^\d.]/g, ""))}
+          value={conComas(monto)}
+          onChange={(e) => setMonto(limpiarMonto(e.target.value))}
           inputMode="decimal"
         />
       </label>

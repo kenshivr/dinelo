@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
+import { conComas, limpiarMonto } from "@/lib/formato";
 import { Dialogo } from "@/components/dialogo";
 import type { Medio, Meta } from "@/lib/tipos";
 
@@ -41,8 +42,8 @@ export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
         $
         <input
           className="min-w-0 flex-1 bg-transparent outline-none"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value.replace(/[^\d.]/g, ""))}
+          value={conComas(monto)}
+          onChange={(e) => setMonto(limpiarMonto(e.target.value))}
           inputMode="decimal"
           placeholder="0"
         />
@@ -56,7 +57,7 @@ export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
             onClick={() => setMedioAbierto(!medioAbierto)}
           >
             <span className={cn(!medio && "text-muted-foreground")}>
-              {medio ? `${medio.emoji}  ${medio.nombre}` : "Elegí un medio"}
+              {medio ? `${medio.emoji}  ${medio.nombre}` : "Elige un medio"}
             </span>
             {chevron}
           </button>
@@ -79,7 +80,7 @@ export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
         </>
       ) : (
         <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay medios — crealos en Configuración →
+          Todavía no hay medios — créalos en Configuración →
         </Link>
       )}
 

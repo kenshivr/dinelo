@@ -20,10 +20,10 @@ export default async function RecuperarPage({
       {enviado ? (
         <div className="nbs flex flex-col items-center gap-2 px-4 py-9 text-center">
           <span className="text-[42px]">💌</span>
-          <b className="text-[15px] font-black">Revisá tu correo</b>
+          <b className="text-[15px] font-black">Revisa tu correo</b>
           <span className="text-xs font-bold leading-relaxed text-muted-foreground">
             Si la dirección existe, te mandamos un enlace para restablecer tu contraseña.
-            Abrilo en este mismo teléfono y volvés directo a la app.
+            Ábrelo en este mismo teléfono y vuelves directo a la app.
           </span>
         </div>
       ) : (

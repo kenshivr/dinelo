@@ -89,7 +89,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
         </div>
       ) : (
         <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay categorías — crealas en Configuración →
+          Todavía no hay categorías — créalas en Configuración →
         </Link>
       )}
 
@@ -100,13 +100,13 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
           onClick={() => setMedioAbierto(!medioAbierto)}
         >
           <span className={cn(!medio && "text-muted-foreground")}>
-            {medio ? `${medio.emoji}  ${medio.nombre}` : "Elegí un medio"}
+            {medio ? `${medio.emoji}  ${medio.nombre}` : "Elige un medio"}
           </span>
           {chevron}
         </button>
       ) : (
         <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay medios — crealos en Configuración →
+          Todavía no hay medios — créalos en Configuración →
         </Link>
       )}
 

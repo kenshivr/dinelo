@@ -152,7 +152,7 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
           <span className="text-[42px]">🌵</span>
           <b className="text-[15px] font-black">Sin movimientos en {nombre}</b>
           <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-            Cuando registres un gasto o un ingreso, acá aparece la magia: gráficas,
+            Cuando registres un gasto o un ingreso, aquí aparece la magia: gráficas,
             totales y todo el chisme financiero.
           </span>
         </div>

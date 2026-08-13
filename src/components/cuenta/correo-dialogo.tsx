@@ -30,7 +30,7 @@ export function CorreoDialogo({ actual, onGuardar, onCerrar }: Props) {
 
   if (enviado) {
     return (
-      <Dialogo titulo="Revisá tu correo" onCerrar={onCerrar}>
+      <Dialogo titulo="Revisa tu correo" onCerrar={onCerrar}>
         <span className="text-xs font-bold leading-relaxed text-muted-foreground">
           Te mandamos un enlace a <b className="text-foreground">{nuevo}</b> y otro a tu correo
           actual. El cambio se aplica cuando confirmes desde los dos.

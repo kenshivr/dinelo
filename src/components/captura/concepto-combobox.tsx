@@ -43,7 +43,7 @@ export function ConceptoCombobox({ value, onChange, frecuentes, placeholder }: P
             </button>
           ))}
           <button className="drow text-muted-foreground" onClick={() => setAbierto(false)}>
-            ✏️ escribí uno nuevo…
+            ✏️ escribe uno nuevo…
           </button>
         </div>
       )}

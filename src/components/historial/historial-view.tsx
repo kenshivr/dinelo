@@ -127,7 +127,7 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
           <span className="text-[42px]">🧾</span>
           <b className="text-[15px] font-black">Todavía no hay registros</b>
           <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-            Tus gastos e ingresos van a aparecer acá, agrupados por día, listos para editar o
+            Tus gastos e ingresos van a aparecer aquí, agrupados por día, listos para editar o
             borrar si se te fue un dedazo.
           </span>
         </div>

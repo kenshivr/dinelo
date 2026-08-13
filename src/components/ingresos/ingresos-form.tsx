@@ -80,7 +80,7 @@ export function IngresosForm({ medios, frecuentes }: Props) {
         </div>
       ) : (
         <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay medios — crealos en Configuración →
+          Todavía no hay medios — créalos en Configuración →
         </Link>
       )}
 
