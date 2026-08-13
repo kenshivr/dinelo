@@ -34,8 +34,14 @@ export async function proxy(request: NextRequest) {
 
   const ruta = request.nextUrl.pathname;
   const enLogin = ruta.startsWith("/login");
-  // recuperar contraseña y el destino de los enlaces de correo van SIN sesión
-  const esPublica = enLogin || ruta.startsWith("/recuperar") || ruta.startsWith("/auth");
+  // recuperar contraseña, el destino de los enlaces de correo, el service worker
+  // y la página offline (el navegador los pide sin contexto de app) van SIN sesión
+  const esPublica =
+    enLogin ||
+    ruta.startsWith("/recuperar") ||
+    ruta.startsWith("/auth") ||
+    ruta.startsWith("/serwist") ||
+    ruta.startsWith("/~offline");
 
   if (!user && !esPublica) {
     const url = request.nextUrl.clone();

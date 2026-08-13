@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SerwistProvider } from "@serwist/turbopack/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -27,9 +28,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        {/* El SW solo en producción: en dev cachearía de más y el puerto localhost se comparte entre proyectos. */}
+        <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </SerwistProvider>
       </body>
     </html>
   );
