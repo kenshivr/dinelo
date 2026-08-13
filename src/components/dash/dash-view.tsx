@@ -63,8 +63,6 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
   // últimos 8 del mes (decisión 2026-08-12); el detalle completo vive en Historial
   const recientes = movimientos.slice(0, 8);
 
-  const valoresDia = porDia();
-
   const movsDelTipo = movimientos.filter((m) => m.tipo === tipoVista);
 
   function rebanadas(): Rebanada[] {
@@ -94,6 +92,8 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
     for (const m of movsDelTipo) valores[Number(m.fecha.slice(8, 10)) - 1] += m.monto;
     return valores;
   }
+
+  const valoresDia = porDia();
 
   function fechaLabel(fecha: string) {
     if (hoy) {
