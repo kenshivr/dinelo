@@ -88,8 +88,8 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
           ))}
         </div>
       ) : (
-        <Link href="/conf" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay categorías — crealas en Conf →
+        <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+          Todavía no hay categorías — crealas en Configuración →
         </Link>
       )}
 
@@ -105,8 +105,8 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
           {chevron}
         </button>
       ) : (
-        <Link href="/conf" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay medios — crealos en Conf →
+        <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+          Todavía no hay medios — crealos en Configuración →
         </Link>
       )}
 

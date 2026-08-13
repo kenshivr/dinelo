@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DiNelo",
-  description: "Gastos e ingresos de B & N",
+  description: "Gastos, ingresos y metas",
   applicationName: "DiNelo",
   appleWebApp: {
     capable: true,

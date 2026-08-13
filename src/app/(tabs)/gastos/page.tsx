@@ -9,9 +9,14 @@ export default async function GastosPage() {
   if (!auth.user) redirect("/login");
 
   const [categorias, medios, frecuentes] = await Promise.all([
-    supabase.from("categorias").select("id, nombre, color").order("created_at"),
+    supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
     supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
-    supabase.from("frecuentes").select("id, nombre, emoji, tipo").eq("tipo", "G").order("created_at"),
+    supabase
+      .from("frecuentes")
+      .select("id, nombre, emoji, tipo")
+      .eq("user_id", auth.user.id)
+      .eq("tipo", "G")
+      .order("created_at"),
   ]);
 
   return (

@@ -10,12 +10,11 @@ const icons = {
       <path d="M5 20c.8-3.5 3.4-5.4 7-5.4s6.2 1.9 7 5.4" />
     </svg>
   ),
-  conf: (
+  metas: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M4 7h16M4 12h16M4 17h16" />
-      <circle cx="9" cy="7" r="2.2" fill="var(--card)" />
-      <circle cx="15" cy="12" r="2.2" fill="var(--card)" />
-      <circle cx="8" cy="17" r="2.2" fill="var(--card)" />
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
     </svg>
   ),
   dash: (
@@ -39,7 +38,7 @@ const icons = {
 
 const tabs = [
   { href: "/cuenta", label: "Cuenta", icon: icons.cuenta },
-  { href: "/conf", label: "Conf", icon: icons.conf },
+  { href: "/metas", label: "Metas", icon: icons.metas },
   { href: "/dash", label: "Dash", icon: icons.dash },
   { href: "/gastos", label: "Gastos", icon: icons.gastos },
   { href: "/ingresos", label: "Ingresos", icon: icons.ingresos },

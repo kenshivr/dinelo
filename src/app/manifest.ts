@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "DiNelo",
     short_name: "DiNelo",
-    description: "Gastos e ingresos de B & N",
+    description: "Gastos, ingresos y metas",
     start_url: "/gastos",
     display: "standalone",
     background_color: "#f2f1ec",

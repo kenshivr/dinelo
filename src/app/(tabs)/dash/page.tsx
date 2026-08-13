@@ -15,14 +15,14 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
   const mesValido = typeof mesParam === "string" && /^\d{4}-\d{2}$/.test(mesParam) ? mesParam : null;
   const mes = mesValido ?? new Date().toISOString().slice(0, 7);
 
-  const [perfiles, categorias, medios, movs] = await Promise.all([
-    supabase.from("profiles").select("id, nombre, inicial, color").order("created_at"),
-    supabase.from("categorias").select("id, nombre, color").order("created_at"),
-    // de AMBOS: el detalle "categoría · medio" también se pinta en lo del otro
-    supabase.from("medios").select("id, nombre, emoji, tipo"),
+  // App individual (2026-08-13): el Dash es SOLO del logueado — nada del otro.
+  const [categorias, medios, movs] = await Promise.all([
+    supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
+    supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id),
     supabase
       .from("movimientos")
       .select("id, user_id, tipo, concepto, monto, categoria_id, medio_id, fecha")
+      .eq("user_id", auth.user.id)
       .gte("fecha", `${mes}-01`)
       .lt("fecha", `${sumarMes(mes, 1)}-01`)
       .order("fecha", { ascending: false })
@@ -36,7 +36,6 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       movimientos={(movs.data ?? []).map(movimientoDeFila)}
       categorias={(categorias.data ?? []) as Categoria[]}
       medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
-      perfiles={perfiles.data ?? []}
     />
   );
 }

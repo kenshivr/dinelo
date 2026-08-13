@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useHidratado } from "@/lib/use-hidratado";
@@ -17,7 +18,7 @@ import {
   guardarCategoria,
   guardarFrecuente,
   guardarMedio,
-} from "@/app/(tabs)/conf/acciones";
+} from "@/app/(tabs)/cuenta/configuracion/acciones";
 import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
 
 type Props = {
@@ -58,8 +59,8 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
   return (
     <>
       <PageHeader
-        title="Configuración"
-        derecha={<span className="text-xs font-bold text-muted-foreground">categorías compartidas</span>}
+        title={<Link href="/cuenta">‹ Configuración</Link>}
+        derecha={<span className="text-xs font-bold text-muted-foreground">desde Cuenta</span>}
       />
 
       <section className="flex flex-col gap-2.5">
@@ -85,7 +86,7 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
 
       <section className="flex flex-col gap-2.5">
         <span className="lbl flex items-center justify-between">
-          Categorías · compartidas
+          Mis categorías
           <BotonMas onClick={() => setCatDialogo("nueva")} />
         </span>
         {categorias.map((c) => (
@@ -136,7 +137,7 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
 
       <section className="flex flex-col gap-2.5">
         <span className="lbl flex items-center justify-between">
-          Frecuentes · alimentan el desplegable
+          Mis frecuentes · alimentan el desplegable
           <BotonMas onClick={() => setFrecDialogo("nuevo")} />
         </span>
         {frecuentes.map((f) => (

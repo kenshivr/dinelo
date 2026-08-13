@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         <div className="f-y -rotate-2 rounded-2xl border-2 px-6 py-3 text-[32px] font-black tracking-tighter shadow-[5px_5px_0_var(--sh)]">
           DiNelo
         </div>
-        <span className="text-xs font-bold text-muted-foreground">gastos y ahorros, de a dos 💛</span>
+        <span className="text-xs font-bold text-muted-foreground">gastos y ahorros 💛</span>
       </div>
 
       <form action={entrar} className="flex flex-col gap-3">
@@ -53,7 +53,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       </Link>
 
       <span className="mt-auto text-center text-[10.5px] font-bold text-muted-foreground">
-        DiNelo v1 · solo para B &amp; N
+        DiNelo v1
       </span>
     </div>
   );

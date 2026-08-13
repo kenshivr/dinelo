@@ -8,10 +8,11 @@ export default async function ConfPage() {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) redirect("/login");
 
+  // App individual: las 3 listas son MÍAS (categorías y frecuentes migradas 2026-08-13)
   const [categorias, medios, frecuentes] = await Promise.all([
-    supabase.from("categorias").select("id, nombre, color").order("created_at"),
+    supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
     supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
-    supabase.from("frecuentes").select("id, nombre, emoji, tipo").order("created_at"),
+    supabase.from("frecuentes").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
   ]);
 
   return (

@@ -65,6 +65,18 @@ export default async function CuentaPage() {
         {chevronDer}
       </Link>
 
+      <span className="lbl">Ajustes</span>
+      <Link href="/cuenta/configuracion" className="nbs crow">
+        <span className="text-[17px]">⚙️</span>
+        <span className="min-w-0 flex-1">
+          <b className="block truncate text-[13px] font-extrabold">Configuración</b>
+          <span className="text-[10.5px] font-bold text-muted-foreground">
+            categorías, medios, frecuentes y tema
+          </span>
+        </span>
+        {chevronDer}
+      </Link>
+
       <form action={salir} className="-mx-[18px] mt-auto">
         <button className="dock w-full text-negative">Cerrar sesión</button>
       </form>

@@ -22,7 +22,7 @@ export default async function HistorialPage({ searchParams }: PageProps<"/cuenta
       .eq("user_id", auth.user.id)
       .order("fecha", { ascending: true })
       .limit(1),
-    supabase.from("categorias").select("id, nombre, color").order("created_at"),
+    supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
     supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
     supabase
       .from("movimientos")

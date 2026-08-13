@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { fechaDe, useHoy } from "@/lib/fechas";
 import { usePerfiles, type PerfilHeader } from "@/components/perfiles-provider";
@@ -37,7 +38,11 @@ export function PageHeader({ title, conFecha = false, derecha }: Props) {
     <>
       <header className="flex items-center justify-between pt-1">
         <span className="text-[21px] font-black tracking-tighter">DiNelo</span>
-        {mio && <Avatar perfil={mio} />}
+        {mio && (
+          <Link href="/cuenta" aria-label="Tu cuenta">
+            <Avatar perfil={mio} />
+          </Link>
+        )}
       </header>
       <div className="flex items-baseline justify-between">
         <b className="text-lg font-black">{title}</b>

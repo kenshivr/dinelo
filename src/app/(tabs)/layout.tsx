@@ -6,10 +6,11 @@ import { crearClienteServidor } from "@/lib/supabase/servidor";
 export default async function TabsLayout({ children }: { children: React.ReactNode }) {
   const supabase = await crearClienteServidor();
   const { data: auth } = await supabase.auth.getUser();
+  // App individual: solo MI perfil (el header no muestra a nadie más)
   const { data: perfiles } = await supabase
     .from("profiles")
     .select("id, nombre, inicial, color, avatar_url")
-    .order("created_at");
+    .eq("id", auth.user?.id ?? "");
 
   return (
     <ToastProvider>
