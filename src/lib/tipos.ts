@@ -27,7 +27,6 @@ export type Perfil = {
 };
 export type Movimiento = {
   id: string;
-  perfilId: string;
   tipo: "gasto" | "ingreso";
   concepto: string;
   monto: number;
@@ -49,7 +48,6 @@ export function movimientoDeFila(fila: {
 }): Movimiento {
   return {
     id: fila.id,
-    perfilId: fila.user_id,
     tipo: fila.tipo as Movimiento["tipo"],
     concepto: fila.concepto,
     monto: fila.monto,
