@@ -77,6 +77,23 @@ export default async function CuentaPage() {
         {chevronDer}
       </Link>
 
+      {/* solo la cuenta admin (env var, server-only) ve la entrada al informe */}
+      {auth.user.id === process.env.ADMIN_USER_ID && (
+        <>
+          <span className="lbl">Admin</span>
+          <Link href="/cuenta/admin" className="nbs crow">
+            <span className="text-[17px]">📊</span>
+            <span className="min-w-0 flex-1">
+              <b className="block truncate text-[13px] font-extrabold">Informe</b>
+              <span className="text-[10.5px] font-bold text-muted-foreground">
+                cuentas, actividad y uso de la app
+              </span>
+            </span>
+            {chevronDer}
+          </Link>
+        </>
+      )}
+
       {/* contents: el dock debe ser hijo directo del main (flex) para que
           mt-auto y su sticky funcionen; el form no genera caja propia */}
       <form action={salir} className="contents">
