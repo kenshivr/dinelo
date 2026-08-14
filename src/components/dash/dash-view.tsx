@@ -18,6 +18,7 @@ type Props = {
   categorias: Categoria[];
   medios: Medio[];
   previos: { ingresos: number; gastos: number }; // totales del mes anterior, para la comparativa
+  apartadosPendientes: number; // suma de apartados sin pagar hasta el mes visible
 };
 
 const formatoCorto = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
@@ -29,7 +30,7 @@ const ANCHO_BARRA_MAX = 88;
 // pares más distinguibles para daltonismo según el validador de paleta
 const PALETA_CONCEPTOS: ColorBloque[] = ["f-g", "f-b", "f-y", "f-p", "f-gg", "f-r"];
 
-export function DashView({ mes, esDefault, movimientos, categorias, medios, previos }: Props) {
+export function DashView({ mes, esDefault, movimientos, categorias, medios, previos, apartadosPendientes }: Props) {
   const hoy = useHoy();
   const router = useRouter();
   const [cambiando, startTransition] = useTransition();
@@ -160,7 +161,15 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, prev
         </div>
       ) : (
         <>
-          <Restante ingresos={totalIngresos} gastos={totalGastos} />
+          <TileSemaforo titulo="Restante" monto={totalIngresos - totalGastos} ingresos={totalIngresos} />
+          {apartadosPendientes > 0 && (
+            <TileSemaforo
+              titulo="Libre"
+              monto={totalIngresos - totalGastos - apartadosPendientes}
+              ingresos={totalIngresos}
+              pie={`apartados pendientes ${fmtMonto(apartadosPendientes)}`}
+            />
+          )}
 
           <div className="seg">
             <button className={cn(tipoVista === "gasto" && "on")} onClick={() => setTipoVista("gasto")}>
@@ -264,23 +273,24 @@ function Stat({ titulo, monto, color, pie }: { titulo: string; monto: number; co
   );
 }
 
-// Semáforo de lo que queda del mes: ≥70% del ingreso verde fuerte (más que el
-// f-g de Ingresos), 40–69% amarillo, <40% rojo. Sin ingresos cuenta como 0%.
-function Restante({ ingresos, gastos }: { ingresos: number; gastos: number }) {
-  const restante = ingresos - gastos;
-  const pct = ingresos > 0 ? Math.max(0, Math.min(100, Math.round((restante / ingresos) * 100))) : 0;
+// Semáforo del mes: ≥70% del ingreso verde fuerte (más que el f-g de Ingresos),
+// 40–69% amarillo, <40% rojo. Sin ingresos cuenta como 0%. Lo usan Restante
+// (ingresos − gastos reales) y Libre (además descuenta apartados pendientes).
+function TileSemaforo({ titulo, monto, ingresos, pie }: { titulo: string; monto: number; ingresos: number; pie?: string }) {
+  const pct = ingresos > 0 ? Math.max(0, Math.min(100, Math.round((monto / ingresos) * 100))) : 0;
   const color = pct >= 70 ? "f-gg" : pct >= 40 ? "f-y" : "f-r";
 
   return (
     <div className={cn("stat", color)}>
       <div className="flex items-baseline justify-between">
-        <span className="text-[9.5px] font-black uppercase tracking-[0.1em]">Restante</span>
+        <span className="text-[9.5px] font-black uppercase tracking-[0.1em]">{titulo}</span>
         <span className="text-[10px] font-extrabold">{pct}% de tus ingresos</span>
       </div>
-      <div className="mt-0.5 text-[21px] font-black tracking-tight">{fmtMonto(restante)}</div>
+      <div className="mt-0.5 text-[21px] font-black tracking-tight">{fmtMonto(monto)}</div>
       <div className="mt-2 h-3.5 overflow-hidden rounded-full border-2 border-[#111]">
         <div className="h-full bg-[#111]" style={{ width: `${pct}%` }} />
       </div>
+      {pie && <div className="mt-1.5 text-[10px] font-extrabold">{pie}</div>}
     </div>
   );
 }

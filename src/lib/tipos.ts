@@ -29,6 +29,8 @@ export type Categoria = { id: string; nombre: string; color: ColorBloque };
 export type Medio = { id: string; nombre: string; emoji: string; tipo: string };
 export type Frecuente = { id: string; nombre: string; emoji: string; tipo: "G" | "I" };
 export type Meta = { id: string; nombre: string; descripcion: string; objetivo: number };
+// movimientoId null = pendiente; al pagarse se liga con el gasto real creado
+export type Apartado = { id: string; nombre: string; monto: number; mes: string; categoriaId: string | null; movimientoId: string | null };
 export type Aporte = { id: string; metaId: string; medioId: string; monto: number; fecha: string }; // yyyy-mm-dd
 export type Perfil = {
   id: string;

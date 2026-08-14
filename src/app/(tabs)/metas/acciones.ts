@@ -63,3 +63,79 @@ export async function borrarAporte(id: string) {
   revalidatePath("/metas");
   return null;
 }
+
+// ═══ Apartados (tab Control) ═══
+
+export async function guardarApartado(datos: {
+  id?: string;
+  nombre: string;
+  monto: number;
+  mes: string; // yyyy-mm del teléfono
+  categoriaId: string | null;
+}) {
+  const { supabase, userId } = await conSesion();
+  const fila = { nombre: datos.nombre, monto: datos.monto, categoria_id: datos.categoriaId };
+  const { error } = datos.id
+    ? await supabase.from("apartados").update(fila).eq("id", datos.id)
+    : await supabase.from("apartados").insert({ ...fila, mes: datos.mes, user_id: userId });
+  if (error) return NO_GUARDO;
+  revalidatePath("/metas");
+  revalidatePath("/dash");
+  return null;
+}
+
+export async function borrarApartado(id: string) {
+  const { supabase } = await conSesion();
+  const { error } = await supabase.from("apartados").delete().eq("id", id);
+  if (error) return NO_BORRO;
+  revalidatePath("/metas");
+  revalidatePath("/dash");
+  return null;
+}
+
+// "Ya lo pagué": crea el gasto REAL (fecha de hoy, del teléfono) y liga el
+// apartado. Si después borran ese gasto del Historial, el apartado vuelve a
+// pendiente solo (on delete set null en el esquema).
+export async function pagarApartado(datos: {
+  id: string;
+  medioId: string;
+  categoriaId: string;
+  fecha: string;
+}) {
+  const { supabase, userId } = await conSesion();
+  const { data: apartado } = await supabase
+    .from("apartados")
+    .select("nombre, monto, movimiento_id")
+    .eq("id", datos.id)
+    .single();
+  if (!apartado) return NO_GUARDO;
+  if (apartado.movimiento_id) return "Este apartado ya está pagado.";
+
+  const { data: mov, error } = await supabase
+    .from("movimientos")
+    .insert({
+      user_id: userId,
+      tipo: "gasto",
+      concepto: apartado.nombre,
+      monto: apartado.monto,
+      categoria_id: datos.categoriaId,
+      medio_id: datos.medioId,
+      fecha: datos.fecha,
+    })
+    .select("id")
+    .single();
+  if (error || !mov) return NO_GUARDO;
+
+  const { error: liga } = await supabase
+    .from("apartados")
+    .update({ movimiento_id: mov.id, categoria_id: datos.categoriaId })
+    .eq("id", datos.id);
+  // si la liga falla el gasto ya existe: mejor avisar y dejar el apartado
+  // visible (borrarlo a mano) que arriesgar un gasto duplicado reintentando
+  if (liga) return "El gasto se registró, pero el apartado no se pudo marcar — bórralo a mano.";
+
+  revalidatePath("/metas");
+  revalidatePath("/dash");
+  revalidatePath("/cuenta/historial");
+  return null;
+}

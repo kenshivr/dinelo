@@ -38,7 +38,7 @@ const icons = {
 
 const tabs = [
   { href: "/cuenta", label: "Cuenta", icon: icons.cuenta },
-  { href: "/metas", label: "Metas", icon: icons.metas },
+  { href: "/metas", label: "Control", icon: icons.metas }, // la ruta se queda /metas: solo cambió el nombre del tab
   { href: "/dash", label: "Dash", icon: icons.dash },
   { href: "/gastos", label: "Gastos", icon: icons.gastos },
   { href: "/ingresos", label: "Ingresos", icon: icons.ingresos },

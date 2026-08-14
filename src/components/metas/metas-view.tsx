@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { fechaDe, fechaLocal } from "@/lib/fechas";
 import { fmtMonto } from "@/lib/formato";
 import { basurita, lapiz } from "@/components/icons";
-import { PageHeader } from "@/components/page-header";
 import { useToast } from "@/components/toast";
 import { ConfirmarBorrado } from "@/components/confirmar-borrado";
 import { MetaDialogo } from "@/components/metas/meta-dialogo";
@@ -40,11 +39,6 @@ export function MetasView({ metas, aportes, medios }: Props) {
 
   return (
     <>
-      <PageHeader
-        title="Metas"
-        derecha={<span className="text-xs font-bold text-muted-foreground">ahorros con nombre</span>}
-      />
-
       {metas.length === 0 && (
         <div className="nbs flex flex-col items-center gap-1.5 px-5 py-10 text-center">
           <span className="text-3xl">🎯</span>

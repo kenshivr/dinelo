@@ -16,7 +16,7 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
   const mes = mesValido ?? new Date().toISOString().slice(0, 7);
 
   // App individual (2026-08-13): el Dash es SOLO del logueado — nada del otro.
-  const [categorias, medios, movs, movsPrev] = await Promise.all([
+  const [categorias, medios, movs, movsPrev, apartados] = await Promise.all([
     supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
     supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id),
     supabase
@@ -34,6 +34,9 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       .eq("user_id", auth.user.id)
       .gte("fecha", `${sumarMes(mes, -1)}-01`)
       .lt("fecha", `${mes}-01`),
+    // apartados pendientes hasta el mes visible (RLS ya los deja solo míos);
+    // lo no pagado de meses viejos sigue comprometido, por eso lte y no eq
+    supabase.from("apartados").select("monto").is("movimiento_id", null).lte("mes", mes),
   ]);
 
   const filasPrev = movsPrev.data ?? [];
@@ -48,6 +51,7 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       categorias={(categorias.data ?? []) as Categoria[]}
       medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
       previos={{ ingresos: totalPrev("ingreso"), gastos: totalPrev("gasto") }}
+      apartadosPendientes={(apartados.data ?? []).reduce((s, a) => s + a.monto, 0)}
     />
   );
 }
