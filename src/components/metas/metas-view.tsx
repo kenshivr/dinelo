@@ -34,6 +34,10 @@ export function MetasView({ metas, aportes, medios }: Props) {
     return m ? `${m.emoji} ${m.nombre}` : "";
   }
 
+  function juntadoDe(metaId: string) {
+    return aportes.filter((a) => a.metaId === metaId).reduce((suma, a) => suma + a.monto, 0);
+  }
+
   return (
     <>
       <PageHeader
@@ -86,7 +90,7 @@ export function MetasView({ metas, aportes, medios }: Props) {
                 </span>
               </span>
               {cumplida ? (
-                <span className="tag f-gg whitespace-nowrap px-2.5">¡Cumplida! 🎉</span>
+                <span className="chip f-gg">¡Cumplida! 🎉</span>
               ) : (
                 <button
                   className="btn sm f-gg whitespace-nowrap px-4"
@@ -145,6 +149,7 @@ export function MetasView({ metas, aportes, medios }: Props) {
         <AportarDialogo
           key={aportando.id}
           meta={aportando}
+          restante={aportando.objetivo - juntadoDe(aportando.id)}
           medios={medios}
           onAportar={async (datos) => {
             const error = await aportar({

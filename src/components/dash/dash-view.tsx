@@ -17,6 +17,7 @@ type Props = {
   movimientos: Movimiento[]; // orden: fecha desc, created_at desc
   categorias: Categoria[];
   medios: Medio[];
+  previos: { ingresos: number; gastos: number }; // totales del mes anterior, para la comparativa
 };
 
 const formatoCorto = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
@@ -28,7 +29,7 @@ const ANCHO_BARRA_MAX = 88;
 // pares más distinguibles para daltonismo según el validador de paleta
 const PALETA_CONCEPTOS: ColorBloque[] = ["f-g", "f-b", "f-y", "f-p", "f-gg", "f-r"];
 
-export function DashView({ mes, esDefault, movimientos, categorias, medios }: Props) {
+export function DashView({ mes, esDefault, movimientos, categorias, medios, previos }: Props) {
   const hoy = useHoy();
   const router = useRouter();
   const [cambiando, startTransition] = useTransition();
@@ -142,9 +143,10 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
 
+      {/* colores fuera del semáforo del Restante (verde/amarillo/rojo) a propósito */}
       <div className="grid grid-cols-2 gap-2.5">
-        <Stat titulo="Ingresos" monto={totalIngresos} color="f-g" />
-        <Stat titulo="Gastos" monto={totalGastos} color="f-p" />
+        <Stat titulo="Ingresos" monto={totalIngresos} color="f-c" pie={comparativa(totalIngresos, previos.ingresos, mes)} />
+        <Stat titulo="Gastos" monto={totalGastos} color="f-m" pie={comparativa(totalGastos, previos.gastos, mes)} />
       </div>
 
       {movimientos.length === 0 ? (
@@ -158,6 +160,8 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
         </div>
       ) : (
         <>
+          <Restante ingresos={totalIngresos} gastos={totalGastos} />
+
           <div className="seg">
             <button className={cn(tipoVista === "gasto" && "on")} onClick={() => setTipoVista("gasto")}>
               Gastos
@@ -241,11 +245,42 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios }: Pr
   );
 }
 
-function Stat({ titulo, monto, color }: { titulo: string; monto: number; color: string }) {
+// "↑ 12% vs jul" — sin datos del mes anterior no hay contra qué comparar (null)
+function comparativa(actual: number, previo: number, mes: string) {
+  if (previo <= 0) return null;
+  const delta = Math.round(((actual - previo) / previo) * 100);
+  const vs = nombreMes(sumarMes(mes, -1)).slice(0, 3);
+  if (delta === 0) return `igual que ${vs}`;
+  return `${delta > 0 ? "↑" : "↓"} ${Math.abs(delta)}% vs ${vs}`;
+}
+
+function Stat({ titulo, monto, color, pie }: { titulo: string; monto: number; color: string; pie?: string | null }) {
   return (
     <div className={cn("stat", color)}>
       <div className="text-[9.5px] font-black uppercase tracking-[0.1em]">{titulo}</div>
       <div className="mt-0.5 text-[21px] font-black tracking-tight">{fmtMonto(monto)}</div>
+      {pie && <div className="mt-0.5 text-[10px] font-extrabold">{pie}</div>}
+    </div>
+  );
+}
+
+// Semáforo de lo que queda del mes: ≥70% del ingreso verde fuerte (más que el
+// f-g de Ingresos), 40–69% amarillo, <40% rojo. Sin ingresos cuenta como 0%.
+function Restante({ ingresos, gastos }: { ingresos: number; gastos: number }) {
+  const restante = ingresos - gastos;
+  const pct = ingresos > 0 ? Math.max(0, Math.min(100, Math.round((restante / ingresos) * 100))) : 0;
+  const color = pct >= 70 ? "f-gg" : pct >= 40 ? "f-y" : "f-r";
+
+  return (
+    <div className={cn("stat", color)}>
+      <div className="flex items-baseline justify-between">
+        <span className="text-[9.5px] font-black uppercase tracking-[0.1em]">Restante</span>
+        <span className="text-[10px] font-extrabold">{pct}% de tus ingresos</span>
+      </div>
+      <div className="mt-0.5 text-[21px] font-black tracking-tight">{fmtMonto(restante)}</div>
+      <div className="mt-2 h-3.5 overflow-hidden rounded-full border-2 border-[#111]">
+        <div className="h-full bg-[#111]" style={{ width: `${pct}%` }} />
+      </div>
     </div>
   );
 }

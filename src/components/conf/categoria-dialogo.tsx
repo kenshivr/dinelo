@@ -11,8 +11,12 @@ type Props = {
   onCerrar: () => void;
 };
 
-// mismo orden que los swatches del mock
-const COLORES: ColorBloque[] = ["f-p", "f-y", "f-b", "f-gg", "f-r", "f-g"];
+// en orden de rueda de color, con los tonos hermanos (rosa/salmón, verde/verde
+// claro) separados para que ningún par parecido quede lado a lado
+const COLORES: ColorBloque[] = [
+  "f-y", "f-o", "f-r", "f-m", "f-p", "f-f", "f-v", "f-c",
+  "f-b", "f-t", "f-gg", "f-g", "f-l", "f-ca", "f-n",
+];
 
 export function CategoriaDialogo({ categoria, onGuardar, onCerrar }: Props) {
   const [nombre, setNombre] = useState(categoria?.nombre ?? "");

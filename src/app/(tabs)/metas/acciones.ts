@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { conSesion } from "@/lib/supabase/sesion";
+import { fmtMonto } from "@/lib/formato";
 
 // Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";
@@ -29,6 +30,20 @@ export async function borrarMeta(id: string) {
 
 export async function aportar(datos: { metaId: string; monto: number; medioId: string; fecha: string }) {
   const { supabase, userId } = await conSesion();
+
+  // El cliente ya avisa, pero puede estar desactualizado (aporte desde otro
+  // dispositivo): la meta nunca acepta más de lo que le falta.
+  const [{ data: meta }, { data: previos }] = await Promise.all([
+    supabase.from("metas").select("objetivo").eq("id", datos.metaId).single(),
+    supabase.from("aportes").select("monto").eq("meta_id", datos.metaId),
+  ]);
+  if (!meta) return NO_GUARDO;
+  const restante = meta.objetivo - (previos ?? []).reduce((suma, a) => suma + a.monto, 0);
+  if (datos.monto > restante)
+    return restante > 0
+      ? `Solo faltan ${fmtMonto(restante)} para completar esta meta.`
+      : "Esta meta ya está cumplida.";
+
   const { error } = await supabase.from("aportes").insert({
     meta_id: datos.metaId,
     medio_id: datos.medioId,

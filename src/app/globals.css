@@ -267,9 +267,16 @@
   .drow.on { background: #facc15; color: #111; }
 
   /* CTA anclado: full-bleed, sin sombra, alto para no chocar con el círculo del nav.
-     El margin-bottom negativo anula el pb-11 del main (igual que -mx anula su px)
-     para que el dock siga PEGADO al navbar mientras las vistas sin dock respiran. */
+     Sticky al fondo del scrollport del main (debe ser hijo directo del main):
+     si la vista es más alta que el viewport, el contenido scrollea por debajo
+     y el dock queda pegado al navbar. z bajo el navbar (20) por el círculo.
+     OJO: sin margen negativo — sticky clampa la caja dentro del content box del
+     main, así que empujar el botón hacia el padding lo separa 44px del navbar;
+     por eso el respiro pb-11 lo quita el propio main con has-[.dock]. */
   .dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
     border: 2px solid var(--border);
     border-bottom: none;
     border-radius: 16px 16px 0 0;
@@ -278,7 +285,6 @@
     font-weight: 900;
     font-size: 16px;
     padding: 15px 0 26px;
-    margin-bottom: -44px;
   }
 
   /* nav inferior: anclado, sin sombra; el círculo amarillo es la tab ACTIVA */
@@ -387,5 +393,15 @@
   .f-gg { background: #4ade80; }
   .f-b { background: #93c5fd; }
   .f-r { background: #fca5a5; }
-  .f-y, .f-p, .f-g, .f-gg, .f-b, .f-r { color: #111; border-color: #111; }
+  .f-o { background: #f97316; }
+  .f-l { background: #65a30d; }
+  .f-t { background: #14b8a6; }
+  .f-c { background: #0ea5e9; }
+  .f-v { background: #8b5cf6; }
+  .f-f { background: #e879f9; }
+  .f-m { background: #ec4899; }
+  .f-ca { background: #a8a29e; }
+  .f-n { background: #d4d4d8; }
+  .f-y, .f-p, .f-g, .f-gg, .f-b, .f-r,
+  .f-o, .f-l, .f-t, .f-c, .f-v, .f-f, .f-m, .f-ca, .f-n { color: #111; border-color: #111; }
 }

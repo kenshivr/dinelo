@@ -16,7 +16,7 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
   const mes = mesValido ?? new Date().toISOString().slice(0, 7);
 
   // App individual (2026-08-13): el Dash es SOLO del logueado — nada del otro.
-  const [categorias, medios, movs] = await Promise.all([
+  const [categorias, medios, movs, movsPrev] = await Promise.all([
     supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
     supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id),
     supabase
@@ -27,7 +27,18 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       .lt("fecha", `${sumarMes(mes, 1)}-01`)
       .order("fecha", { ascending: false })
       .order("created_at", { ascending: false }),
+    // mes anterior solo para la comparativa de las almohadillas: tipo y monto bastan
+    supabase
+      .from("movimientos")
+      .select("tipo, monto")
+      .eq("user_id", auth.user.id)
+      .gte("fecha", `${sumarMes(mes, -1)}-01`)
+      .lt("fecha", `${mes}-01`),
   ]);
+
+  const filasPrev = movsPrev.data ?? [];
+  const totalPrev = (tipo: string) =>
+    filasPrev.filter((m) => m.tipo === tipo).reduce((s, m) => s + m.monto, 0);
 
   return (
     <DashView
@@ -36,6 +47,7 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
       movimientos={(movs.data ?? []).map(movimientoDeFila)}
       categorias={(categorias.data ?? []) as Categoria[]}
       medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
+      previos={{ ingresos: totalPrev("ingreso"), gastos: totalPrev("gasto") }}
     />
   );
 }

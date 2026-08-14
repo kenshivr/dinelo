@@ -4,18 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
-import { conComas, limpiarMonto } from "@/lib/formato";
+import { conComas, fmtMonto, limpiarMonto } from "@/lib/formato";
 import { Dialogo } from "@/components/dialogo";
 import type { Medio, Meta } from "@/lib/tipos";
 
 type Props = {
   meta: Meta;
+  restante: number; // lo que falta para el objetivo — no se puede aportar más
   medios: Medio[];
   onAportar: (datos: { monto: number; medioId: string }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
-export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
+export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: Props) {
   const [monto, setMonto] = useState("");
   const [medioId, setMedioId] = useState<string | null>(null);
   const [medioAbierto, setMedioAbierto] = useState(false);
@@ -23,7 +24,8 @@ export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const medio = medios.find((m) => m.id === medioId);
-  const listo = Number(monto) > 0 && medioId !== null;
+  const excedido = Number(monto) > restante;
+  const listo = Number(monto) > 0 && medioId !== null && !excedido;
 
   async function aportar() {
     if (medioId === null) return;
@@ -48,6 +50,11 @@ export function AportarDialogo({ meta, medios, onAportar, onCerrar }: Props) {
           placeholder="0"
         />
       </label>
+      {excedido && (
+        <div className="nbs f-y px-3.5 py-2.5 text-center text-xs font-extrabold">
+          Solo faltan {fmtMonto(restante)} para completarla — ajusta el monto.
+        </div>
+      )}
 
       <span className="lbl">¿De dónde salió?</span>
       {medios.length > 0 ? (

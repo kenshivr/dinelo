@@ -1,6 +1,10 @@
 // Tipos del dominio. Espejo del esquema de Supabase (supabase/esquema.sql).
 
-export type ColorBloque = "f-y" | "f-p" | "f-g" | "f-gg" | "f-b" | "f-r";
+// Paleta validada 2026-08-14 (OKLab, todos los pares nuevos a ΔE ≥ 12.8): los 6
+// originales intactos + 9 nuevos. Todos aguantan texto negro encima (regla Bloque).
+export type ColorBloque =
+  | "f-y" | "f-p" | "f-g" | "f-gg" | "f-b" | "f-r"
+  | "f-o" | "f-l" | "f-t" | "f-c" | "f-v" | "f-f" | "f-m" | "f-ca" | "f-n";
 
 // Hex de cada color de bloque — para SVG, donde las clases f-* no aplican
 export const colorBloque: Record<ColorBloque, string> = {
@@ -10,6 +14,15 @@ export const colorBloque: Record<ColorBloque, string> = {
   "f-gg": "#4ade80",
   "f-b": "#93c5fd",
   "f-r": "#fca5a5",
+  "f-o": "#f97316", // naranja
+  "f-l": "#65a30d", // oliva
+  "f-t": "#14b8a6", // turquesa
+  "f-c": "#0ea5e9", // cielo
+  "f-v": "#8b5cf6", // violeta
+  "f-f": "#e879f9", // fucsia
+  "f-m": "#ec4899", // rosa mexicano
+  "f-ca": "#a8a29e", // café
+  "f-n": "#d4d4d8", // gris
 };
 
 export type Categoria = { id: string; nombre: string; color: ColorBloque };

@@ -21,7 +21,11 @@ create table public.profiles (
 create table public.categorias (
   id         uuid primary key default gen_random_uuid(),
   nombre     text not null,
-  color      text not null check (color in ('f-y','f-p','f-g','f-gg','f-b','f-r')),
+  -- 15 colores desde 2026-08-14 (colores-categorias.sql amplió el check original de 6)
+  color      text not null check (color in (
+    'f-y','f-p','f-g','f-gg','f-b','f-r',
+    'f-o','f-l','f-t','f-c','f-v','f-f','f-m','f-ca','f-n'
+  )),
   created_at timestamptz not null default now()
 );
 

@@ -77,8 +77,10 @@ export default async function CuentaPage() {
         {chevronDer}
       </Link>
 
-      <form action={salir} className="-mx-[18px] mt-auto">
-        <button className="dock w-full text-negative">Cerrar sesión</button>
+      {/* contents: el dock debe ser hijo directo del main (flex) para que
+          mt-auto y su sticky funcionen; el form no genera caja propia */}
+      <form action={salir} className="contents">
+        <button className="dock -mx-[18px] mt-auto text-negative">Cerrar sesión</button>
       </form>
     </>
   );

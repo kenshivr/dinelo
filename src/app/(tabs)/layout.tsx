@@ -1,4 +1,5 @@
 import { NavBar } from "@/components/nav-bar";
+import { TabsMain } from "@/components/tabs-main";
 import { ToastProvider } from "@/components/toast";
 import { PerfilesProvider, type PerfilHeader } from "@/components/perfiles-provider";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
@@ -26,10 +27,10 @@ export default async function TabsLayout({ children }: { children: React.ReactNo
           }),
         )}
       >
-        <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col">
-          <main className="flex flex-1 flex-col gap-3 px-[18px] pb-11 pt-[calc(env(safe-area-inset-top)+12px)]">
-            {children}
-          </main>
+        {/* marco fijo (h-dvh): el que scrollea es el main, no el document —
+            así el dock y el navbar no se despegan con el viewport dinámico móvil */}
+        <div className="mx-auto flex h-dvh w-full max-w-md flex-col">
+          <TabsMain>{children}</TabsMain>
           <NavBar />
         </div>
       </PerfilesProvider>

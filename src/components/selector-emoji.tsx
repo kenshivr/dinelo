@@ -4,13 +4,18 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 
-// Grilla curada para una app de gastos: dinero · casa/transporte · comida/salidas · vida.
+// Grilla curada para una app de gastos, en filas temáticas de 8:
+// dinero ×2 · casa/transporte · casa/servicios · comida/salidas ×2 · vida ×2.
 // El picker del SISTEMA no se puede abrir desde la web (no hay API), así que el menú es propio.
 const EMOJIS = [
   "💵", "💰", "🏦", "💳", "🪙", "📈", "💼", "🧾",
+  "💸", "🏧", "🏛️", "📲", "🤑", "💎", "🧧", "🎰",
   "🏠", "🔌", "🚗", "⛽", "🚌", "✈️", "📱", "🔧",
+  "💡", "🚿", "🛋️", "🧺", "🖥️", "📺", "🌐", "🧹",
   "🛒", "🍽️", "🌮", "🍕", "☕", "🍺", "🎬", "🎮",
+  "🍔", "🍦", "🍿", "🍰", "🧋", "🥤", "⚽", "🎳",
   "🛍️", "💊", "🏋️", "📚", "🎁", "🐶", "👶", "❤️",
+  "💇", "💅", "👗", "👟", "🏥", "🦷", "🐱", "🌸",
 ];
 
 type Props = {
@@ -35,8 +40,10 @@ export function SelectorEmoji({ value, onChange }: Props) {
         {chevron}
       </button>
 
+      {/* alto fijo = las 4 filas originales (4×36 + 3 gaps de 6 + padding 2×8);
+          el resto de la grilla se alcanza scrolleando adentro */}
       {abierto && (
-        <div className="nbs flex flex-wrap gap-1.5 p-2">
+        <div className="nbs flex max-h-[178px] flex-wrap gap-1.5 overflow-y-auto overscroll-contain p-2">
           {EMOJIS.map((e) => (
             <button
               key={e}

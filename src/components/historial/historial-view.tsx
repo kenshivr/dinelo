@@ -24,6 +24,7 @@ type Props = {
 };
 
 type FiltroTipo = "todo" | "gasto" | "ingreso";
+type Panel = "mes" | "categoria" | "medio" | null; // solo uno abierto a la vez
 
 const formatoDia = new Intl.DateTimeFormat("es-MX", {
   weekday: "short",
@@ -31,12 +32,19 @@ const formatoDia = new Intl.DateTimeFormat("es-MX", {
   month: "short",
 });
 
+// búsqueda insensible a acentos: NFD separa el diacrítico y el rango del regex
+// (los combinantes U+0300–U+036F, invisibles aquí) lo borra — "cafe" halla "Café"
+const sinAcentos = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
 export function HistorialView({ mes, esDefault, desdeMes, movimientos, categorias, medios }: Props) {
   const hoy = useHoy();
   const router = useRouter();
   const [cambiando, startTransition] = useTransition();
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>("todo");
-  const [mesAbierto, setMesAbierto] = useState(false);
+  const [filtroCat, setFiltroCat] = useState<string | null>(null);
+  const [filtroMedio, setFiltroMedio] = useState<string | null>(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [panel, setPanel] = useState<Panel>(null);
   const [editando, setEditando] = useState<Movimiento | null>(null);
   const [borrando, setBorrando] = useState<Movimiento | null>(null);
 
@@ -49,7 +57,7 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
   }, [esDefault, mesCliente, mes, router]);
 
   function irAlMes(nuevo: string) {
-    setMesAbierto(false);
+    setPanel(null);
     startTransition(() => router.replace(`/cuenta/historial?mes=${nuevo}`, { scroll: false }));
   }
 
@@ -59,7 +67,13 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
   for (let m = tope; m >= desdeMes && meses.length < 60; m = sumarMes(m, -1)) meses.push(m);
   if (meses.length === 0) meses.push(mes);
 
-  const visibles = movimientos.filter((m) => filtroTipo === "todo" || m.tipo === filtroTipo);
+  const visibles = movimientos.filter(
+    (m) =>
+      (filtroTipo === "todo" || m.tipo === filtroTipo) &&
+      (filtroCat === null || m.categoriaId === filtroCat) &&
+      (filtroMedio === null || m.medioId === filtroMedio) &&
+      (busqueda.trim() === "" || sinAcentos(m.concepto).includes(sinAcentos(busqueda.trim()))),
+  );
   const dias = [...new Set(visibles.map((m) => m.fecha))];
 
   function etiquetaDia(fecha: string) {
@@ -104,13 +118,32 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
         ))}
         <button
           className={cn("chip", cambiando && "opacity-50")}
-          onClick={() => setMesAbierto(!mesAbierto)}
+          onClick={() => setPanel(panel === "mes" ? null : "mes")}
         >
           {etiquetaMes} ▾
         </button>
+        <button
+          className={cn("chip", filtroCat && "f-y")}
+          onClick={() => setPanel(panel === "categoria" ? null : "categoria")}
+        >
+          {filtroCat ? categorias.find((c) => c.id === filtroCat)?.nombre : "Categoría"} ▾
+        </button>
+        <button
+          className={cn("chip", filtroMedio && "f-y")}
+          onClick={() => setPanel(panel === "medio" ? null : "medio")}
+        >
+          {filtroMedio ? medios.find((m) => m.id === filtroMedio)?.nombre : "Medio"} ▾
+        </button>
       </div>
 
-      {mesAbierto && (
+      <input
+        className="nbs finput outline-none"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="🔍  Buscar por concepto"
+      />
+
+      {panel === "mes" && (
         <div className="nbs p-[7px]">
           {meses.map((m) => (
             <button key={m} className={cn("drow", mes === m && "on")} onClick={() => irAlMes(m)}>
@@ -120,9 +153,58 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
         </div>
       )}
 
+      {panel === "categoria" && (
+        <div className="nbs p-[7px]">
+          <button
+            className={cn("drow", filtroCat === null && "on")}
+            onClick={() => { setFiltroCat(null); setPanel(null); }}
+          >
+            Todas
+          </button>
+          {categorias.map((c) => (
+            <button
+              key={c.id}
+              className={cn("drow", filtroCat === c.id && "on")}
+              onClick={() => { setFiltroCat(c.id); setPanel(null); }}
+            >
+              <span className={cn("tag", c.color)} /> {c.nombre}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {panel === "medio" && (
+        <div className="nbs p-[7px]">
+          <button
+            className={cn("drow", filtroMedio === null && "on")}
+            onClick={() => { setFiltroMedio(null); setPanel(null); }}
+          >
+            Todos
+          </button>
+          {medios.map((m) => (
+            <button
+              key={m.id}
+              className={cn("drow", filtroMedio === m.id && "on")}
+              onClick={() => { setFiltroMedio(m.id); setPanel(null); }}
+            >
+              {m.emoji} {m.nombre}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
       {dias.length === 0 ? (
+        movimientos.length > 0 ? (
+          <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
+            <span className="text-[42px]">🔍</span>
+            <b className="text-[15px] font-black">Nada coincide</b>
+            <span className="text-xs font-bold leading-relaxed text-muted-foreground">
+              Este mes sí tiene registros — prueba con otra búsqueda u otros filtros.
+            </span>
+          </div>
+        ) : (
         <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
           <span className="text-[42px]">🧾</span>
           <b className="text-[15px] font-black">Todavía no hay registros</b>
@@ -131,6 +213,7 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
             borrar si se te fue un dedazo.
           </span>
         </div>
+        )
       ) : (
         dias.map((dia) => (
           <Fragment key={dia}>
