@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { ConceptoCombobox } from "@/components/captura/concepto-combobox";
 import { MontoInput } from "@/components/captura/monto-input";
+import { CategoriaDialogo } from "@/components/conf/categoria-dialogo";
 import { useToast } from "@/components/toast";
-import { registrarGasto } from "@/app/(tabs)/gastos/acciones";
+import { crearCategoria, registrarGasto } from "@/app/(tabs)/gastos/acciones";
 import { fechaLocal } from "@/lib/fechas";
 import { enumerar } from "@/lib/texto";
 import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
@@ -23,21 +24,37 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
   const [concepto, setConcepto] = useState("");
   const [monto, setMonto] = useState("");
   const [categoriaId, setCategoriaId] = useState<string | null>(null);
+  const [nuevaCategoria, setNuevaCategoria] = useState(false);
   const [medioId, setMedioId] = useState<string | null>(null);
   const [medioAbierto, setMedioAbierto] = useState(false);
   const [registrando, setRegistrando] = useState(false);
+  // borde rojo por campo obligatorio; se limpia en cuanto el campo cambia
+  const [errores, setErrores] = useState({ concepto: false, monto: false, medio: false });
+  const conceptoRef = useRef<HTMLInputElement>(null);
+  const montoRef = useRef<HTMLInputElement>(null);
+  const medioRef = useRef<HTMLButtonElement>(null);
   const toast = useToast();
 
   const medio = medios.find((m) => m.id === medioId);
 
   async function registrar() {
-    const faltantes: string[] = [];
-    if (concepto.trim() === "") faltantes.push("el concepto");
-    if (!(Number(monto) > 0)) faltantes.push("el monto");
-    if (categoriaId === null) faltantes.push("la categoría");
-    if (medioId === null) faltantes.push("el medio");
-    if (categoriaId === null || medioId === null || faltantes.length > 0) {
+    // la categoría es opcional: sin elegir, el gasto va a "Sin categoría"
+    const errs = {
+      concepto: concepto.trim() === "",
+      monto: !(Number(monto) > 0),
+      medio: medioId === null,
+    };
+    setErrores(errs);
+    if (medioId === null || errs.concepto || errs.monto) {
+      const faltantes: string[] = [];
+      if (errs.concepto) faltantes.push("el concepto");
+      if (errs.monto) faltantes.push("el monto");
+      if (errs.medio) faltantes.push("el medio");
       toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
+      // el foco también trae el campo a la vista
+      if (errs.concepto) conceptoRef.current?.focus();
+      else if (errs.monto) montoRef.current?.focus();
+      else medioRef.current?.focus();
       return;
     }
 
@@ -66,37 +83,75 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
       <PageHeader title="Registrar gasto" conFecha />
 
       <ConceptoCombobox
+        ref={conceptoRef}
         value={concepto}
-        onChange={setConcepto}
+        onChange={(v) => {
+          setConcepto(v);
+          setErrores((e) => ({ ...e, concepto: false }));
+        }}
         frecuentes={frecuentes}
         placeholder="¿En qué gastaste?"
+        error={errores.concepto}
       />
 
-      <MontoInput value={monto} onChange={setMonto} />
+      <MontoInput
+        ref={montoRef}
+        value={monto}
+        onChange={(v) => {
+          setMonto(v);
+          setErrores((e) => ({ ...e, monto: false }));
+        }}
+        error={errores.monto}
+      />
 
-      <span className="lbl">Categoría</span>
+      <span className="lbl">Categoría · opcional</span>
       {categorias.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {categorias.map((c) => (
             <button
               key={c.id}
               className={cn("chip", categoriaId === c.id && "f-y")}
-              onClick={() => setCategoriaId(c.id)}
+              onClick={() => setCategoriaId(categoriaId === c.id ? null : c.id)}
             >
               {c.nombre}
             </button>
           ))}
+          {/* size fijo (no estira con la fila): círculo de verdad, no óvalo */}
+          <button className="chip grid size-10 place-items-center p-0" onClick={() => setNuevaCategoria(true)}>
+            ＋
+          </button>
         </div>
       ) : (
-        <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay categorías — créalas en Configuración →
-        </Link>
+        <button
+          className="nbs px-3.5 py-3 text-left text-sm font-extrabold text-muted-foreground"
+          onClick={() => setNuevaCategoria(true)}
+        >
+          Todavía no hay categorías — crea la primera ＋
+        </button>
+      )}
+
+      {nuevaCategoria && (
+        <CategoriaDialogo
+          categoria={null}
+          onGuardar={async (datos) => {
+            const r = await crearCategoria(datos);
+            if (r.error) return r.error;
+            setCategoriaId(r.id); // queda elegida; el chip llega con la revalidación
+            setNuevaCategoria(false);
+            return null;
+          }}
+          onCerrar={() => setNuevaCategoria(false)}
+        />
       )}
 
       <span className="lbl">¿De dónde salió?</span>
       {medios.length > 0 ? (
         <button
-          className="nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold"
+          ref={medioRef}
+          className={cn(
+            "nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold",
+            errores.medio && "border-negative",
+          )}
           onClick={() => setMedioAbierto(!medioAbierto)}
         >
           <span className={cn(!medio && "text-muted-foreground")}>
@@ -119,6 +174,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
               onClick={() => {
                 setMedioId(m.id);
                 setMedioAbierto(false);
+                setErrores((e) => ({ ...e, medio: false }));
               }}
             >
               {m.emoji} {m.nombre}

@@ -24,3 +24,20 @@ export async function registrarIngreso(datos: {
   revalidatePath("/dash"); // el Dash lee movimientos: sin esto mostraría cache viejo
   return null;
 }
+
+// Alta rápida desde la captura: devuelve el id para dejar el medio nuevo ya
+// seleccionado. Se revalida cada vista que lee medios (Gastos, Metas y Conf).
+export async function crearMedio(datos: { nombre: string; emoji: string; tipo: string }) {
+  const { supabase, userId } = await conSesion();
+  const { data, error } = await supabase
+    .from("medios")
+    .insert({ nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo || null, user_id: userId })
+    .select("id")
+    .single();
+  if (error || !data) return { id: null, error: "No se pudo guardar. Intenta de nuevo." };
+  revalidatePath("/ingresos");
+  revalidatePath("/gastos");
+  revalidatePath("/metas");
+  revalidatePath("/cuenta/configuracion");
+  return { id: data.id as string, error: null };
+}

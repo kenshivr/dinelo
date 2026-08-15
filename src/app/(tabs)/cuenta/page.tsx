@@ -5,8 +5,9 @@ import { chevronDer } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { MisDatos } from "@/components/cuenta/mis-datos";
 import { CambiarFoto } from "@/components/cuenta/cambiar-foto";
+import { CerrarSesion } from "@/components/cuenta/cerrar-sesion";
+import { EliminarCuenta } from "@/components/cuenta/eliminar-cuenta";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
-import { salir } from "./acciones";
 
 const formatoDesde = new Intl.DateTimeFormat("es-MX", { month: "short", year: "numeric" });
 
@@ -49,6 +50,10 @@ export default async function CuentaPage() {
         </span>
         <CambiarFoto />
       </div>
+
+      {/* sesión y cuenta viven pegadas a la card del perfil (ya no en el dock) */}
+      <CerrarSesion />
+      <EliminarCuenta esAdmin={auth.user.id === process.env.ADMIN_USER_ID} />
 
       <span className="lbl">Mis datos</span>
       <MisDatos email={auth.user.email ?? ""} />
@@ -93,12 +98,6 @@ export default async function CuentaPage() {
           </Link>
         </>
       )}
-
-      {/* contents: el dock debe ser hijo directo del main (flex) para que
-          mt-auto y su sticky funcionen; el form no genera caja propia */}
-      <form action={salir} className="contents">
-        <button className="dock -mx-[18px] mt-auto text-negative">Cerrar sesión</button>
-      </form>
     </>
   );
 }

@@ -10,15 +10,18 @@ type Props = {
   onChange: (value: string) => void;
   frecuentes: Frecuente[];
   placeholder: string;
+  error?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 };
 
-export function ConceptoCombobox({ value, onChange, frecuentes, placeholder }: Props) {
+export function ConceptoCombobox({ value, onChange, frecuentes, placeholder, error, ref }: Props) {
   const [abierto, setAbierto] = useState(false);
 
   return (
     <>
-      <div className="nbs flex items-center justify-between px-3.5">
+      <div className={cn("nbs flex items-center justify-between px-3.5", error && "border-negative")}>
         <input
+          ref={ref}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => setAbierto(true)}

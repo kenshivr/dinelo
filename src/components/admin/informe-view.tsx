@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/page-header";
+import { EliminarCuentaAdmin } from "@/components/admin/eliminar-cuenta-admin";
 import type { ColorBloque } from "@/lib/tipos";
 
-// Vista del informe de admin — TODO server: no hay interacción, solo lectura.
+// Vista del informe de admin — server salvo el 🗑 por cuenta (cliente).
 // Muestra USO de la app (conteos y actividad), nunca montos de otras cuentas.
 
 export type CuentaInforme = {
@@ -132,6 +133,7 @@ export function InformeView({ informe }: { informe: Informe }) {
               </b>
               <span className="block truncate text-[10.5px] font-bold text-muted-foreground">{c.email}</span>
             </span>
+            {!c.esAdmin && <EliminarCuentaAdmin id={c.id} nombre={c.nombre} email={c.email} />}
           </div>
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-[10.5px] font-bold text-muted-foreground">
             <span>📒 {c.movs} movs</span>

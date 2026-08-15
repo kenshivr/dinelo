@@ -27,11 +27,7 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
 
   const esGasto = movimiento.tipo === "gasto";
   const medio = medios.find((m) => m.id === medioId);
-  const listo =
-    concepto.trim() !== "" &&
-    Number(monto) > 0 &&
-    fecha !== "" &&
-    (!esGasto || categoriaId !== null);
+  const listo = concepto.trim() !== "" && Number(monto) > 0 && fecha !== "";
 
   async function guardar() {
     setGuardando(true);
@@ -41,7 +37,8 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
       monto: Number(monto),
       medioId,
       fecha,
-      ...(esGasto && categoriaId ? { categoriaId } : {}),
+      // explícito (no spread condicional): quitar la categoría debe borrarla de verdad
+      categoriaId: esGasto && categoriaId ? categoriaId : undefined,
     });
     if (e) {
       setError(e);
@@ -71,13 +68,13 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
 
       {esGasto && (
         <>
-          <span className="lbl">Categoría</span>
+          <span className="lbl">Categoría · opcional</span>
           <div className="flex flex-wrap gap-2">
             {categorias.map((c) => (
               <button
                 key={c.id}
                 className={cn("chip", categoriaId === c.id && "f-y")}
-                onClick={() => setCategoriaId(c.id)}
+                onClick={() => setCategoriaId(categoriaId === c.id ? null : c.id)}
               >
                 {c.nombre}
               </button>

@@ -87,7 +87,7 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
   function subtitulo(m: Movimiento) {
     const medio = medios.find((x) => x.id === m.medioId)?.nombre;
     if (m.tipo === "ingreso") return `Ingreso · ${medio}`;
-    const categoria = categorias.find((c) => c.id === m.categoriaId)?.nombre;
+    const categoria = categorias.find((c) => c.id === m.categoriaId)?.nombre ?? "Sin categoría";
     return `${categoria} · ${medio}`;
   }
 

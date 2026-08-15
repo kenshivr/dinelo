@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
+import { borrarCuentaCompleta } from "@/lib/supabase/admin";
 import { conSesion } from "@/lib/supabase/sesion";
 
 export async function salir() {
@@ -63,4 +64,19 @@ export async function subirAvatar(datos: FormData) {
   // layout completo: el avatar también vive en el header de TODAS las tabs
   revalidatePath("/", "layout");
   return null;
+}
+
+// El usuario borra SU cuenta (el cómo vive en borrarCuentaCompleta).
+export async function eliminarCuenta() {
+  const { supabase, userId } = await conSesion();
+  // sin la admin no hay informe: esa solo se borra desde el dashboard de Supabase
+  if (userId === process.env.ADMIN_USER_ID) return "La cuenta admin no se elimina desde la app.";
+
+  const e = await borrarCuentaCompleta(userId);
+  if (e) return e;
+
+  // signOut limpia las cookies locales aunque el usuario ya no exista
+  await supabase.auth.signOut();
+  revalidatePath("/", "layout");
+  redirect("/login");
 }

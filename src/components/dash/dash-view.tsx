@@ -53,11 +53,19 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, prev
   const totalIngresos = movimientos.filter((m) => m.tipo === "ingreso").reduce((s, m) => s + m.monto, 0);
   const totalGastos = gastosMes.reduce((s, m) => s + m.monto, 0);
 
-  const porCategoria = categorias
-    .map((c) => ({
+  // los gastos sin categoría forman su propio grupo (categoría opcional)
+  const porCategoria = [
+    ...categorias.map((c) => ({
       ...c,
       total: gastosMes.filter((m) => m.categoriaId === c.id).reduce((s, m) => s + m.monto, 0),
-    }))
+    })),
+    {
+      id: "sin-categoria",
+      nombre: "Sin categoría",
+      color: "f-n" as ColorBloque,
+      total: gastosMes.filter((m) => !m.categoriaId).reduce((s, m) => s + m.monto, 0),
+    },
+  ]
     .filter((c) => c.total > 0)
     .sort((a, b) => b.total - a.total);
   const mayor = porCategoria[0]?.total ?? 0;
@@ -71,11 +79,18 @@ export function DashView({ mes, esDefault, movimientos, categorias, medios, prev
     const movs = movsDelTipo;
     let grupos: Rebanada[];
     if (tipoVista === "gasto") {
-      grupos = categorias.map((c) => ({
-        nombre: c.nombre,
-        color: colorBloque[c.color],
-        monto: movs.filter((m) => m.categoriaId === c.id).reduce((s, m) => s + m.monto, 0),
-      }));
+      grupos = [
+        ...categorias.map((c) => ({
+          nombre: c.nombre,
+          color: colorBloque[c.color],
+          monto: movs.filter((m) => m.categoriaId === c.id).reduce((s, m) => s + m.monto, 0),
+        })),
+        {
+          nombre: "Sin categoría",
+          color: colorBloque["f-n"],
+          monto: movs.filter((m) => !m.categoriaId).reduce((s, m) => s + m.monto, 0),
+        },
+      ];
     } else {
       // los ingresos no tienen categoría: se componen por concepto;
       // color estable por orden alfabético, no por ranking

@@ -15,6 +15,32 @@ export function crearClienteAdmin() {
   );
 }
 
+// Borrado completo de una cuenta: datos, foto y Auth. El orden importa —
+// movimientos y aportes apuntan a medios/categorías con on delete RESTRICT,
+// así que la cascada de profiles abortaría si llega a un medio antes que a sus
+// movimientos. Se limpian primero a mano y deleteUser dispara la cascada que
+// barre el resto (perfil, medios, categorías, frecuentes, metas, apartados).
+// La usan eliminarCuenta (el propio usuario) y el informe de admin.
+export async function borrarCuentaCompleta(userId: string) {
+  const admin = crearClienteAdmin();
+  const movimientos = await admin.from("movimientos").delete().eq("user_id", userId);
+  const aportes = await admin.from("aportes").delete().eq("user_id", userId);
+  if (movimientos.error || aportes.error) {
+    console.error("No se pudo limpiar antes de borrar:", movimientos.error ?? aportes.error);
+    return "No se pudo eliminar la cuenta. Intenta de nuevo.";
+  }
+
+  // la foto no cae con la cascada (Storage va aparte); sin foto no es error
+  await admin.storage.from("avatares").remove([`${userId}.jpg`]);
+
+  const { error } = await admin.auth.admin.deleteUser(userId);
+  if (error) {
+    console.error("Auth no pudo borrar la cuenta:", error);
+    return "No se pudo eliminar la cuenta. Intenta de nuevo.";
+  }
+  return null;
+}
+
 // Guardia de las vistas de admin: sesión válida Y ser LA cuenta admin.
 // Sin ADMIN_USER_ID configurada nadie es admin — falla cerrado.
 export async function conAdmin() {
