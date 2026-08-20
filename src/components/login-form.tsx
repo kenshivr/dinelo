@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { entrar } from "@/app/login/acciones";
+import { CampoContrasena } from "@/components/captura/par-contrasenas";
 
 type Props = {
   correoInicial?: string; // viene de "Ya hay una cuenta con este correo" en registro
@@ -47,11 +48,9 @@ export function LoginForm({ correoInicial, errorInicial }: Props) {
       />
 
       <span className="lbl">Contraseña</span>
-      <input
-        className="nbs finput outline-none"
-        type="password"
+      <CampoContrasena
         value={contrasena}
-        onChange={(e) => setContrasena(e.target.value)}
+        onChange={setContrasena}
         autoComplete="current-password"
         placeholder="•••••••••"
         required

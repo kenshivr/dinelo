@@ -50,14 +50,20 @@ export function ParContrasenas({
   );
 }
 
-function CampoContrasena({
+// Campo de contraseña con ojito. Lo usan el par de arriba y el login
+// (ahí con autoComplete="current-password" para que el gestor ofrezca la guardada).
+export function CampoContrasena({
   value,
   onChange,
   placeholder,
+  autoComplete = "new-password",
+  required,
 }: {
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
+  autoComplete?: "new-password" | "current-password";
+  required?: boolean;
 }) {
   const [ver, setVer] = useState(false);
   return (
@@ -67,8 +73,9 @@ function CampoContrasena({
         type={ver ? "text" : "password"}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        autoComplete="new-password"
+        autoComplete={autoComplete}
         placeholder={placeholder}
+        required={required}
       />
       <button
         type="button"
