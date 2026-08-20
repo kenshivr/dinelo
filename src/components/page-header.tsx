@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { fechaDe, useHoy } from "@/lib/fechas";
@@ -18,12 +18,20 @@ type Props = {
   derecha?: ReactNode;
 };
 
-// Siempre el usuario logueado, siempre al mismo tamaño (32px) en toda la app
+// Siempre el usuario logueado, siempre al mismo tamaño (32px) en toda la app.
+// Si la foto no carga (red, caché del SW), cae a la inicial con color — un
+// círculo vacío con borde #111 sobre fondo oscuro sería invisible.
 function Avatar({ perfil }: { perfil: PerfilHeader }) {
-  if (perfil.avatarUrl) {
+  const [fotoFallo, setFotoFallo] = useState(false);
+  if (perfil.avatarUrl && !fotoFallo) {
     return (
       // eslint-disable-next-line @next/next/no-img-element -- 32px; next/image pide config de dominio remoto
-      <img src={perfil.avatarUrl} alt={perfil.nombre} className="av object-cover" />
+      <img
+        src={perfil.avatarUrl}
+        alt={perfil.nombre}
+        className={cn("av object-cover", perfil.color)}
+        onError={() => setFotoFallo(true)}
+      />
     );
   }
   return <span className={cn("av", perfil.color)}>{perfil.inicial}</span>;
