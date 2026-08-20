@@ -37,7 +37,7 @@ export default async function ControlPage() {
       categorias={(categorias.data ?? []) as Categoria[]}
       metas={(metas.data ?? []) as Meta[]}
       aportes={(aportes.data ?? []).map(
-        (a): Aporte => ({ id: a.id, metaId: a.meta_id, medioId: a.medio_id, monto: a.monto, fecha: a.fecha }),
+        (a): Aporte => ({ id: a.id, metaId: a.meta_id, medioId: a.medio_id ?? undefined, monto: a.monto, fecha: a.fecha }),
       )}
       medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
     />

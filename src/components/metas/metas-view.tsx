@@ -28,8 +28,8 @@ export function MetasView({ metas, aportes, medios }: Props) {
   const [borrandoAporte, setBorrandoAporte] = useState<Aporte | null>(null);
   const [abierta, setAbierta] = useState<string | null>(null);
 
-  function nombreMedio(id: string) {
-    const m = medios.find((x) => x.id === id);
+  function nombreMedio(id?: string) {
+    const m = medios.find((x) => x.id === id); // sin medio → ""
     return m ? `${m.emoji} ${m.nombre}` : "";
   }
 
@@ -177,7 +177,7 @@ export function MetasView({ metas, aportes, medios }: Props) {
       {borrandoAporte && (
         <ConfirmarBorrado
           titulo="¿Borrar este aporte?"
-          resumen={`${fmtMonto(borrandoAporte.monto)} · ${nombreMedio(borrandoAporte.medioId)}`}
+          resumen={[fmtMonto(borrandoAporte.monto), nombreMedio(borrandoAporte.medioId)].filter(Boolean).join(" · ")}
           onBorrar={async () => {
             const error = await borrarAporte(borrandoAporte.id);
             if (!error) setBorrandoAporte(null);

@@ -28,7 +28,8 @@ export async function borrarMeta(id: string) {
   return null;
 }
 
-export async function aportar(datos: { metaId: string; monto: number; medioId: string; fecha: string }) {
+// medioId opcional (aportes-medio-opcional.sql): sin medio = null
+export async function aportar(datos: { metaId: string; monto: number; medioId: string | null; fecha: string }) {
   const { supabase, userId } = await conSesion();
 
   // El cliente ya avisa, pero puede estar desactualizado (aporte desde otro
@@ -98,8 +99,8 @@ export async function borrarApartado(id: string) {
 // pendiente solo (on delete set null en el esquema).
 export async function pagarApartado(datos: {
   id: string;
-  medioId: string;
-  categoriaId: string;
+  medioId: string | null; // opcionales, como en la captura de Gastos
+  categoriaId: string | null;
   fecha: string;
 }) {
   const { supabase, userId } = await conSesion();

@@ -19,7 +19,7 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
   const [concepto, setConcepto] = useState(movimiento.concepto);
   const [monto, setMonto] = useState(String(movimiento.monto));
   const [categoriaId, setCategoriaId] = useState(movimiento.categoriaId ?? null);
-  const [medioId, setMedioId] = useState(movimiento.medioId);
+  const [medioId, setMedioId] = useState(movimiento.medioId ?? null);
   const [medioAbierto, setMedioAbierto] = useState(false);
   const [fecha, setFecha] = useState(movimiento.fecha);
   const [guardando, setGuardando] = useState(false);
@@ -35,9 +35,9 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
       ...movimiento,
       concepto: concepto.trim(),
       monto: Number(monto),
-      medioId,
       fecha,
-      // explícito (no spread condicional): quitar la categoría debe borrarla de verdad
+      // explícitos (no spread condicional): quitar categoría o medio debe borrarlos de verdad
+      medioId: medioId ?? undefined,
       categoriaId: esGasto && categoriaId ? categoriaId : undefined,
     });
     if (e) {
@@ -83,13 +83,13 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
         </>
       )}
 
-      <span className="lbl">Medio</span>
+      <span className="lbl">Medio · opcional</span>
       <button
         className="nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold"
         onClick={() => setMedioAbierto(!medioAbierto)}
       >
-        <span>
-          {medio?.emoji}&nbsp; {medio?.nombre}
+        <span className={cn(!medio && "text-muted-foreground")}>
+          {medio ? `${medio.emoji}  ${medio.nombre}` : "Sin medio"}
         </span>
         {chevron}
       </button>
@@ -100,7 +100,8 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
               key={m.id}
               className={cn("drow", medioId === m.id && "on")}
               onClick={() => {
-                setMedioId(m.id);
+                // tocar el elegido lo quita: vuelve a "Sin medio"
+                setMedioId(medioId === m.id ? null : m.id);
                 setMedioAbierto(false);
               }}
             >

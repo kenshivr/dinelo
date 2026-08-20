@@ -29,32 +29,28 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
   const [medioAbierto, setMedioAbierto] = useState(false);
   const [registrando, setRegistrando] = useState(false);
   // borde rojo por campo obligatorio; se limpia en cuanto el campo cambia
-  const [errores, setErrores] = useState({ concepto: false, monto: false, medio: false });
+  const [errores, setErrores] = useState({ concepto: false, monto: false });
   const conceptoRef = useRef<HTMLInputElement>(null);
   const montoRef = useRef<HTMLInputElement>(null);
-  const medioRef = useRef<HTMLButtonElement>(null);
   const toast = useToast();
 
   const medio = medios.find((m) => m.id === medioId);
 
   async function registrar() {
-    // la categoría es opcional: sin elegir, el gasto va a "Sin categoría"
+    // solo concepto y monto son obligatorios: categoría y medio opcionales
     const errs = {
       concepto: concepto.trim() === "",
       monto: !(Number(monto) > 0),
-      medio: medioId === null,
     };
     setErrores(errs);
-    if (medioId === null || errs.concepto || errs.monto) {
+    if (errs.concepto || errs.monto) {
       const faltantes: string[] = [];
       if (errs.concepto) faltantes.push("el concepto");
       if (errs.monto) faltantes.push("el monto");
-      if (errs.medio) faltantes.push("el medio");
       toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
       // el foco también trae el campo a la vista
       if (errs.concepto) conceptoRef.current?.focus();
-      else if (errs.monto) montoRef.current?.focus();
-      else medioRef.current?.focus();
+      else montoRef.current?.focus();
       return;
     }
 
@@ -90,6 +86,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
           setErrores((e) => ({ ...e, concepto: false }));
         }}
         frecuentes={frecuentes}
+        tipo="G"
         placeholder="¿En qué gastaste?"
         error={errores.concepto}
       />
@@ -144,18 +141,14 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
         />
       )}
 
-      <span className="lbl">¿De dónde salió?</span>
+      <span className="lbl">¿De dónde salió? · opcional</span>
       {medios.length > 0 ? (
         <button
-          ref={medioRef}
-          className={cn(
-            "nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold",
-            errores.medio && "border-negative",
-          )}
+          className="nbs flex items-center justify-between px-3.5 py-3 text-sm font-extrabold"
           onClick={() => setMedioAbierto(!medioAbierto)}
         >
           <span className={cn(!medio && "text-muted-foreground")}>
-            {medio ? `${medio.emoji}  ${medio.nombre}` : "Elige un medio"}
+            {medio ? `${medio.emoji}  ${medio.nombre}` : "Sin medio"}
           </span>
           {chevron}
         </button>
@@ -172,9 +165,9 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
               key={m.id}
               className={cn("drow", medioId === m.id && "on")}
               onClick={() => {
-                setMedioId(m.id);
+                // tocar el elegido lo quita: vuelve a "Sin medio"
+                setMedioId(medioId === m.id ? null : m.id);
                 setMedioAbierto(false);
-                setErrores((e) => ({ ...e, medio: false }));
               }}
             >
               {m.emoji} {m.nombre}

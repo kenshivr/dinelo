@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { borrarCuentaCompleta } from "@/lib/supabase/admin";
+import { mensajeDeAuth } from "@/lib/supabase/errores";
 import { conSesion } from "@/lib/supabase/sesion";
 
 export async function salir() {
@@ -19,10 +20,7 @@ export async function salir() {
 export async function cambiarContrasena(nueva: string) {
   const { supabase } = await conSesion();
   const { error } = await supabase.auth.updateUser({ password: nueva });
-  if (!error) return null;
-  if (error.code === "same_password") return "La nueva contraseña es igual a la actual.";
-  if (error.code === "weak_password") return "Muy débil: usa al menos 6 caracteres.";
-  return "No se pudo cambiar. Intenta de nuevo.";
+  return error ? mensajeDeAuth(error, "cambiar-contrasena") : null;
 }
 
 // El correo NO cambia de inmediato: Supabase manda enlaces de confirmación
@@ -30,9 +28,7 @@ export async function cambiarContrasena(nueva: string) {
 export async function cambiarCorreo(nuevo: string) {
   const { supabase } = await conSesion();
   const { error } = await supabase.auth.updateUser({ email: nuevo });
-  if (!error) return null;
-  if (error.code === "email_exists") return "Ese correo ya está en uso.";
-  return "No se pudo cambiar. Intenta de nuevo.";
+  return error ? mensajeDeAuth(error, "cambiar-correo") : null;
 }
 
 // Recibe la foto YA redimensionada por el teléfono (~15 KB) y la sube con la

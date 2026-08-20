@@ -9,7 +9,7 @@ export async function registrarGasto(datos: {
   concepto: string;
   monto: number;
   categoriaId: string | null; // null = "Sin categoría" (categoria-opcional.sql)
-  medioId: string;
+  medioId: string | null; // null = "Sin medio" (primer-uso.sql)
   fecha: string; // yyyy-mm-dd local del cliente: el default current_date corre en UTC
 }) {
   const { supabase, userId } = await conSesion();

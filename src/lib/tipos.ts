@@ -31,7 +31,7 @@ export type Frecuente = { id: string; nombre: string; emoji: string; tipo: "G" |
 export type Meta = { id: string; nombre: string; descripcion: string; objetivo: number };
 // movimientoId null = pendiente; al pagarse se liga con el gasto real creado
 export type Apartado = { id: string; nombre: string; monto: number; mes: string; categoriaId: string | null; movimientoId: string | null };
-export type Aporte = { id: string; metaId: string; medioId: string; monto: number; fecha: string }; // yyyy-mm-dd
+export type Aporte = { id: string; metaId: string; medioId?: string; monto: number; fecha: string }; // yyyy-mm-dd
 export type Perfil = {
   id: string;
   nombre: string;
@@ -46,7 +46,7 @@ export type Movimiento = {
   concepto: string;
   monto: number;
   categoriaId?: string; // solo gastos
-  medioId: string;
+  medioId?: string; // opcional desde primer-uso.sql
   fecha: string; // yyyy-mm-dd
 };
 
@@ -58,7 +58,7 @@ export function movimientoDeFila(fila: {
   concepto: string;
   monto: number;
   categoria_id: string | null;
-  medio_id: string;
+  medio_id: string | null;
   fecha: string;
 }): Movimiento {
   return {
@@ -67,7 +67,7 @@ export function movimientoDeFila(fila: {
     concepto: fila.concepto,
     monto: fila.monto,
     categoriaId: fila.categoria_id ?? undefined,
-    medioId: fila.medio_id,
+    medioId: fila.medio_id ?? undefined,
     fecha: fila.fecha,
   };
 }

@@ -33,13 +33,14 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const ruta = request.nextUrl.pathname;
-  const enLogin = ruta.startsWith("/login");
-  // recuperar contraseña, el destino de los enlaces de correo, el service worker
-  // y la página offline (el navegador los pide sin contexto de app) van SIN sesión
+  // pantallas de entrada: con sesión no tienen sentido (y /registro encima
+  // pisaría la sesión actual con una cuenta nueva) → a /gastos
+  const esEntrada =
+    ruta.startsWith("/login") || ruta.startsWith("/registro") || ruta.startsWith("/recuperar");
+  // el destino de los enlaces de correo, el service worker y la página offline
+  // (el navegador los pide sin contexto de app) van SIN sesión
   const esPublica =
-    enLogin ||
-    ruta.startsWith("/registro") ||
-    ruta.startsWith("/recuperar") ||
+    esEntrada ||
     ruta.startsWith("/auth") ||
     ruta.startsWith("/serwist") ||
     ruta.startsWith("/~offline");
@@ -53,7 +54,7 @@ export async function proxy(request: NextRequest) {
     return redireccion;
   }
 
-  if (user && enLogin) {
+  if (user && esEntrada) {
     const url = request.nextUrl.clone();
     url.pathname = "/gastos";
     const redireccion = NextResponse.redirect(url);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { restablecer } from "@/app/restablecer/acciones";
+import { ParContrasenas, contrasenaLista } from "@/components/captura/par-contrasenas";
 
 export function RestablecerForm() {
   const router = useRouter();
@@ -11,9 +12,10 @@ export function RestablecerForm() {
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const listo = nueva.length >= 6 && nueva === repetida;
+  const listo = contrasenaLista(nueva, repetida);
 
   async function guardar() {
+    if (!listo || guardando) return;
     setGuardando(true);
     setError(null);
     const e = await restablecer(nueva);
@@ -27,28 +29,7 @@ export function RestablecerForm() {
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="lbl">Nueva contraseña</span>
-      <input
-        className="nbs finput outline-none"
-        type="password"
-        value={nueva}
-        onChange={(e) => setNueva(e.target.value)}
-        placeholder="mínimo 6 caracteres"
-        autoComplete="new-password"
-      />
-
-      <span className="lbl">Repítela</span>
-      <input
-        className="nbs finput outline-none"
-        type="password"
-        value={repetida}
-        onChange={(e) => setRepetida(e.target.value)}
-        placeholder="otra vez, para confirmar"
-        autoComplete="new-password"
-      />
-      {repetida !== "" && nueva !== repetida && (
-        <span className="text-xs font-bold text-negative">Todavía no coinciden</span>
-      )}
+      <ParContrasenas nueva={nueva} repetida={repetida} onNueva={setNueva} onRepetida={setRepetida} />
 
       {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
 

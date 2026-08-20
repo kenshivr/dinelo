@@ -7,10 +7,8 @@ import type { ColorBloque } from "@/lib/tipos";
 // Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";
 const NO_BORRO = "No se pudo borrar. Intenta de nuevo.";
-// 23503 = foreign key violation: el on delete restrict del esquema protegió movimientos.
-const CON_MOVIMIENTOS = "No se puede borrar: tiene movimientos registrados.";
-// Los medios también los protegen los aportes de Metas.
-const CON_REGISTROS = "No se puede borrar: tiene movimientos o aportes registrados.";
+// Borrar una categoría o un medio nunca bloquea (primer-uso.sql + aportes-medio-opcional.sql):
+// movimientos, apartados y aportes quedan "sin" — la UI avisa cuántos antes de confirmar.
 
 export async function guardarCategoria(datos: { id?: string; nombre: string; color: ColorBloque }) {
   const { supabase, userId } = await conSesion();
@@ -26,7 +24,7 @@ export async function guardarCategoria(datos: { id?: string; nombre: string; col
 export async function borrarCategoria(id: string) {
   const { supabase } = await conSesion();
   const { error } = await supabase.from("categorias").delete().eq("id", id);
-  if (error) return error.code === "23503" ? CON_MOVIMIENTOS : NO_BORRO;
+  if (error) return NO_BORRO;
   revalidatePath("/cuenta/configuracion");
   return null;
 }
@@ -45,7 +43,7 @@ export async function guardarMedio(datos: { id?: string; nombre: string; emoji: 
 export async function borrarMedio(id: string) {
   const { supabase } = await conSesion();
   const { error } = await supabase.from("medios").delete().eq("id", id);
-  if (error) return error.code === "23503" ? CON_REGISTROS : NO_BORRO;
+  if (error) return NO_BORRO;
   revalidatePath("/cuenta/configuracion");
   return null;
 }

@@ -24,29 +24,26 @@ export function IngresosForm({ medios, frecuentes }: Props) {
   const [nuevoMedio, setNuevoMedio] = useState(false);
   const [registrando, setRegistrando] = useState(false);
   // borde rojo por campo obligatorio; se limpia en cuanto el campo cambia
-  const [errores, setErrores] = useState({ concepto: false, monto: false, medio: false });
+  const [errores, setErrores] = useState({ concepto: false, monto: false });
   const conceptoRef = useRef<HTMLInputElement>(null);
   const montoRef = useRef<HTMLInputElement>(null);
-  const mediosRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
 
   async function registrar() {
+    // solo concepto y monto son obligatorios: el medio es opcional
     const errs = {
       concepto: concepto.trim() === "",
       monto: !(Number(monto) > 0),
-      medio: medioId === null,
     };
     setErrores(errs);
-    if (medioId === null || errs.concepto || errs.monto) {
+    if (errs.concepto || errs.monto) {
       const faltantes: string[] = [];
       if (errs.concepto) faltantes.push("el concepto");
       if (errs.monto) faltantes.push("el monto");
-      if (errs.medio) faltantes.push("el medio");
       toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
-      // el foco trae el campo a la vista; los chips de medio no se enfocan: se scrollean
+      // el foco también trae el campo a la vista
       if (errs.concepto) conceptoRef.current?.focus();
-      else if (errs.monto) montoRef.current?.focus();
-      else mediosRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+      else montoRef.current?.focus();
       return;
     }
 
@@ -80,6 +77,7 @@ export function IngresosForm({ medios, frecuentes }: Props) {
           setErrores((e) => ({ ...e, concepto: false }));
         }}
         frecuentes={frecuentes}
+        tipo="I"
         placeholder="¿De dónde llegó?"
         error={errores.concepto}
       />
@@ -94,20 +92,15 @@ export function IngresosForm({ medios, frecuentes }: Props) {
         error={errores.monto}
       />
 
-      <span className="lbl">¿A dónde entra?</span>
+      <span className="lbl">¿A dónde entra? · opcional</span>
       {medios.length > 0 ? (
-        <div
-          ref={mediosRef}
-          className={cn("flex flex-wrap gap-2", errores.medio && "rounded-xl ring-2 ring-negative")}
-        >
+        <div className="flex flex-wrap gap-2">
           {medios.map((m) => (
             <button
               key={m.id}
               className={cn("chip", medioId === m.id && "f-y")}
-              onClick={() => {
-                setMedioId(m.id);
-                setErrores((e) => ({ ...e, medio: false }));
-              }}
+              // tocar el elegido lo quita: vuelve a "Sin medio"
+              onClick={() => setMedioId(medioId === m.id ? null : m.id)}
             >
               {m.emoji} {m.nombre}
             </button>
@@ -133,7 +126,6 @@ export function IngresosForm({ medios, frecuentes }: Props) {
             const r = await crearMedio(datos);
             if (r.error) return r.error;
             setMedioId(r.id); // queda elegido; el chip llega con la revalidación
-            setErrores((e) => ({ ...e, medio: false }));
             setNuevoMedio(false);
             return null;
           }}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { conComas, fmtMonto, limpiarMonto } from "@/lib/formato";
@@ -12,10 +11,11 @@ type Props = {
   meta: Meta;
   restante: number; // lo que falta para el objetivo — no se puede aportar más
   medios: Medio[];
-  onAportar: (datos: { monto: number; medioId: string }) => Promise<string | null>;
+  onAportar: (datos: { monto: number; medioId: string | null }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
+// El medio es opcional, como en la captura de Gastos (sin elegir → "Sin medio").
 export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: Props) {
   const [monto, setMonto] = useState("");
   const [medioId, setMedioId] = useState<string | null>(null);
@@ -25,11 +25,12 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
 
   const medio = medios.find((m) => m.id === medioId);
   const excedido = Number(monto) > restante;
-  const listo = Number(monto) > 0 && medioId !== null && !excedido;
+  const listo = Number(monto) > 0 && !excedido;
 
   async function aportar() {
-    if (medioId === null) return;
+    if (!listo || aportando) return;
     setAportando(true);
+    setError(null);
     const e = await onAportar({ monto: Number(monto), medioId });
     if (e) {
       setError(e);
@@ -56,7 +57,7 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
         </div>
       )}
 
-      <span className="lbl">¿De dónde salió?</span>
+      <span className="lbl">¿De dónde salió? · opcional</span>
       {medios.length > 0 ? (
         <>
           <button
@@ -64,7 +65,7 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
             onClick={() => setMedioAbierto(!medioAbierto)}
           >
             <span className={cn(!medio && "text-muted-foreground")}>
-              {medio ? `${medio.emoji}  ${medio.nombre}` : "Elige un medio"}
+              {medio ? `${medio.emoji}  ${medio.nombre}` : "Sin medio"}
             </span>
             {chevron}
           </button>
@@ -75,7 +76,8 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
                   key={m.id}
                   className={cn("drow", medioId === m.id && "on")}
                   onClick={() => {
-                    setMedioId(m.id);
+                    // tocar el elegido lo quita: vuelve a "Sin medio"
+                    setMedioId(medioId === m.id ? null : m.id);
                     setMedioAbierto(false);
                   }}
                 >
@@ -86,9 +88,9 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
           )}
         </>
       ) : (
-        <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
-          Todavía no hay medios — créalos en Configuración →
-        </Link>
+        <span className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+          Sin medios todavía — irá sin medio
+        </span>
       )}
 
       {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
@@ -102,7 +104,7 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
           disabled={!listo || aportando}
           onClick={aportar}
         >
-          Aportar
+          {aportando ? "Aportando…" : "Aportar"}
         </button>
       </div>
     </Dialogo>

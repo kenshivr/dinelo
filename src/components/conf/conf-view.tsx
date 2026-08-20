@@ -21,10 +21,18 @@ import {
 } from "@/app/(tabs)/cuenta/configuracion/acciones";
 import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
 
+// cuántos movimientos usan cada categoría / medio, y cuántos aportes cada medio (id → conteo)
+export type Usos = {
+  categorias: Record<string, number>;
+  medios: Record<string, number>;
+  aportes: Record<string, number>;
+};
+
 type Props = {
   categorias: Categoria[];
   medios: Medio[];
   frecuentes: Frecuente[];
+  usos: Usos;
 };
 
 type Borrando = {
@@ -32,7 +40,18 @@ type Borrando = {
   id: string;
   nombre: string;
   coleccion: "categorias" | "medios" | "frecuentes";
+  aviso?: string;
 };
+
+// "Tiene 12 gastos y 2 aportes registrados: pasarán a Sin categoría." — nada si no tiene
+function avisoDeUso(conteos: [number, string][], destino: string) {
+  const partes = conteos.filter(([n]) => n > 0).map(([n, cosa]) => `${n} ${cosa}${n === 1 ? "" : "s"}`);
+  if (partes.length === 0) return undefined;
+  const total = conteos.reduce((suma, [n]) => suma + n, 0);
+  return total === 1
+    ? `Tiene ${partes[0]} registrado: pasará a ${destino}.`
+    : `Tiene ${partes.join(" y ")} registrados: pasarán a ${destino}.`;
+}
 
 const ACCION_BORRAR = {
   categorias: borrarCategoria,
@@ -40,8 +59,9 @@ const ACCION_BORRAR = {
   frecuentes: borrarFrecuente,
 } as const;
 
-export function ConfView({ categorias, medios, frecuentes }: Props) {
-  const { theme, setTheme } = useTheme();
+export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
+  // sin opción "Sistema": quien nunca eligió ve marcado el tema que resolvió su teléfono
+  const { resolvedTheme, setTheme } = useTheme();
   const hidratado = useHidratado();
 
   const [catDialogo, setCatDialogo] = useState<Categoria | "nueva" | null>(null);
@@ -70,12 +90,11 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
             [
               ["light", "Claro"],
               ["dark", "Oscuro"],
-              ["system", "Sistema"],
             ] as const
           ).map(([valor, label]) => (
             <button
               key={valor}
-              className={cn(hidratado && theme === valor && "on")}
+              className={cn(hidratado && resolvedTheme === valor && "on")}
               onClick={() => setTheme(valor)}
             >
               {label}
@@ -99,7 +118,13 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
             <button
               className="mini"
               onClick={() =>
-                setBorrando({ titulo: "¿Borrar esta categoría?", id: c.id, nombre: c.nombre, coleccion: "categorias" })
+                setBorrando({
+                  titulo: "¿Borrar esta categoría?",
+                  id: c.id,
+                  nombre: c.nombre,
+                  coleccion: "categorias",
+                  aviso: avisoDeUso([[usos.categorias[c.id] ?? 0, "gasto"]], "Sin categoría"),
+                })
               }
             >
               {basurita}
@@ -126,7 +151,19 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
             <button
               className="mini"
               onClick={() =>
-                setBorrando({ titulo: "¿Borrar este medio?", id: m.id, nombre: m.nombre, coleccion: "medios" })
+                setBorrando({
+                  titulo: "¿Borrar este medio?",
+                  id: m.id,
+                  nombre: m.nombre,
+                  coleccion: "medios",
+                  aviso: avisoDeUso(
+                    [
+                      [usos.medios[m.id] ?? 0, "movimiento"],
+                      [usos.aportes[m.id] ?? 0, "aporte"],
+                    ],
+                    "Sin medio"
+                  ),
+                })
               }
             >
               {basurita}
@@ -213,6 +250,7 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
         <ConfirmarBorrado
           titulo={borrando.titulo}
           resumen={borrando.nombre}
+          aviso={borrando.aviso}
           onBorrar={borrar}
           onCerrar={() => setBorrando(null)}
         />
@@ -224,7 +262,7 @@ export function ConfView({ categorias, medios, frecuentes }: Props) {
 function BotonMas({ onClick }: { onClick: () => void }) {
   return (
     <button
-      className="rounded-lg border-2 bg-card px-2.5 py-[3px] text-[11px] font-extrabold shadow-[2px_2px_0_var(--sh)]"
+      className="rounded-lg border-2 bg-card px-2.5 py-[3px] text-[11px] font-extrabold shadow-[2px_2px_0_var(--sh)] transition-[translate,box-shadow] duration-75 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_var(--sh)]"
       onClick={onClick}
     >
       ＋

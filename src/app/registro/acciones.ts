@@ -1,25 +1,43 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
+import { esCuentaExistente, mensajeDeAuth } from "@/lib/supabase/errores";
 
-export async function registrar(formData: FormData) {
-  const nombre = String(formData.get("nombre") ?? "").trim();
-  const correo = String(formData.get("correo") ?? "").trim();
-  const contrasena = String(formData.get("contrasena") ?? "");
-  // el enlace del correo vuelve a ESTE origen (localhost o prod, según dónde se pidió)
+export type DatosRegistro = { nombre: string; correo: string; contrasena: string };
+
+// sesion=false → "Confirm email" sigue encendido en Supabase: toca revisar el correo
+export type ResultadoRegistro =
+  | { ok: true; sesion: boolean }
+  | { ok: false; mensaje: string; yaExiste: boolean };
+
+export async function registrar(datos: DatosRegistro): Promise<ResultadoRegistro> {
+  const nombre = datos.nombre.trim();
+  const correo = datos.correo.trim().toLowerCase();
+  // el enlace del correo (si hay) vuelve a ESTE origen (localhost o prod)
   const origen = (await headers()).get("origin") ?? "https://dinelo.vercel.app";
 
   const supabase = await crearClienteServidor();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: correo,
-    password: contrasena,
+    password: datos.contrasena,
     options: {
       data: { nombre }, // el trigger crear_perfil_nuevo lo lee para el profile
       emailRedirectTo: `${origen}/auth/confirm`,
     },
   });
 
-  redirect(error ? "/registro?error=1" : "/registro?enviado=1");
+  if (error) {
+    return { ok: false, mensaje: mensajeDeAuth(error, "registro"), yaExiste: esCuentaExistente(error) };
+  }
+
+  // con confirmación encendida Supabase finge éxito si el correo ya existe
+  // (identities vacío) — para una app de amigos preferimos decir la verdad
+  if (data.user && data.user.identities?.length === 0) {
+    return { ok: false, mensaje: "Ya hay una cuenta con este correo.", yaExiste: true };
+  }
+
+  if (data.session) revalidatePath("/", "layout");
+  return { ok: true, sesion: data.session !== null };
 }

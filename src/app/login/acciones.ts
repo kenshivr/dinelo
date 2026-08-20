@@ -1,21 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
+import { mensajeDeAuth } from "@/lib/supabase/errores";
 
-export async function entrar(formData: FormData) {
-  const correo = String(formData.get("correo") ?? "").trim();
-  const contrasena = String(formData.get("contrasena") ?? "");
-
+// Devuelve el mensaje de error a mostrar, o null si la sesión ya quedó en cookies.
+export async function entrar(datos: { correo: string; contrasena: string }) {
   const supabase = await crearClienteServidor();
   const { error } = await supabase.auth.signInWithPassword({
-    email: correo,
-    password: contrasena,
+    email: datos.correo.trim(),
+    password: datos.contrasena,
   });
-
-  if (error) redirect("/login?error=1");
+  if (error) return mensajeDeAuth(error, "login");
 
   revalidatePath("/", "layout");
-  redirect("/gastos");
+  return null;
 }

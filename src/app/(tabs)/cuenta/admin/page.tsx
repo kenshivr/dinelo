@@ -31,14 +31,17 @@ export default async function AdminPage() {
   }
 
   const admin = crearClienteAdmin();
-  const [usuarios, perfiles, movs, metas, apartados, medios] = await Promise.all([
+  const [usuarios, perfiles, movs, metas, apartados, medios, frecuentes] = await Promise.all([
     admin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
     admin.from("profiles").select("id, nombre, inicial, color, avatar_url, created_at"),
     admin.from("movimientos").select("user_id, fecha"), // solo lo mínimo: el informe cuenta, no espía montos
     admin.from("metas").select("user_id"),
     admin.from("apartados").select("user_id"),
     admin.from("medios").select("user_id"),
+    admin.from("frecuentes").select("user_id"),
   ]);
+  // todos nacen con 2 medios base (primer-uso.sql): los frecuentes sí dicen quién entendió la app
+  const conFrecuentes = new Set((frecuentes.data ?? []).map((f) => f.user_id));
 
   const hoy = new Date();
   const mesActual = hoy.toISOString().slice(0, 7);
@@ -109,7 +112,7 @@ export default async function AdminPage() {
       { etiqueta: "Registran movimientos", n: cuentas.filter((c) => c.movs > 0).length },
       { etiqueta: "Usan metas", n: cuentas.filter((c) => c.metas > 0).length },
       { etiqueta: "Usan apartados", n: cuentas.filter((c) => c.apartados > 0).length },
-      { etiqueta: "Crearon medios", n: cuentas.filter((c) => c.medios > 0).length },
+      { etiqueta: "Crearon frecuentes", n: cuentas.filter((c) => conFrecuentes.has(c.id)).length },
       { etiqueta: "Foto de perfil", n: cuentas.filter((c) => c.avatarUrl !== null).length },
     ],
     altasPorMes,

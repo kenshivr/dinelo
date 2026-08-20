@@ -14,7 +14,7 @@ export async function guardarMovimiento(datos: {
   concepto: string;
   monto: number;
   categoriaId?: string; // solo gastos; en ingresos queda null (check gasto_con_categoria)
-  medioId: string;
+  medioId?: string; // sin medio = null
   fecha: string;
 }) {
   const { supabase } = await conSesion();
@@ -24,7 +24,7 @@ export async function guardarMovimiento(datos: {
       concepto: datos.concepto,
       monto: datos.monto,
       categoria_id: datos.categoriaId ?? null,
-      medio_id: datos.medioId,
+      medio_id: datos.medioId ?? null,
       fecha: datos.fecha,
     })
     .eq("id", datos.id);

@@ -253,6 +253,30 @@
     white-space: nowrap;
   }
 
+  /* el toque Bloque: al presionar, el botón se hunde hacia su sombra */
+  .btn,
+  .dock,
+  .chip,
+  .mini,
+  .seg button {
+    transition:
+      translate 0.08s ease-out,
+      box-shadow 0.08s ease-out;
+  }
+  .btn:active:not(:disabled),
+  .chip:active:not(:disabled),
+  .mini:active:not(:disabled) {
+    translate: 2px 2px;
+    box-shadow: 1px 1px 0 var(--sh);
+  }
+  .seg button:active {
+    translate: 0 1px;
+  }
+  /* el dock no tiene sombra (va pegado al nav): solo baja */
+  .dock:active:not(:disabled) {
+    translate: 0 2px;
+  }
+
   .drow {
     display: flex;
     align-items: center;
