@@ -87,7 +87,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
         }}
         frecuentes={frecuentes}
         tipo="G"
-        placeholder="¿En qué gastaste?"
+        placeholder="Cine, Comida, Ropa…"
         error={errores.concepto}
       />
 

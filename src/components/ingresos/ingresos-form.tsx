@@ -78,7 +78,7 @@ export function IngresosForm({ medios, frecuentes }: Props) {
         }}
         frecuentes={frecuentes}
         tipo="I"
-        placeholder="¿De dónde llegó?"
+        placeholder="Nómina, Venta, Quincena…"
         error={errores.concepto}
       />
 
