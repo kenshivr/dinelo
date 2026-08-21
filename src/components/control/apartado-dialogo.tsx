@@ -55,7 +55,7 @@ export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: P
 
       {categorias.length > 0 && (
         <>
-          <span className="lbl">Categoría (opcional — se pide al pagar)</span>
+          <span className="lbl">Categoría · opcional</span>
           <div className="flex flex-wrap gap-2">
             {categorias.map((c) => (
               <button

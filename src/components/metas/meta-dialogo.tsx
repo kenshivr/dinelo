@@ -40,7 +40,7 @@ export function MetaDialogo({ meta, onGuardar, onCerrar }: Props) {
         className="nbs finput outline-none"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
-        placeholder="Carrito para Canela"
+        placeholder="Teléfono nuevo, Tenis, Carro…"
       />
 
       <span className="lbl">Descripción</span>
