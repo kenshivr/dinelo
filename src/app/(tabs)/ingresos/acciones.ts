@@ -7,7 +7,7 @@ import { conSesion } from "@/lib/supabase/sesion";
 export async function registrarIngreso(datos: {
   concepto: string;
   monto: number;
-  medioId: string | null; // null = "Sin medio" (primer-uso.sql)
+  medioId: string | null; // null = "Sin medio"
   fecha: string; // yyyy-mm-dd local del cliente: el default current_date corre en UTC
 }) {
   const { supabase, userId } = await conSesion();

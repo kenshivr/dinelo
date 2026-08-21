@@ -1,4 +1,4 @@
-// Tipos del dominio. Espejo del esquema de Supabase (supabase/esquema.sql).
+// Tipos del dominio. Espejo del esquema de Supabase (supabase/seed.sql).
 
 // Paleta validada 2026-08-14 (OKLab, todos los pares nuevos a ΔE ≥ 12.8): los 6
 // originales intactos + 9 nuevos. Todos aguantan texto negro encima (regla Bloque).
@@ -46,7 +46,7 @@ export type Movimiento = {
   concepto: string;
   monto: number;
   categoriaId?: string; // solo gastos
-  medioId?: string; // opcional desde primer-uso.sql
+  medioId?: string; // opcional: null = "Sin medio"
   fecha: string; // yyyy-mm-dd
 };
 

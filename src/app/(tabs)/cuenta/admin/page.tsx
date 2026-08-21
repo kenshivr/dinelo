@@ -40,7 +40,7 @@ export default async function AdminPage() {
     admin.from("medios").select("user_id"),
     admin.from("frecuentes").select("user_id"),
   ]);
-  // todos nacen con 2 medios base (primer-uso.sql): los frecuentes sí dicen quién entendió la app
+  // todos nacen con 2 medios base (trigger de seed.sql): los frecuentes sí dicen quién entendió la app
   const conFrecuentes = new Set((frecuentes.data ?? []).map((f) => f.user_id));
 
   const hoy = new Date();

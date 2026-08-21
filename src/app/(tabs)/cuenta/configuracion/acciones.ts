@@ -7,7 +7,7 @@ import type { ColorBloque } from "@/lib/tipos";
 // Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";
 const NO_BORRO = "No se pudo borrar. Intenta de nuevo.";
-// Borrar una categoría o un medio nunca bloquea (primer-uso.sql + aportes-medio-opcional.sql):
+// Borrar una categoría o un medio nunca bloquea (on delete set null en seed.sql):
 // movimientos, apartados y aportes quedan "sin" — la UI avisa cuántos antes de confirmar.
 
 export async function guardarCategoria(datos: { id?: string; nombre: string; color: ColorBloque }) {
