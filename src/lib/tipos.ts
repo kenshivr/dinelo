@@ -26,7 +26,10 @@ export const colorBloque: Record<ColorBloque, string> = {
 };
 
 export type Categoria = { id: string; nombre: string; color: ColorBloque };
-export type Medio = { id: string; nombre: string; emoji: string; tipo: string };
+// saldoInicial solo se carga donde se usa (Conf y Control › Medios)
+export type Medio = { id: string; nombre: string; emoji: string; tipo: string; saldoInicial?: number };
+// origen/destino null = medio borrado (set null); el saldo del otro lado igual la cuenta
+export type Transferencia = { id: string; origenId: string | null; destinoId: string | null; monto: number; fecha: string };
 export type Frecuente = { id: string; nombre: string; emoji: string; tipo: "G" | "I" };
 export type Meta = { id: string; nombre: string; descripcion: string; objetivo: number };
 // movimientoId null = pendiente; al pagarse se liga con el gasto real creado

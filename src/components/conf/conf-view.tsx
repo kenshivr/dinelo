@@ -21,11 +21,12 @@ import {
 } from "@/app/(tabs)/cuenta/configuracion/acciones";
 import type { Categoria, Frecuente, Medio } from "@/lib/tipos";
 
-// cuántos movimientos usan cada categoría / medio, y cuántos aportes cada medio (id → conteo)
+// cuántos movimientos usan cada categoría / medio, y cuántos aportes y transferencias cada medio (id → conteo)
 export type Usos = {
   categorias: Record<string, number>;
   medios: Record<string, number>;
   aportes: Record<string, number>;
+  transferencias: Record<string, number>;
 };
 
 type Props = {
@@ -160,6 +161,7 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
                     [
                       [usos.medios[m.id] ?? 0, "movimiento"],
                       [usos.aportes[m.id] ?? 0, "aporte"],
+                      [usos.transferencias[m.id] ?? 0, "transferencia"],
                     ],
                     "Sin medio"
                   ),

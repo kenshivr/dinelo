@@ -29,14 +29,21 @@ export async function borrarCategoria(id: string) {
   return null;
 }
 
-export async function guardarMedio(datos: { id?: string; nombre: string; emoji: string; tipo: string }) {
+export async function guardarMedio(datos: {
+  id?: string;
+  nombre: string;
+  emoji: string;
+  tipo: string;
+  saldoInicial: number;
+}) {
   const { supabase, userId } = await conSesion();
-  const fila = { nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo || null };
+  const fila = { nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo || null, saldo_inicial: datos.saldoInicial };
   const { error } = datos.id
     ? await supabase.from("medios").update(fila).eq("id", datos.id)
     : await supabase.from("medios").insert({ ...fila, user_id: userId });
   if (error) return NO_GUARDO;
   revalidatePath("/cuenta/configuracion");
+  revalidatePath("/metas"); // Control › Medios muestra el saldo
   return null;
 }
 
@@ -45,6 +52,7 @@ export async function borrarMedio(id: string) {
   const { error } = await supabase.from("medios").delete().eq("id", id);
   if (error) return NO_BORRO;
   revalidatePath("/cuenta/configuracion");
+  revalidatePath("/metas"); // su card desaparece de Control › Medios
   return null;
 }
 

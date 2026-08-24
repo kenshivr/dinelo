@@ -94,6 +94,33 @@ export async function borrarApartado(id: string) {
   return null;
 }
 
+// ═══ Transferencias (Control › Medios) ═══
+
+// Mueve dinero entre medios sin crear gasto ni ingreso: el Dash no la ve,
+// solo cambia el saldo de las dos cards.
+export async function transferir(datos: { origenId: string; destinoId: string; monto: number; fecha: string }) {
+  const { supabase, userId } = await conSesion();
+  if (datos.origenId === datos.destinoId) return "Elige un medio distinto al de origen.";
+  const { error } = await supabase.from("transferencias").insert({
+    user_id: userId,
+    origen_id: datos.origenId,
+    destino_id: datos.destinoId,
+    monto: datos.monto,
+    fecha: datos.fecha,
+  });
+  if (error) return NO_GUARDO;
+  revalidatePath("/metas");
+  return null;
+}
+
+export async function borrarTransferencia(id: string) {
+  const { supabase } = await conSesion();
+  const { error } = await supabase.from("transferencias").delete().eq("id", id);
+  if (error) return NO_BORRO;
+  revalidatePath("/metas");
+  return null;
+}
+
 // "Ya lo pagué": crea el gasto REAL (fecha de hoy, del teléfono) y liga el
 // apartado. Si después borran ese gasto del Historial, el apartado vuelve a
 // pendiente solo (on delete set null en el esquema).

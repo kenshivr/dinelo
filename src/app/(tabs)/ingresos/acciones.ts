@@ -27,11 +27,17 @@ export async function registrarIngreso(datos: {
 
 // Alta rápida desde la captura: devuelve el id para dejar el medio nuevo ya
 // seleccionado. Se revalida cada vista que lee medios (Gastos, Metas y Conf).
-export async function crearMedio(datos: { nombre: string; emoji: string; tipo: string }) {
+export async function crearMedio(datos: { nombre: string; emoji: string; tipo: string; saldoInicial: number }) {
   const { supabase, userId } = await conSesion();
   const { data, error } = await supabase
     .from("medios")
-    .insert({ nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo || null, user_id: userId })
+    .insert({
+      nombre: datos.nombre,
+      emoji: datos.emoji,
+      tipo: datos.tipo || null,
+      saldo_inicial: datos.saldoInicial,
+      user_id: userId,
+    })
     .select("id")
     .single();
   if (error || !data) return { id: null, error: "No se pudo guardar. Intenta de nuevo." };

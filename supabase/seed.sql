@@ -61,6 +61,8 @@ create table public.medios (
     nombre text not null,
     emoji text not null,
     tipo text,
+    -- punto de partida del saldo en Control › Medios (la app arranca a medio camino)
+    saldo_inicial numeric(10, 2) not null default 0,
     created_at timestamptz not null default now()
 );
 
@@ -132,6 +134,21 @@ create table public.apartados (
 
 create index apartados_user_mes_idx on public.apartados (user_id, mes);
 
+-- Mover dinero entre medios: no es gasto ni ingreso (el Dash no las ve),
+-- solo cambia el saldo de las dos cards en Control › Medios.
+create table public.transferencias (
+    id uuid primary key default gen_random_uuid (),
+    user_id uuid not null references public.profiles (id) on delete cascade,
+    origen_id uuid references public.medios (id) on delete set null,
+    destino_id uuid references public.medios (id) on delete set null,
+    monto numeric(10, 2) not null check (monto > 0),
+    fecha date not null, -- la app manda la del teléfono
+    created_at timestamptz not null default now(),
+    constraint medios_distintos check (origen_id <> destino_id)
+);
+
+create index transferencias_user_idx on public.transferencias (user_id, created_at desc);
+
 -- ═══ RLS: solo lo propio, solo autenticados (el rol anon no ve nada) ══════
 
 alter table public.profiles enable row level security;
@@ -149,6 +166,8 @@ alter table public.metas enable row level security;
 alter table public.aportes enable row level security;
 
 alter table public.apartados enable row level security;
+
+alter table public.transferencias enable row level security;
 
 -- profiles: sin insert ni delete desde la app (los hace el trigger y el borrado de cuenta)
 create policy "ver mi perfil" on public.profiles for
@@ -184,6 +203,10 @@ with
     check (user_id = auth.uid ());
 
 create policy "mis apartados" on public.apartados for all to authenticated using (user_id = auth.uid ())
+with
+    check (user_id = auth.uid ());
+
+create policy "mis transferencias" on public.transferencias for all to authenticated using (user_id = auth.uid ())
 with
     check (user_id = auth.uid ());
 
