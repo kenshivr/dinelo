@@ -48,7 +48,11 @@ export async function proxy(request: NextRequest) {
   if (!user && !esPublica) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    const redireccion = NextResponse.redirect(url);
+    // La raíz se REESCRIBE (no redirige): el login se sirve en "/" sin salto
+    // extra — el 307 costaba ~800ms de LCP en móvil. Rutas profundas sí
+    // redirigen para que la URL visible sea /login.
+    const redireccion =
+      ruta === "/" ? NextResponse.rewrite(url, { request }) : NextResponse.redirect(url);
     // conservar las cookies que setAll haya escrito (p. ej. limpieza de sesión vencida)
     respuesta.cookies.getAll().forEach((cookie) => redireccion.cookies.set(cookie));
     return redireccion;
