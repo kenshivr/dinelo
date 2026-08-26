@@ -4,9 +4,19 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  // Base absoluta para que og:image salga con URL completa (WhatsApp no resuelve relativas)
+  metadataBase: new URL("https://dinelo.vercel.app"),
   title: "DiNelo",
   description: "Gastos, ingresos y metas",
   applicationName: "DiNelo",
+  openGraph: {
+    title: "DiNelo",
+    description: "Gastos, ingresos y metas",
+    url: "/",
+    siteName: "DiNelo",
+    type: "website",
+    locale: "es_MX",
+  },
   appleWebApp: {
     capable: true,
     title: "DiNelo",
