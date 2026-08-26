@@ -66,8 +66,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Todo salvo estáticos, imágenes, el manifest PWA y los íconos.
+  // Todo salvo estáticos, imágenes, el manifest PWA y los archivos para bots:
+  // robots.txt, sitemap.xml, llms.txt y la og:image (.jpg) también deben salir
+  // sin sesión — si pasan por el proxy terminan redirigidos a /login.
   matcher: [
-    "/((?!_next/static|_next/image|manifest\\.webmanifest|.*\\.(?:png|ico|svg)$).*)",
+    "/((?!_next/static|_next/image|manifest\\.webmanifest|.*\\.(?:png|ico|svg|jpg|jpeg|webp|txt|xml)$).*)",
   ],
 };
