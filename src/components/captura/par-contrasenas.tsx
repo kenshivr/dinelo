@@ -80,7 +80,7 @@ export function CampoContrasena({
       <button
         type="button"
         aria-label={ver ? "Ocultar contraseña" : "Mostrar contraseña"}
-        className="absolute top-1/2 right-3.5 -translate-y-1/2 text-muted-foreground"
+        className="absolute top-1/2 right-1.5 -translate-y-1/2 p-2 text-muted-foreground"
         onClick={() => setVer((v) => !v)}
       >
         {ver ? <EyeOff size={18} /> : <Eye size={18} />}

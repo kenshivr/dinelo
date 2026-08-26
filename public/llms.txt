@@ -1,0 +1,13 @@
+# DiNelo
+
+> App web (PWA) para registrar gastos, ingresos y metas de ahorro personales. El contenido del usuario vive detrás de un login: solo las páginas de acceso son públicas.
+
+## Páginas públicas
+
+- [Iniciar sesión](https://dinelo.vercel.app/login): entrada a la app
+- [Crear cuenta](https://dinelo.vercel.app/registro): registro de usuario
+- [Recuperar contraseña](https://dinelo.vercel.app/recuperar): restablecer el acceso
+
+## Código
+
+- [Repositorio en GitHub](https://github.com/kenshivr/dinelo): código fuente del proyecto
