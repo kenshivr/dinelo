@@ -10,6 +10,7 @@ Una app para anotar un gasto en segundos, con una mano, y saber cuánto te queda
 <p align="center">
   <a href="https://dinelo.vercel.app"><img src="https://img.shields.io/badge/abrir%20la%20app-dinelo.vercel.app-facc15?style=flat-square&labelColor=111" alt="abrir la app" /></a>
   <a href="https://github.com/kenshivr/dinelo/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/kenshivr/dinelo/ci.yml?branch=main&style=flat-square&labelColor=111&label=ci" alt="ci" /></a>
+  <a href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fdinelo.vercel.app"><img src="https://img.shields.io/badge/Lighthouse-100·100·100·100-4ade80?style=flat-square&labelColor=111" alt="Lighthouse 100 en las cuatro categorías" /></a>
   <img src="https://img.shields.io/badge/PWA-instalable-4ade80?style=flat-square&labelColor=111" alt="PWA" />
   <img src="https://img.shields.io/badge/idioma-español-93c5fd?style=flat-square&labelColor=111" alt="español" />
   <img src="https://img.shields.io/badge/moneda-MXN-f9a8d4?style=flat-square&labelColor=111" alt="MXN" />
@@ -63,7 +64,7 @@ flowchart LR
 | Datos y auth | ![Supabase](https://img.shields.io/badge/Supabase-111?style=flat-square&logo=supabase&logoColor=3ecf8e) Postgres + Auth (correo/contraseña) + Storage + **RLS**                                                                                                                                                                  |
 | PWA          | ![Serwist](https://img.shields.io/badge/Serwist-9-111?style=flat-square) manifest, service worker, página offline, shortcuts                                                                                                                                                                                                     |
 | Deploy       | ![Vercel](https://img.shields.io/badge/Vercel-111?style=flat-square&logo=vercel&logoColor=white) `git push` a `main` = nueva versión en todos los teléfonos                                                                                                                                                                      |
-| Calidad      | ![Vitest](https://img.shields.io/badge/Vitest-111?style=flat-square&logo=vitest&logoColor=fcc72b) Testing Library · TypeScript `strict` · ESLint · CI en GitHub Actions (tipos, lint y tests en cada push)                                                                                                                    |
+| Calidad      | ![Vitest](https://img.shields.io/badge/Vitest-111?style=flat-square&logo=vitest&logoColor=fcc72b) Testing Library · TypeScript `strict` · ESLint · CI en GitHub Actions (tipos, lint y tests en cada push) · Lighthouse **100/100/100/100** en móvil y desktop                                                                |
 
 Server Components leen de Supabase con la sesión del usuario; las escrituras son **Server Actions**
 que devuelven un mensaje de error o `null`. No hay API propia ni estado global en el cliente.
