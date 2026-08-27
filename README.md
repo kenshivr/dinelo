@@ -16,6 +16,8 @@ Una app para anotar un gasto en segundos, con una mano, y saber cuánto te queda
   <img src="https://img.shields.io/badge/moneda-MXN-f9a8d4?style=flat-square&labelColor=111" alt="MXN" />
 </p>
 
+<p align="center"><a href="README.en.md">🌐 Read this in English</a></p>
+
 ---
 
 ## ¿Qué es?
@@ -174,7 +176,7 @@ Mantener apretado el ícono (Android) abre directo "Registrar gasto", "Registrar
 ## Estado
 
 **v1 terminada** (agosto 2026) y en producción. Ideas sin compromiso: notificaciones push, pruebas
-con Vitest/Playwright y dominio propio.
+E2E con Playwright y dominio propio.
 
 ---
 
