@@ -8,7 +8,12 @@ import type { Medio } from "@/lib/tipos";
 
 type Props = {
   medio: Medio | null; // null = nuevo
-  onGuardar: (datos: { nombre: string; emoji: string; tipo: string; saldoInicial: number }) => Promise<string | null>;
+  onGuardar: (datos: {
+    nombre: string;
+    emoji: string;
+    tipo: string;
+    saldoInicial: number;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
@@ -16,7 +21,9 @@ export function MedioDialogo({ medio, onGuardar, onCerrar }: Props) {
   const [nombre, setNombre] = useState(medio?.nombre ?? "");
   const [emoji, setEmoji] = useState(medio?.emoji ?? "");
   const [tipo, setTipo] = useState(medio?.tipo ?? "");
-  const [saldoInicial, setSaldoInicial] = useState(medio?.saldoInicial ? String(medio.saldoInicial) : "");
+  const [saldoInicial, setSaldoInicial] = useState(
+    medio?.saldoInicial ? String(medio.saldoInicial) : "",
+  );
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +44,10 @@ export function MedioDialogo({ medio, onGuardar, onCerrar }: Props) {
   }
 
   return (
-    <Dialogo titulo={medio ? "Editar medio" : "Nuevo medio"} onCerrar={onCerrar}>
+    <Dialogo
+      titulo={medio ? "Editar medio" : "Nuevo medio"}
+      onCerrar={onCerrar}
+    >
       <span className="lbl">Nombre</span>
       <input
         className="nbs finput outline-none"
@@ -69,7 +79,11 @@ export function MedioDialogo({ medio, onGuardar, onCerrar }: Props) {
         />
       </label>
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

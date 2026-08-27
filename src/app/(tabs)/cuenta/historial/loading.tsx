@@ -7,7 +7,11 @@ export default function Cargando() {
     <>
       <PageHeader
         title={<Link href="/cuenta">‹ Historial</Link>}
-        derecha={<span className="text-xs font-bold text-muted-foreground">desde Cuenta</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            desde Cuenta
+          </span>
+        }
       />
       <div className="flex flex-wrap gap-2">
         <span className="ske h-9 w-16 rounded-full" />

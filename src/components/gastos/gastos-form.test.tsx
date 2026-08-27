@@ -12,7 +12,10 @@ const { registrarGasto, toast } = vi.hoisted(() => ({
   toast: vi.fn(),
 }));
 
-vi.mock("@/app/(tabs)/gastos/acciones", () => ({ registrarGasto, crearCategoria: vi.fn() }));
+vi.mock("@/app/(tabs)/gastos/acciones", () => ({
+  registrarGasto,
+  crearCategoria: vi.fn(),
+}));
 vi.mock("@/components/toast", () => ({ useToast: () => toast }));
 // PageHeader lee el perfil de un contexto que aquí no existe
 vi.mock("@/components/page-header", () => ({
@@ -23,10 +26,14 @@ const categorias: Categoria[] = [
   { id: "c1", nombre: "Comida", color: "f-y" },
   { id: "c2", nombre: "Transporte", color: "f-b" },
 ];
-const medios: Medio[] = [{ id: "m1", nombre: "Efectivo", emoji: "💵", tipo: "" }];
+const medios: Medio[] = [
+  { id: "m1", nombre: "Efectivo", emoji: "💵", tipo: "" },
+];
 
 function montar() {
-  render(<GastosForm categorias={categorias} medios={medios} frecuentes={[]} />);
+  render(
+    <GastosForm categorias={categorias} medios={medios} frecuentes={[]} />,
+  );
   return {
     concepto: screen.getByPlaceholderText("Cine, Comida, Ropa…"),
     monto: screen.getByPlaceholderText("0"),
@@ -46,7 +53,10 @@ describe("GastosForm — validación antes de tocar el servidor", () => {
 
     await user.click(registrar);
 
-    expect(toast).toHaveBeenCalledWith("Te faltan el concepto y el monto para registrar", "error");
+    expect(toast).toHaveBeenCalledWith(
+      "Te faltan el concepto y el monto para registrar",
+      "error",
+    );
     expect(concepto).toHaveFocus();
     expect(registrarGasto).not.toHaveBeenCalled();
   });
@@ -58,7 +68,10 @@ describe("GastosForm — validación antes de tocar el servidor", () => {
     await user.type(concepto, "Tacos");
     await user.click(registrar);
 
-    expect(toast).toHaveBeenCalledWith("Te falta el monto para registrar", "error");
+    expect(toast).toHaveBeenCalledWith(
+      "Te falta el monto para registrar",
+      "error",
+    );
     expect(monto).toHaveFocus();
     expect(registrarGasto).not.toHaveBeenCalled();
   });
@@ -100,7 +113,9 @@ describe("GastosForm — registrar", () => {
     await user.click(registrar);
 
     await waitFor(() => expect(registrarGasto).toHaveBeenCalled());
-    expect(registrarGasto.mock.calls[0][0]).toMatchObject({ categoriaId: null });
+    expect(registrarGasto.mock.calls[0][0]).toMatchObject({
+      categoriaId: null,
+    });
   });
 
   test("si el server falla, el error se muestra y el form conserva lo tecleado", async () => {
@@ -112,7 +127,12 @@ describe("GastosForm — registrar", () => {
     await user.type(monto, "120");
     await user.click(registrar);
 
-    await waitFor(() => expect(toast).toHaveBeenCalledWith("No se pudo registrar. Intenta de nuevo.", "error"));
+    await waitFor(() =>
+      expect(toast).toHaveBeenCalledWith(
+        "No se pudo registrar. Intenta de nuevo.",
+        "error",
+      ),
+    );
     expect(concepto).toHaveValue("Tacos");
   });
 });

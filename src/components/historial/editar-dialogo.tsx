@@ -15,10 +15,18 @@ type Props = {
   onCerrar: () => void;
 };
 
-export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCerrar }: Props) {
+export function EditarDialogo({
+  movimiento,
+  categorias,
+  medios,
+  onGuardar,
+  onCerrar,
+}: Props) {
   const [concepto, setConcepto] = useState(movimiento.concepto);
   const [monto, setMonto] = useState(String(movimiento.monto));
-  const [categoriaId, setCategoriaId] = useState(movimiento.categoriaId ?? null);
+  const [categoriaId, setCategoriaId] = useState(
+    movimiento.categoriaId ?? null,
+  );
   const [medioId, setMedioId] = useState(movimiento.medioId ?? null);
   const [medioAbierto, setMedioAbierto] = useState(false);
   const [fecha, setFecha] = useState(movimiento.fecha);
@@ -74,7 +82,9 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
               <button
                 key={c.id}
                 className={cn("chip", categoriaId === c.id && "f-y")}
-                onClick={() => setCategoriaId(categoriaId === c.id ? null : c.id)}
+                onClick={() =>
+                  setCategoriaId(categoriaId === c.id ? null : c.id)
+                }
               >
                 {c.nombre}
               </button>
@@ -122,7 +132,11 @@ export function EditarDialogo({ movimiento, categorias, medios, onGuardar, onCer
         />
       </label>
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

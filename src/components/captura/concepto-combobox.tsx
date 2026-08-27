@@ -16,12 +16,25 @@ type Props = {
   ref?: React.Ref<HTMLInputElement>;
 };
 
-export function ConceptoCombobox({ value, onChange, frecuentes, placeholder, tipo, error, ref }: Props) {
+export function ConceptoCombobox({
+  value,
+  onChange,
+  frecuentes,
+  placeholder,
+  tipo,
+  error,
+  ref,
+}: Props) {
   const [abierto, setAbierto] = useState(false);
 
   return (
     <>
-      <div className={cn("nbs flex items-center px-3.5", error && "border-negative")}>
+      <div
+        className={cn(
+          "nbs flex items-center px-3.5",
+          error && "border-negative",
+        )}
+      >
         <input
           ref={ref}
           value={value}
@@ -33,7 +46,10 @@ export function ConceptoCombobox({ value, onChange, frecuentes, placeholder, tip
         <button
           type="button"
           aria-label="Mis frecuentes"
-          className={cn("-mr-2 p-2 transition-transform", abierto && "rotate-180")}
+          className={cn(
+            "-mr-2 p-2 transition-transform",
+            abierto && "rotate-180",
+          )}
           onClick={() => setAbierto(!abierto)}
         >
           {chevron}
@@ -56,7 +72,10 @@ export function ConceptoCombobox({ value, onChange, frecuentes, placeholder, tip
               </button>
             ))
           ) : (
-            <Link href="/cuenta/configuracion" className="drow text-muted-foreground">
+            <Link
+              href="/cuenta/configuracion"
+              className="drow text-muted-foreground"
+            >
               ＋ Da de alta un {tipo === "G" ? "gasto" : "ingreso"} frecuente →
             </Link>
           )}

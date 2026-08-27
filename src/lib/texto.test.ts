@@ -11,7 +11,9 @@ describe("enumerar — listas en español para mensajes al usuario", () => {
   });
 
   test("dos elementos se unen con 'y'", () => {
-    expect(enumerar(["el concepto", "el monto"])).toBe("el concepto y el monto");
+    expect(enumerar(["el concepto", "el monto"])).toBe(
+      "el concepto y el monto",
+    );
   });
 
   test("tres o más: comas y 'y' al final", () => {

@@ -29,14 +29,18 @@ export async function registrarGasto(datos: {
 
 // Alta rápida desde la captura: devuelve el id para dejar la categoría nueva
 // ya seleccionada en el form (el chip llega después, con la revalidación).
-export async function crearCategoria(datos: { nombre: string; color: ColorBloque }) {
+export async function crearCategoria(datos: {
+  nombre: string;
+  color: ColorBloque;
+}) {
   const { supabase, userId } = await conSesion();
   const { data, error } = await supabase
     .from("categorias")
     .insert({ nombre: datos.nombre, color: datos.color, user_id: userId })
     .select("id")
     .single();
-  if (error || !data) return { id: null, error: "No se pudo guardar. Intenta de nuevo." };
+  if (error || !data)
+    return { id: null, error: "No se pudo guardar. Intenta de nuevo." };
   revalidatePath("/gastos");
   revalidatePath("/cuenta/configuracion"); // Conf muestra la misma lista
   return { id: data.id as string, error: null };

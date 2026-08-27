@@ -11,12 +11,21 @@ type Props = {
   meta: Meta;
   restante: number; // lo que falta para el objetivo — no se puede aportar más
   medios: Medio[];
-  onAportar: (datos: { monto: number; medioId: string | null }) => Promise<string | null>;
+  onAportar: (datos: {
+    monto: number;
+    medioId: string | null;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
 // El medio es opcional, como en la captura de Gastos (sin elegir → "Sin medio").
-export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: Props) {
+export function AportarDialogo({
+  meta,
+  restante,
+  medios,
+  onAportar,
+  onCerrar,
+}: Props) {
   const [monto, setMonto] = useState("");
   const [medioId, setMedioId] = useState<string | null>(null);
   const [medioAbierto, setMedioAbierto] = useState(false);
@@ -93,7 +102,11 @@ export function AportarDialogo({ meta, restante, medios, onAportar, onCerrar }: 
         </span>
       )}
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

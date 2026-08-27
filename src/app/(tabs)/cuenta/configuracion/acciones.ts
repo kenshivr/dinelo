@@ -10,7 +10,11 @@ const NO_BORRO = "No se pudo borrar. Intenta de nuevo.";
 // Borrar una categoría o un medio nunca bloquea (on delete set null en seed.sql):
 // movimientos, apartados y aportes quedan "sin" — la UI avisa cuántos antes de confirmar.
 
-export async function guardarCategoria(datos: { id?: string; nombre: string; color: ColorBloque }) {
+export async function guardarCategoria(datos: {
+  id?: string;
+  nombre: string;
+  color: ColorBloque;
+}) {
   const { supabase, userId } = await conSesion();
   const fila = { nombre: datos.nombre, color: datos.color };
   const { error } = datos.id
@@ -37,7 +41,12 @@ export async function guardarMedio(datos: {
   saldoInicial: number;
 }) {
   const { supabase, userId } = await conSesion();
-  const fila = { nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo || null, saldo_inicial: datos.saldoInicial };
+  const fila = {
+    nombre: datos.nombre,
+    emoji: datos.emoji,
+    tipo: datos.tipo || null,
+    saldo_inicial: datos.saldoInicial,
+  };
   const { error } = datos.id
     ? await supabase.from("medios").update(fila).eq("id", datos.id)
     : await supabase.from("medios").insert({ ...fila, user_id: userId });
@@ -56,7 +65,12 @@ export async function borrarMedio(id: string) {
   return null;
 }
 
-export async function guardarFrecuente(datos: { id?: string; nombre: string; emoji: string; tipo: "G" | "I" }) {
+export async function guardarFrecuente(datos: {
+  id?: string;
+  nombre: string;
+  emoji: string;
+  tipo: "G" | "I";
+}) {
   const { supabase, userId } = await conSesion();
   const fila = { nombre: datos.nombre, emoji: datos.emoji, tipo: datos.tipo };
   const { error } = datos.id

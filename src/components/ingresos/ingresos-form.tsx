@@ -40,7 +40,10 @@ export function IngresosForm({ medios, frecuentes }: Props) {
       const faltantes: string[] = [];
       if (errs.concepto) faltantes.push("el concepto");
       if (errs.monto) faltantes.push("el monto");
-      toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
+      toast(
+        `${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`,
+        "error",
+      );
       // el foco también trae el campo a la vista
       if (errs.concepto) conceptoRef.current?.focus();
       else montoRef.current?.focus();
@@ -106,7 +109,10 @@ export function IngresosForm({ medios, frecuentes }: Props) {
             </button>
           ))}
           {/* size fijo (no estira con la fila): círculo de verdad, no óvalo */}
-          <button className="chip grid size-10 place-items-center p-0" onClick={() => setNuevoMedio(true)}>
+          <button
+            className="chip grid size-10 place-items-center p-0"
+            onClick={() => setNuevoMedio(true)}
+          >
             ＋
           </button>
         </div>

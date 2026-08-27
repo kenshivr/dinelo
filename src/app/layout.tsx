@@ -39,8 +39,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" suppressHydrationWarning>
       <body>
         {/* El SW solo en producción: en dev cachearía de más y el puerto localhost se comparte entre proyectos. */}
-        <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <SerwistProvider
+          swUrl="/serwist/sw.js"
+          disable={process.env.NODE_ENV === "development"}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
           </ThemeProvider>
         </SerwistProvider>

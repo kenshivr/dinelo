@@ -6,7 +6,11 @@ export default function Cargando() {
     <>
       <PageHeader
         title="Metas"
-        derecha={<span className="text-xs font-bold text-muted-foreground">ahorros con nombre</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            ahorros con nombre
+          </span>
+        }
       />
       <div className="ske h-32" />
       <div className="ske h-32" />

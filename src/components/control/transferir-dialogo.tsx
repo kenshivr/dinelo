@@ -10,12 +10,21 @@ type Props = {
   origen: Medio;
   saldoOrigen: number;
   destinos: Medio[]; // los demás medios (sin el origen)
-  onTransferir: (datos: { destinoId: string; monto: number }) => Promise<string | null>;
+  onTransferir: (datos: {
+    destinoId: string;
+    monto: number;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
 // Mueve dinero entre medios sin tocar gastos ni ingresos (el Dash no lo ve).
-export function TransferirDialogo({ origen, saldoOrigen, destinos, onTransferir, onCerrar }: Props) {
+export function TransferirDialogo({
+  origen,
+  saldoOrigen,
+  destinos,
+  onTransferir,
+  onCerrar,
+}: Props) {
   const [monto, setMonto] = useState("");
   const [destinoId, setDestinoId] = useState<string | null>(null);
   const [transfiriendo, setTransfiriendo] = useState(false);
@@ -36,10 +45,17 @@ export function TransferirDialogo({ origen, saldoOrigen, destinos, onTransferir,
   }
 
   return (
-    <Dialogo titulo={`Transferir de ${origen.emoji} ${origen.nombre}`} onCerrar={onCerrar}>
+    <Dialogo
+      titulo={`Transferir de ${origen.emoji} ${origen.nombre}`}
+      onCerrar={onCerrar}
+    >
       <div className="nbs px-3.5 py-3 text-center">
-        <b className="block text-[21px] font-black tracking-tight">{fmtMonto(saldoOrigen)}</b>
-        <span className="text-[10.5px] font-bold text-muted-foreground">hay ahora en {origen.nombre}</span>
+        <b className="block text-[21px] font-black tracking-tight">
+          {fmtMonto(saldoOrigen)}
+        </b>
+        <span className="text-[10.5px] font-bold text-muted-foreground">
+          hay ahora en {origen.nombre}
+        </span>
       </div>
 
       <span className="lbl">Monto</span>
@@ -55,7 +71,8 @@ export function TransferirDialogo({ origen, saldoOrigen, destinos, onTransferir,
       </label>
       {excedido && (
         <div className="nbs f-y px-3.5 py-2.5 text-center text-xs font-extrabold">
-          Es más de lo registrado en {origen.nombre} — puedes seguir si el saldo real es otro.
+          Es más de lo registrado en {origen.nombre} — puedes seguir si el saldo
+          real es otro.
         </div>
       )}
 
@@ -78,13 +95,21 @@ export function TransferirDialogo({ origen, saldoOrigen, destinos, onTransferir,
         </span>
       )}
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>
           Cancelar
         </button>
-        <button className="btn sm f-gg flex-1 disabled:opacity-60" disabled={!listo || transfiriendo} onClick={mover}>
+        <button
+          className="btn sm f-gg flex-1 disabled:opacity-60"
+          disabled={!listo || transfiriendo}
+          onClick={mover}
+        >
           {transfiriendo ? "Transfiriendo…" : "Transferir"}
         </button>
       </div>

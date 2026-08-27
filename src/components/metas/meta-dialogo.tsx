@@ -7,7 +7,11 @@ import type { Meta } from "@/lib/tipos";
 
 type Props = {
   meta: Meta | null; // null = nueva
-  onGuardar: (datos: { nombre: string; descripcion: string; objetivo: number }) => Promise<string | null>;
+  onGuardar: (datos: {
+    nombre: string;
+    descripcion: string;
+    objetivo: number;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
@@ -63,7 +67,11 @@ export function MetaDialogo({ meta, onGuardar, onCerrar }: Props) {
         />
       </label>
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

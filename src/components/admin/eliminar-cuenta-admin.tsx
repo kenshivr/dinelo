@@ -7,7 +7,15 @@ import { eliminarCuentaAdmin } from "@/app/(tabs)/cuenta/admin/acciones";
 
 // Botón 🗑 de cada fila del informe: borra la cuenta COMPLETA (datos, foto y
 // Auth) tras confirmar. La fila del admin no lo muestra (y el server lo frena).
-export function EliminarCuentaAdmin({ id, nombre, email }: { id: string; nombre: string; email: string }) {
+export function EliminarCuentaAdmin({
+  id,
+  nombre,
+  email,
+}: {
+  id: string;
+  nombre: string;
+  email: string;
+}) {
   const [abierto, setAbierto] = useState(false);
 
   return (

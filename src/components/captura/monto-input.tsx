@@ -14,7 +14,12 @@ export function MontoInput({ value, onChange, error, ref }: Props) {
   const mostrado = conComas(value);
   return (
     // ring (no border): el aro de error no mueve el layout
-    <label className={cn("block pt-1 text-center", error && "rounded-xl ring-2 ring-negative")}>
+    <label
+      className={cn(
+        "block pt-1 text-center",
+        error && "rounded-xl ring-2 ring-negative",
+      )}
+    >
       <span className="flex items-baseline justify-center text-5xl font-black tracking-tight">
         $&nbsp;
         <input

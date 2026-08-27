@@ -11,7 +11,7 @@ export function crearClienteAdmin() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!,
     // sin sesión de navegador: es un cliente de servicio, no de usuario
-    { auth: { persistSession: false, autoRefreshToken: false } }
+    { auth: { persistSession: false, autoRefreshToken: false } },
   );
 }
 
@@ -23,10 +23,16 @@ export function crearClienteAdmin() {
 // La usan eliminarCuenta (el propio usuario) y el informe de admin.
 export async function borrarCuentaCompleta(userId: string) {
   const admin = crearClienteAdmin();
-  const movimientos = await admin.from("movimientos").delete().eq("user_id", userId);
+  const movimientos = await admin
+    .from("movimientos")
+    .delete()
+    .eq("user_id", userId);
   const aportes = await admin.from("aportes").delete().eq("user_id", userId);
   if (movimientos.error || aportes.error) {
-    console.error("No se pudo limpiar antes de borrar:", movimientos.error ?? aportes.error);
+    console.error(
+      "No se pudo limpiar antes de borrar:",
+      movimientos.error ?? aportes.error,
+    );
     return "No se pudo eliminar la cuenta. Intenta de nuevo.";
   }
 

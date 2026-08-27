@@ -16,7 +16,10 @@ export async function GET(request: NextRequest) {
 
   if (tokenHash && tipo) {
     const supabase = await crearClienteServidor();
-    const { error } = await supabase.auth.verifyOtp({ type: tipo, token_hash: tokenHash });
+    const { error } = await supabase.auth.verifyOtp({
+      type: tipo,
+      token_hash: tokenHash,
+    });
     if (!error) {
       url.pathname = tipo === "recovery" ? "/restablecer" : "/gastos";
       return NextResponse.redirect(url);

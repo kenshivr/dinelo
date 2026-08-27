@@ -1,0 +1,7 @@
+# build y dependencias
+.next
+node_modules
+pnpm-lock.yaml
+
+# markdown se mantiene como está escrito (README, ADRs, postmortem)
+*.md

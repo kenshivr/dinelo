@@ -16,7 +16,10 @@ type Props = {
   transferencias: Transferencia[]; // solo las más recientes, orden created_at desc
 };
 
-const formatoDia = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
+const formatoDia = new Intl.DateTimeFormat("es-MX", {
+  day: "numeric",
+  month: "short",
+});
 
 export function MediosSeccion({ medios, saldos, transferencias }: Props) {
   const toast = useToast();
@@ -37,7 +40,8 @@ export function MediosSeccion({ medios, saldos, transferencias }: Props) {
           <span className="text-3xl">💱</span>
           <b className="text-sm font-extrabold">Sin medios todavía</b>
           <span className="text-xs font-bold text-muted-foreground">
-            Da de alta tus medios (banco, efectivo…) en Configuración y aquí verás cuánto hay en cada uno.
+            Da de alta tus medios (banco, efectivo…) en Configuración y aquí
+            verás cuánto hay en cada uno.
           </span>
         </div>
       ) : (
@@ -47,8 +51,12 @@ export function MediosSeccion({ medios, saldos, transferencias }: Props) {
       {medios.map((m) => (
         <div key={m.id} className="nbs flex items-center gap-2 p-3.5">
           <span className="text-[17px]">{m.emoji}</span>
-          <b className="min-w-0 flex-1 truncate text-[15px] font-black">{m.nombre}</b>
-          <b className="whitespace-nowrap text-[13.5px] font-black">{fmtMonto(saldos[m.id] ?? 0)}</b>
+          <b className="min-w-0 flex-1 truncate text-[15px] font-black">
+            {m.nombre}
+          </b>
+          <b className="whitespace-nowrap text-[13.5px] font-black">
+            {fmtMonto(saldos[m.id] ?? 0)}
+          </b>
           <button className="mini" onClick={() => setTransfiriendo(m)}>
             {flechas}
           </button>

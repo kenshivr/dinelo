@@ -9,7 +9,11 @@ export default async function IngresosPage() {
   if (!auth.user) redirect("/login");
 
   const [medios, frecuentes] = await Promise.all([
-    supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
+    supabase
+      .from("medios")
+      .select("id, nombre, emoji, tipo")
+      .eq("user_id", auth.user.id)
+      .order("created_at"),
     supabase
       .from("frecuentes")
       .select("id, nombre, emoji, tipo")
@@ -20,7 +24,10 @@ export default async function IngresosPage() {
 
   return (
     <IngresosForm
-      medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
+      medios={(medios.data ?? []).map((m): Medio => ({
+        ...m,
+        tipo: m.tipo ?? "",
+      }))}
       frecuentes={(frecuentes.data ?? []) as Frecuente[]}
     />
   );

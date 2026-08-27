@@ -9,14 +9,25 @@ import type { Apartado, Categoria } from "@/lib/tipos";
 type Props = {
   apartado: Apartado | null; // null = nuevo
   categorias: Categoria[];
-  onGuardar: (datos: { nombre: string; monto: number; categoriaId: string | null }) => Promise<string | null>;
+  onGuardar: (datos: {
+    nombre: string;
+    monto: number;
+    categoriaId: string | null;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
-export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: Props) {
+export function ApartadoDialogo({
+  apartado,
+  categorias,
+  onGuardar,
+  onCerrar,
+}: Props) {
   const [nombre, setNombre] = useState(apartado?.nombre ?? "");
   const [monto, setMonto] = useState(apartado ? String(apartado.monto) : "");
-  const [categoriaId, setCategoriaId] = useState<string | null>(apartado?.categoriaId ?? null);
+  const [categoriaId, setCategoriaId] = useState<string | null>(
+    apartado?.categoriaId ?? null,
+  );
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +35,11 @@ export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: P
 
   async function guardar() {
     setGuardando(true);
-    const e = await onGuardar({ nombre: nombre.trim(), monto: Number(monto), categoriaId });
+    const e = await onGuardar({
+      nombre: nombre.trim(),
+      monto: Number(monto),
+      categoriaId,
+    });
     if (e) {
       setError(e);
       setGuardando(false);
@@ -32,7 +47,10 @@ export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: P
   }
 
   return (
-    <Dialogo titulo={apartado ? "Editar apartado" : "Nuevo apartado"} onCerrar={onCerrar}>
+    <Dialogo
+      titulo={apartado ? "Editar apartado" : "Nuevo apartado"}
+      onCerrar={onCerrar}
+    >
       <span className="lbl">¿Para qué es?</span>
       <input
         className="nbs finput outline-none"
@@ -61,7 +79,9 @@ export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: P
               <button
                 key={c.id}
                 className={cn("chip", categoriaId === c.id && "f-y")}
-                onClick={() => setCategoriaId(categoriaId === c.id ? null : c.id)}
+                onClick={() =>
+                  setCategoriaId(categoriaId === c.id ? null : c.id)
+                }
               >
                 {c.nombre}
               </button>
@@ -70,7 +90,11 @@ export function ApartadoDialogo({ apartado, categorias, onGuardar, onCerrar }: P
         </>
       )}
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

@@ -10,18 +10,30 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         <div className="f-y -rotate-2 rounded-2xl border-2 px-6 py-3 text-[32px] font-black tracking-tighter shadow-[5px_5px_0_var(--sh)]">
           DiNelo
         </div>
-        <span className="text-xs font-bold text-muted-foreground">gastos y ahorros 💛</span>
+        <span className="text-xs font-bold text-muted-foreground">
+          gastos y ahorros 💛
+        </span>
       </div>
 
       <LoginForm
         correoInicial={typeof correo === "string" ? correo : undefined}
-        errorInicial={error === "enlace" ? "El enlace expiró o ya se usó. Pide otro." : undefined}
+        errorInicial={
+          error === "enlace"
+            ? "El enlace expiró o ya se usó. Pide otro."
+            : undefined
+        }
       />
 
-      <Link href="/recuperar" className="text-center text-xs font-bold text-muted-foreground">
+      <Link
+        href="/recuperar"
+        className="text-center text-xs font-bold text-muted-foreground"
+      >
         ¿Olvidaste tu contraseña?
       </Link>
-      <Link href="/registro" className="text-center text-xs font-bold text-muted-foreground">
+      <Link
+        href="/registro"
+        className="text-center text-xs font-bold text-muted-foreground"
+      >
         ¿No tienes cuenta? <b className="font-black">Regístrate</b>
       </Link>
 

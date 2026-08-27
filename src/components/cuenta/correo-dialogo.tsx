@@ -32,8 +32,9 @@ export function CorreoDialogo({ actual, onGuardar, onCerrar }: Props) {
     return (
       <Dialogo titulo="Revisa tu correo" onCerrar={onCerrar}>
         <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-          Te mandamos un enlace a <b className="text-foreground">{nuevo}</b> y otro a tu correo
-          actual. El cambio se aplica cuando confirmes desde los dos.
+          Te mandamos un enlace a <b className="text-foreground">{nuevo}</b> y
+          otro a tu correo actual. El cambio se aplica cuando confirmes desde
+          los dos.
         </span>
         <button className="btn sm f-y" onClick={onCerrar}>
           Entendido
@@ -58,7 +59,11 @@ export function CorreoDialogo({ actual, onGuardar, onCerrar }: Props) {
         placeholder="nuevo@correo.com"
       />
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

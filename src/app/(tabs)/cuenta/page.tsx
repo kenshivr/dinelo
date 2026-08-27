@@ -9,7 +9,10 @@ import { CerrarSesion } from "@/components/cuenta/cerrar-sesion";
 import { EliminarCuenta } from "@/components/cuenta/eliminar-cuenta";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 
-const formatoDesde = new Intl.DateTimeFormat("es-MX", { month: "short", year: "numeric" });
+const formatoDesde = new Intl.DateTimeFormat("es-MX", {
+  month: "short",
+  year: "numeric",
+});
 
 export default async function CuentaPage() {
   const supabase = await crearClienteServidor();
@@ -32,13 +35,21 @@ export default async function CuentaPage() {
     <>
       <PageHeader
         title="Cuenta"
-        derecha={<span className="text-xs font-bold text-muted-foreground">tu perfil</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            tu perfil
+          </span>
+        }
       />
 
       <div className="nbs crow px-3.5 py-3">
         {perfil.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element -- 46px; next/image pide config de dominio remoto
-          <img src={perfil.avatar_url} alt="tu foto" className="av big object-cover" />
+          <img
+            src={perfil.avatar_url}
+            alt="tu foto"
+            className="av big object-cover"
+          />
         ) : (
           <span className={cn("av big", perfil.color)}>{perfil.inicial}</span>
         )}
@@ -74,7 +85,9 @@ export default async function CuentaPage() {
       <Link href="/cuenta/configuracion" className="nbs crow">
         <span className="text-[17px]">⚙️</span>
         <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold">Configuración</b>
+          <b className="block truncate text-[13px] font-extrabold">
+            Configuración
+          </b>
           <span className="text-[10.5px] font-bold text-muted-foreground">
             categorías, medios, frecuentes y tema
           </span>
@@ -89,7 +102,9 @@ export default async function CuentaPage() {
           <Link href="/cuenta/admin" className="nbs crow">
             <span className="text-[17px]">📊</span>
             <span className="min-w-0 flex-1">
-              <b className="block truncate text-[13px] font-extrabold">Informe</b>
+              <b className="block truncate text-[13px] font-extrabold">
+                Informe
+              </b>
               <span className="text-[10.5px] font-bold text-muted-foreground">
                 cuentas, actividad y uso de la app
               </span>

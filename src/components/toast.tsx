@@ -1,12 +1,20 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "@/lib/utils";
 
 type TipoToast = "exito" | "error";
 type Toast = { id: number; mensaje: string; tipo: TipoToast };
 
-const ToastContext = createContext<(mensaje: string, tipo?: TipoToast) => void>(() => {});
+const ToastContext = createContext<(mensaje: string, tipo?: TipoToast) => void>(
+  () => {},
+);
 
 // const toast = useToast(); toast("¡Gasto registrado!"); toast("Falta el monto", "error");
 export function useToast() {
@@ -20,7 +28,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const avisar = useCallback((mensaje: string, tipo: TipoToast = "exito") => {
     const id = siguienteId.current++;
     setToasts((lista) => [...lista, { id, mensaje, tipo }]);
-    setTimeout(() => setToasts((lista) => lista.filter((t) => t.id !== id)), 3000);
+    setTimeout(
+      () => setToasts((lista) => lista.filter((t) => t.id !== id)),
+      3000,
+    );
   }, []);
 
   return (
@@ -30,8 +41,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <button
             key={t.id}
-            className={cn("toast pointer-events-auto", t.tipo === "exito" ? "f-gg" : "f-r")}
-            onClick={() => setToasts((lista) => lista.filter((x) => x.id !== t.id))}
+            className={cn(
+              "toast pointer-events-auto",
+              t.tipo === "exito" ? "f-gg" : "f-r",
+            )}
+            onClick={() =>
+              setToasts((lista) => lista.filter((x) => x.id !== t.id))
+            }
           >
             {t.mensaje}
           </button>

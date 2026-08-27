@@ -41,13 +41,18 @@ export async function subirAvatar(datos: FormData) {
   const { supabase, userId } = await conSesion();
   const { error } = await supabase.storage
     .from("avatares")
-    .upload(`${userId}.jpg`, archivo, { upsert: true, contentType: "image/jpeg" });
+    .upload(`${userId}.jpg`, archivo, {
+      upsert: true,
+      contentType: "image/jpeg",
+    });
   if (error) {
     console.error("Storage rechazó la subida:", error);
     return "No se pudo subir la foto. Intenta de nuevo.";
   }
 
-  const { data } = supabase.storage.from("avatares").getPublicUrl(`${userId}.jpg`);
+  const { data } = supabase.storage
+    .from("avatares")
+    .getPublicUrl(`${userId}.jpg`);
   const { error: errorPerfil } = await supabase
     .from("profiles")
     .update({ avatar_url: `${data.publicUrl}?v=${Date.now()}` })
@@ -66,7 +71,8 @@ export async function subirAvatar(datos: FormData) {
 export async function eliminarCuenta() {
   const { supabase, userId } = await conSesion();
   // sin la admin no hay informe: esa solo se borra desde el dashboard de Supabase
-  if (userId === process.env.ADMIN_USER_ID) return "La cuenta admin no se elimina desde la app.";
+  if (userId === process.env.ADMIN_USER_ID)
+    return "La cuenta admin no se elimina desde la app.";
 
   const e = await borrarCuentaCompleta(userId);
   if (e) return e;

@@ -46,7 +46,9 @@ type Borrando = {
 
 // "Tiene 12 gastos y 2 aportes registrados: pasarán a Sin categoría." — nada si no tiene
 function avisoDeUso(conteos: [number, string][], destino: string) {
-  const partes = conteos.filter(([n]) => n > 0).map(([n, cosa]) => `${n} ${cosa}${n === 1 ? "" : "s"}`);
+  const partes = conteos
+    .filter(([n]) => n > 0)
+    .map(([n, cosa]) => `${n} ${cosa}${n === 1 ? "" : "s"}`);
   if (partes.length === 0) return undefined;
   const total = conteos.reduce((suma, [n]) => suma + n, 0);
   return total === 1
@@ -65,9 +67,15 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
   const { resolvedTheme, setTheme } = useTheme();
   const hidratado = useHidratado();
 
-  const [catDialogo, setCatDialogo] = useState<Categoria | "nueva" | null>(null);
-  const [medioDialogo, setMedioDialogo] = useState<Medio | "nuevo" | null>(null);
-  const [frecDialogo, setFrecDialogo] = useState<Frecuente | "nuevo" | null>(null);
+  const [catDialogo, setCatDialogo] = useState<Categoria | "nueva" | null>(
+    null,
+  );
+  const [medioDialogo, setMedioDialogo] = useState<Medio | "nuevo" | null>(
+    null,
+  );
+  const [frecDialogo, setFrecDialogo] = useState<Frecuente | "nuevo" | null>(
+    null,
+  );
   const [borrando, setBorrando] = useState<Borrando | null>(null);
 
   async function borrar() {
@@ -81,7 +89,11 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
     <>
       <PageHeader
         title={<Link href="/cuenta">‹ Configuración</Link>}
-        derecha={<span className="text-xs font-bold text-muted-foreground">desde Cuenta</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            desde Cuenta
+          </span>
+        }
       />
 
       <section className="flex flex-col gap-2.5">
@@ -112,7 +124,9 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
         {categorias.map((c) => (
           <div key={c.id} className="nbs crow">
             <span className={cn("tag", c.color)} />
-            <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold">{c.nombre}</b>
+            <b className="min-w-0 flex-1 truncate text-[13px] font-extrabold">
+              {c.nombre}
+            </b>
             <button className="mini" onClick={() => setCatDialogo(c)}>
               {lapiz}
             </button>
@@ -124,7 +138,10 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
                   id: c.id,
                   nombre: c.nombre,
                   coleccion: "categorias",
-                  aviso: avisoDeUso([[usos.categorias[c.id] ?? 0, "gasto"]], "Sin categoría"),
+                  aviso: avisoDeUso(
+                    [[usos.categorias[c.id] ?? 0, "gasto"]],
+                    "Sin categoría",
+                  ),
                 })
               }
             >
@@ -143,8 +160,14 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
           <div key={m.id} className="nbs crow">
             <span className="text-[17px]">{m.emoji}</span>
             <span className="min-w-0 flex-1">
-              <b className="block truncate text-[13px] font-extrabold">{m.nombre}</b>
-              {m.tipo && <span className="text-[10.5px] font-bold text-muted-foreground">{m.tipo}</span>}
+              <b className="block truncate text-[13px] font-extrabold">
+                {m.nombre}
+              </b>
+              {m.tipo && (
+                <span className="text-[10.5px] font-bold text-muted-foreground">
+                  {m.tipo}
+                </span>
+              )}
             </span>
             <button className="mini" onClick={() => setMedioDialogo(m)}>
               {lapiz}
@@ -163,7 +186,7 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
                       [usos.aportes[m.id] ?? 0, "aporte"],
                       [usos.transferencias[m.id] ?? 0, "transferencia"],
                     ],
-                    "Sin medio"
+                    "Sin medio",
                   ),
                 })
               }
@@ -181,9 +204,13 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
         </span>
         {frecuentes.map((f) => (
           <div key={f.id} className="nbs crow">
-            <span className={cn("tag", f.tipo === "G" ? "f-y" : "f-gg")}>{f.tipo}</span>
+            <span className={cn("tag", f.tipo === "G" ? "f-y" : "f-gg")}>
+              {f.tipo}
+            </span>
             <span className="min-w-0 flex-1">
-              <b className="block truncate text-[13px] font-extrabold">{f.nombre}</b>
+              <b className="block truncate text-[13px] font-extrabold">
+                {f.nombre}
+              </b>
               <span className="text-[10.5px] font-bold text-muted-foreground">
                 {f.tipo === "G" ? "gasto frecuente" : "ingreso frecuente"}
               </span>
@@ -194,7 +221,12 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
             <button
               className="mini"
               onClick={() =>
-                setBorrando({ titulo: "¿Borrar este frecuente?", id: f.id, nombre: f.nombre, coleccion: "frecuentes" })
+                setBorrando({
+                  titulo: "¿Borrar este frecuente?",
+                  id: f.id,
+                  nombre: f.nombre,
+                  coleccion: "frecuentes",
+                })
               }
             >
               {basurita}
@@ -224,7 +256,9 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
           medio={medioDialogo === "nuevo" ? null : medioDialogo}
           onGuardar={async (datos) => {
             const error = await guardarMedio(
-              medioDialogo === "nuevo" ? datos : { ...datos, id: medioDialogo.id },
+              medioDialogo === "nuevo"
+                ? datos
+                : { ...datos, id: medioDialogo.id },
             );
             if (!error) setMedioDialogo(null);
             return error;
@@ -239,7 +273,9 @@ export function ConfView({ categorias, medios, frecuentes, usos }: Props) {
           frecuente={frecDialogo === "nuevo" ? null : frecDialogo}
           onGuardar={async (datos) => {
             const error = await guardarFrecuente(
-              frecDialogo === "nuevo" ? datos : { ...datos, id: frecDialogo.id },
+              frecDialogo === "nuevo"
+                ? datos
+                : { ...datos, id: frecDialogo.id },
             );
             if (!error) setFrecDialogo(null);
             return error;

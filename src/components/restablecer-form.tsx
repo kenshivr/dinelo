@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { restablecer } from "@/app/restablecer/acciones";
-import { ParContrasenas, contrasenaLista } from "@/components/captura/par-contrasenas";
+import {
+  ParContrasenas,
+  contrasenaLista,
+} from "@/components/captura/par-contrasenas";
 
 export function RestablecerForm() {
   const router = useRouter();
@@ -29,9 +32,18 @@ export function RestablecerForm() {
 
   return (
     <div className="flex flex-col gap-3">
-      <ParContrasenas nueva={nueva} repetida={repetida} onNueva={setNueva} onRepetida={setRepetida} />
+      <ParContrasenas
+        nueva={nueva}
+        repetida={repetida}
+        onNueva={setNueva}
+        onRepetida={setRepetida}
+      />
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <button
         className="btn f-y mt-2.5 disabled:opacity-60"

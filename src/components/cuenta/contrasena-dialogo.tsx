@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { Dialogo } from "@/components/dialogo";
-import { ParContrasenas, contrasenaLista } from "@/components/captura/par-contrasenas";
+import {
+  ParContrasenas,
+  contrasenaLista,
+} from "@/components/captura/par-contrasenas";
 
 type Props = {
   onGuardar: (nueva: string) => Promise<string | null>;
@@ -30,9 +33,18 @@ export function ContrasenaDialogo({ onGuardar, onCerrar }: Props) {
 
   return (
     <Dialogo titulo="Cambiar contraseña" onCerrar={onCerrar}>
-      <ParContrasenas nueva={nueva} repetida={repetida} onNueva={setNueva} onRepetida={setRepetida} />
+      <ParContrasenas
+        nueva={nueva}
+        repetida={repetida}
+        onNueva={setNueva}
+        onRepetida={setRepetida}
+      />
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

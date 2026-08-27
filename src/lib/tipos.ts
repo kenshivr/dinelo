@@ -3,8 +3,21 @@
 // Paleta validada 2026-08-14 (OKLab, todos los pares nuevos a ΔE ≥ 12.8): los 6
 // originales intactos + 9 nuevos. Todos aguantan texto negro encima (regla Bloque).
 export type ColorBloque =
-  | "f-y" | "f-p" | "f-g" | "f-gg" | "f-b" | "f-r"
-  | "f-o" | "f-l" | "f-t" | "f-c" | "f-v" | "f-f" | "f-m" | "f-ca" | "f-n";
+  | "f-y"
+  | "f-p"
+  | "f-g"
+  | "f-gg"
+  | "f-b"
+  | "f-r"
+  | "f-o"
+  | "f-l"
+  | "f-t"
+  | "f-c"
+  | "f-v"
+  | "f-f"
+  | "f-m"
+  | "f-ca"
+  | "f-n";
 
 // Hex de cada color de bloque — para SVG, donde las clases f-* no aplican
 export const colorBloque: Record<ColorBloque, string> = {
@@ -27,14 +40,49 @@ export const colorBloque: Record<ColorBloque, string> = {
 
 export type Categoria = { id: string; nombre: string; color: ColorBloque };
 // saldoInicial solo se carga donde se usa (Conf y Control › Medios)
-export type Medio = { id: string; nombre: string; emoji: string; tipo: string; saldoInicial?: number };
+export type Medio = {
+  id: string;
+  nombre: string;
+  emoji: string;
+  tipo: string;
+  saldoInicial?: number;
+};
 // origen/destino null = medio borrado (set null); el saldo del otro lado igual la cuenta
-export type Transferencia = { id: string; origenId: string | null; destinoId: string | null; monto: number; fecha: string };
-export type Frecuente = { id: string; nombre: string; emoji: string; tipo: "G" | "I" };
-export type Meta = { id: string; nombre: string; descripcion: string; objetivo: number };
+export type Transferencia = {
+  id: string;
+  origenId: string | null;
+  destinoId: string | null;
+  monto: number;
+  fecha: string;
+};
+export type Frecuente = {
+  id: string;
+  nombre: string;
+  emoji: string;
+  tipo: "G" | "I";
+};
+export type Meta = {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  objetivo: number;
+};
 // movimientoId null = pendiente; al pagarse se liga con el gasto real creado
-export type Apartado = { id: string; nombre: string; monto: number; mes: string; categoriaId: string | null; movimientoId: string | null };
-export type Aporte = { id: string; metaId: string; medioId?: string; monto: number; fecha: string }; // yyyy-mm-dd
+export type Apartado = {
+  id: string;
+  nombre: string;
+  monto: number;
+  mes: string;
+  categoriaId: string | null;
+  movimientoId: string | null;
+};
+export type Aporte = {
+  id: string;
+  metaId: string;
+  medioId?: string;
+  monto: number;
+  fecha: string;
+}; // yyyy-mm-dd
 export type Perfil = {
   id: string;
   nombre: string;

@@ -288,7 +288,10 @@
     border-radius: 6px;
     text-align: left;
   }
-  .drow.on { background: #facc15; color: #111; }
+  .drow.on {
+    background: #facc15;
+    color: #111;
+  }
 
   /* CTA anclado: full-bleed, sin sombra, alto para no chocar con el círculo del nav.
      Sticky al fondo del scrollport del main (debe ser hijo directo del main):
@@ -333,8 +336,13 @@
     color: var(--muted-foreground);
     width: 58px;
   }
-  .ni svg { width: 22px; height: 22px; }
-  .ni.on { color: var(--foreground); }
+  .ni svg {
+    width: 22px;
+    height: 22px;
+  }
+  .ni.on {
+    color: var(--foreground);
+  }
   .nc {
     width: 54px;
     height: 54px;
@@ -346,7 +354,10 @@
     margin-top: -34px;
     box-shadow: 3px 3px 0 var(--sh);
   }
-  .nc svg { width: 24px; height: 24px; }
+  .nc svg {
+    width: 24px;
+    height: 24px;
+  }
 
   /* cuadrito identificador de fila: color de categoría o tag G/I */
   .tag {
@@ -411,21 +422,67 @@
      VAN AL FINAL de la capa a propósito: a igual especificidad gana la última
      regla, y el fill debe pisar el background de .chip/.dock/.btn/etc. —
      si se mueven arriba, la selección amarilla y los CTAs de color se apagan. */
-  .f-y { background: #facc15; }
-  .f-p { background: #f9a8d4; }
-  .f-g { background: #bbf7d0; }
-  .f-gg { background: #4ade80; }
-  .f-b { background: #93c5fd; }
-  .f-r { background: #fca5a5; }
-  .f-o { background: #f97316; }
-  .f-l { background: #65a30d; }
-  .f-t { background: #14b8a6; }
-  .f-c { background: #0ea5e9; }
-  .f-v { background: #8b5cf6; }
-  .f-f { background: #e879f9; }
-  .f-m { background: #ec4899; }
-  .f-ca { background: #a8a29e; }
-  .f-n { background: #d4d4d8; }
-  .f-y, .f-p, .f-g, .f-gg, .f-b, .f-r,
-  .f-o, .f-l, .f-t, .f-c, .f-v, .f-f, .f-m, .f-ca, .f-n { color: #111; border-color: #111; }
+  .f-y {
+    background: #facc15;
+  }
+  .f-p {
+    background: #f9a8d4;
+  }
+  .f-g {
+    background: #bbf7d0;
+  }
+  .f-gg {
+    background: #4ade80;
+  }
+  .f-b {
+    background: #93c5fd;
+  }
+  .f-r {
+    background: #fca5a5;
+  }
+  .f-o {
+    background: #f97316;
+  }
+  .f-l {
+    background: #65a30d;
+  }
+  .f-t {
+    background: #14b8a6;
+  }
+  .f-c {
+    background: #0ea5e9;
+  }
+  .f-v {
+    background: #8b5cf6;
+  }
+  .f-f {
+    background: #e879f9;
+  }
+  .f-m {
+    background: #ec4899;
+  }
+  .f-ca {
+    background: #a8a29e;
+  }
+  .f-n {
+    background: #d4d4d8;
+  }
+  .f-y,
+  .f-p,
+  .f-g,
+  .f-gg,
+  .f-b,
+  .f-r,
+  .f-o,
+  .f-l,
+  .f-t,
+  .f-c,
+  .f-v,
+  .f-f,
+  .f-m,
+  .f-ca,
+  .f-n {
+    color: #111;
+    border-color: #111;
+  }
 }

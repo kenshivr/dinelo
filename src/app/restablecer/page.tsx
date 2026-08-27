@@ -14,7 +14,9 @@ export default async function RestablecerPage() {
         <div className="f-y -rotate-2 rounded-2xl border-2 px-6 py-3 text-[32px] font-black tracking-tighter shadow-[5px_5px_0_var(--sh)]">
           DiNelo
         </div>
-        <span className="text-xs font-bold text-muted-foreground">contraseña nueva</span>
+        <span className="text-xs font-bold text-muted-foreground">
+          contraseña nueva
+        </span>
       </div>
 
       <RestablecerForm />

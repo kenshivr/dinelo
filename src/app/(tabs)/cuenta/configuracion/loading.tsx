@@ -7,7 +7,11 @@ export default function Cargando() {
     <>
       <PageHeader
         title={<Link href="/cuenta">‹ Configuración</Link>}
-        derecha={<span className="text-xs font-bold text-muted-foreground">desde Cuenta</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            desde Cuenta
+          </span>
+        }
       />
       <span className="lbl">Tema</span>
       <div className="ske h-10" />

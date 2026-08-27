@@ -1,7 +1,11 @@
 import type { Medio, Transferencia } from "@/lib/tipos";
 
 // Lo que Control › Medios necesita del movimiento: nada de concepto ni categoría
-export type MovimientoDeSaldo = { tipo: "gasto" | "ingreso"; monto: number; medioId: string | null };
+export type MovimientoDeSaldo = {
+  tipo: "gasto" | "ingreso";
+  monto: number;
+  medioId: string | null;
+};
 
 // Saldo por medio: inicial + ingresos − gastos + transferencias que entran − las
 // que salen. Lo "Sin medio" (movimiento sin medio o punta borrada de una

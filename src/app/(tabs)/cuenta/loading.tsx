@@ -6,7 +6,11 @@ export default function Cargando() {
     <>
       <PageHeader
         title="Cuenta"
-        derecha={<span className="text-xs font-bold text-muted-foreground">tu perfil</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            tu perfil
+          </span>
+        }
       />
       <div className="ske h-[70px]" />
       <span className="lbl">Mis datos</span>

@@ -14,12 +14,17 @@ export default async function RecuperarPage({
         <div className="f-y -rotate-2 rounded-2xl border-2 px-6 py-3 text-[32px] font-black tracking-tighter shadow-[5px_5px_0_var(--sh)]">
           DiNelo
         </div>
-        <span className="text-xs font-bold text-muted-foreground">recuperar contraseña</span>
+        <span className="text-xs font-bold text-muted-foreground">
+          recuperar contraseña
+        </span>
       </div>
 
       <RecuperarForm correoInicial={correo} />
 
-      <Link href="/login" className="mt-auto text-center text-xs font-bold text-muted-foreground">
+      <Link
+        href="/login"
+        className="mt-auto text-center text-xs font-bold text-muted-foreground"
+      >
         ‹ Volver al login
       </Link>
     </main>

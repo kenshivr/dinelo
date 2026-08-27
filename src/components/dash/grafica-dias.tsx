@@ -22,14 +22,23 @@ const formatoDia = new Intl.DateTimeFormat("es-MX", {
   month: "short",
 });
 
-export function GraficaDias({ valores, color, mes, vacio = "Sin movimientos" }: Props) {
+export function GraficaDias({
+  valores,
+  color,
+  mes,
+  vacio = "Sin movimientos",
+}: Props) {
   const [sel, setSel] = useState<number | null>(null);
 
   const ancho = valores.length * PASO;
   const mayor = Math.max(...valores);
 
   if (mayor === 0) {
-    return <p className="py-4 text-center text-[11px] font-bold text-muted-foreground">{vacio}</p>;
+    return (
+      <p className="py-4 text-center text-[11px] font-bold text-muted-foreground">
+        {vacio}
+      </p>
+    );
   }
 
   const detalle =
@@ -41,9 +50,18 @@ export function GraficaDias({ valores, color, mes, vacio = "Sin movimientos" }: 
       : "";
 
   return (
-    <svg viewBox={`0 0 ${ancho} ${DETALLE + ALTO + 16}`} className="w-full" role="img">
+    <svg
+      viewBox={`0 0 ${ancho} ${DETALLE + ALTO + 16}`}
+      className="w-full"
+      role="img"
+    >
       {detalle && (
-        <text x={ancho / 2} y="10" textAnchor="middle" className="fill-foreground text-[10px] font-black">
+        <text
+          x={ancho / 2}
+          y="10"
+          textAnchor="middle"
+          className="fill-foreground text-[10px] font-black"
+        >
           {detalle}
         </text>
       )}

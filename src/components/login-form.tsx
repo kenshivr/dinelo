@@ -56,9 +56,17 @@ export function LoginForm({ correoInicial, errorInicial }: Props) {
         required
       />
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
-      <button type="submit" className="btn f-y mt-2.5 disabled:opacity-60" disabled={entrando}>
+      <button
+        type="submit"
+        className="btn f-y mt-2.5 disabled:opacity-60"
+        disabled={entrando}
+      >
         {entrando ? "Entrando…" : "Entrar"}
       </button>
     </form>

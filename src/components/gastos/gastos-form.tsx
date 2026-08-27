@@ -47,7 +47,10 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
       const faltantes: string[] = [];
       if (errs.concepto) faltantes.push("el concepto");
       if (errs.monto) faltantes.push("el monto");
-      toast(`${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`, "error");
+      toast(
+        `${faltantes.length > 1 ? "Te faltan" : "Te falta"} ${enumerar(faltantes)} para registrar`,
+        "error",
+      );
       // el foco también trae el campo a la vista
       if (errs.concepto) conceptoRef.current?.focus();
       else montoRef.current?.focus();
@@ -114,7 +117,10 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
             </button>
           ))}
           {/* size fijo (no estira con la fila): círculo de verdad, no óvalo */}
-          <button className="chip grid size-10 place-items-center p-0" onClick={() => setNuevaCategoria(true)}>
+          <button
+            className="chip grid size-10 place-items-center p-0"
+            onClick={() => setNuevaCategoria(true)}
+          >
             ＋
           </button>
         </div>
@@ -153,7 +159,10 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
           {chevron}
         </button>
       ) : (
-        <Link href="/cuenta/configuracion" className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground">
+        <Link
+          href="/cuenta/configuracion"
+          className="nbs block px-3.5 py-3 text-sm font-extrabold text-muted-foreground"
+        >
           Todavía no hay medios — créalos en Configuración →
         </Link>
       )}

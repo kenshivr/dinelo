@@ -11,7 +11,10 @@ import { basurita, lapiz } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { EditarDialogo } from "@/components/historial/editar-dialogo";
 import { ConfirmarBorrado } from "@/components/confirmar-borrado";
-import { borrarMovimiento, guardarMovimiento } from "@/app/(tabs)/cuenta/historial/acciones";
+import {
+  borrarMovimiento,
+  guardarMovimiento,
+} from "@/app/(tabs)/cuenta/historial/acciones";
 import type { Categoria, Medio, Movimiento } from "@/lib/tipos";
 
 type Props = {
@@ -34,9 +37,17 @@ const formatoDia = new Intl.DateTimeFormat("es-MX", {
 
 // búsqueda insensible a acentos: NFD separa el diacrítico y el rango del regex
 // (los combinantes U+0300–U+036F, invisibles aquí) lo borra — "cafe" halla "Café"
-const sinAcentos = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const sinAcentos = (s: string) =>
+  s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
-export function HistorialView({ mes, esDefault, desdeMes, movimientos, categorias, medios }: Props) {
+export function HistorialView({
+  mes,
+  esDefault,
+  desdeMes,
+  movimientos,
+  categorias,
+  medios,
+}: Props) {
   const hoy = useHoy();
   const router = useRouter();
   const [cambiando, startTransition] = useTransition();
@@ -58,13 +69,16 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
 
   function irAlMes(nuevo: string) {
     setPanel(null);
-    startTransition(() => router.replace(`/cuenta/historial?mes=${nuevo}`, { scroll: false }));
+    startTransition(() =>
+      router.replace(`/cuenta/historial?mes=${nuevo}`, { scroll: false }),
+    );
   }
 
   // Del mes actual (o el visible, si es mayor) hacia atrás hasta el alta de la cuenta
   const tope = mesCliente && mesCliente > mes ? mesCliente : mes;
   const meses: string[] = [];
-  for (let m = tope; m >= desdeMes && meses.length < 60; m = sumarMes(m, -1)) meses.push(m);
+  for (let m = tope; m >= desdeMes && meses.length < 60; m = sumarMes(m, -1))
+    meses.push(m);
   if (meses.length === 0) meses.push(mes);
 
   const visibles = movimientos.filter(
@@ -72,7 +86,8 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
       (filtroTipo === "todo" || m.tipo === filtroTipo) &&
       (filtroCat === null || m.categoriaId === filtroCat) &&
       (filtroMedio === null || m.medioId === filtroMedio) &&
-      (busqueda.trim() === "" || sinAcentos(m.concepto).includes(sinAcentos(busqueda.trim()))),
+      (busqueda.trim() === "" ||
+        sinAcentos(m.concepto).includes(sinAcentos(busqueda.trim()))),
   );
   const dias = [...new Set(visibles.map((m) => m.fecha))];
 
@@ -81,7 +96,10 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
       if (fecha === hoy) return "Hoy";
       if (fecha === ayerDe(hoy)) return "Ayer";
     }
-    return formatoDia.format(fechaDe(fecha)).replaceAll(",", "").replace(".", "");
+    return formatoDia
+      .format(fechaDe(fecha))
+      .replaceAll(",", "")
+      .replace(".", "");
   }
 
   function subtitulo(m: Movimiento) {
@@ -89,7 +107,8 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
     const principal =
       m.tipo === "ingreso"
         ? "Ingreso"
-        : (categorias.find((c) => c.id === m.categoriaId)?.nombre ?? "Sin categoría");
+        : (categorias.find((c) => c.id === m.categoriaId)?.nombre ??
+          "Sin categoría");
     return [principal, medio].filter(Boolean).join(" · ");
   }
 
@@ -99,7 +118,11 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
     <>
       <PageHeader
         title={<Link href="/cuenta">‹ Historial</Link>}
-        derecha={<span className="text-xs font-bold text-muted-foreground">desde Cuenta</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            desde Cuenta
+          </span>
+        }
       />
 
       <div className="flex flex-wrap gap-2">
@@ -128,13 +151,19 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
           className={cn("chip", filtroCat && "f-y")}
           onClick={() => setPanel(panel === "categoria" ? null : "categoria")}
         >
-          {filtroCat ? categorias.find((c) => c.id === filtroCat)?.nombre : "Categoría"} ▾
+          {filtroCat
+            ? categorias.find((c) => c.id === filtroCat)?.nombre
+            : "Categoría"}{" "}
+          ▾
         </button>
         <button
           className={cn("chip", filtroMedio && "f-y")}
           onClick={() => setPanel(panel === "medio" ? null : "medio")}
         >
-          {filtroMedio ? medios.find((m) => m.id === filtroMedio)?.nombre : "Medio"} ▾
+          {filtroMedio
+            ? medios.find((m) => m.id === filtroMedio)?.nombre
+            : "Medio"}{" "}
+          ▾
         </button>
       </div>
 
@@ -148,7 +177,11 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
       {panel === "mes" && (
         <div className="nbs p-[7px]">
           {meses.map((m) => (
-            <button key={m} className={cn("drow", mes === m && "on")} onClick={() => irAlMes(m)}>
+            <button
+              key={m}
+              className={cn("drow", mes === m && "on")}
+              onClick={() => irAlMes(m)}
+            >
               {capitalizar(nombreMes(m))} {m.slice(0, 4)}
             </button>
           ))}
@@ -159,7 +192,10 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
         <div className="nbs p-[7px]">
           <button
             className={cn("drow", filtroCat === null && "on")}
-            onClick={() => { setFiltroCat(null); setPanel(null); }}
+            onClick={() => {
+              setFiltroCat(null);
+              setPanel(null);
+            }}
           >
             Todas
           </button>
@@ -167,7 +203,10 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
             <button
               key={c.id}
               className={cn("drow", filtroCat === c.id && "on")}
-              onClick={() => { setFiltroCat(c.id); setPanel(null); }}
+              onClick={() => {
+                setFiltroCat(c.id);
+                setPanel(null);
+              }}
             >
               <span className={cn("tag", c.color)} /> {c.nombre}
             </button>
@@ -179,7 +218,10 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
         <div className="nbs p-[7px]">
           <button
             className={cn("drow", filtroMedio === null && "on")}
-            onClick={() => { setFiltroMedio(null); setPanel(null); }}
+            onClick={() => {
+              setFiltroMedio(null);
+              setPanel(null);
+            }}
           >
             Todos
           </button>
@@ -187,7 +229,10 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
             <button
               key={m.id}
               className={cn("drow", filtroMedio === m.id && "on")}
-              onClick={() => { setFiltroMedio(m.id); setPanel(null); }}
+              onClick={() => {
+                setFiltroMedio(m.id);
+                setPanel(null);
+              }}
             >
               {m.emoji} {m.nombre}
             </button>
@@ -197,59 +242,62 @@ export function HistorialView({ mes, esDefault, desdeMes, movimientos, categoria
 
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
-      {dias.length === 0 ? (
-        movimientos.length > 0 ? (
-          <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
-            <span className="text-[42px]">🔍</span>
-            <b className="text-[15px] font-black">Nada coincide</b>
-            <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-              Este mes sí tiene registros — prueba con otra búsqueda u otros filtros.
-            </span>
-          </div>
+        {dias.length === 0 ? (
+          movimientos.length > 0 ? (
+            <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
+              <span className="text-[42px]">🔍</span>
+              <b className="text-[15px] font-black">Nada coincide</b>
+              <span className="text-xs font-bold leading-relaxed text-muted-foreground">
+                Este mes sí tiene registros — prueba con otra búsqueda u otros
+                filtros.
+              </span>
+            </div>
+          ) : (
+            <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
+              <span className="text-[42px]">🧾</span>
+              <b className="text-[15px] font-black">Todavía no hay registros</b>
+              <span className="text-xs font-bold leading-relaxed text-muted-foreground">
+                Tus gastos e ingresos van a aparecer aquí, agrupados por día,
+                listos para editar o borrar si se te fue un dedazo.
+              </span>
+            </div>
+          )
         ) : (
-        <div className="nbs mt-2 flex flex-col items-center gap-2 px-4 py-9 text-center">
-          <span className="text-[42px]">🧾</span>
-          <b className="text-[15px] font-black">Todavía no hay registros</b>
-          <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-            Tus gastos e ingresos van a aparecer aquí, agrupados por día, listos para editar o
-            borrar si se te fue un dedazo.
-          </span>
-        </div>
-        )
-      ) : (
-        dias.map((dia) => (
-          <Fragment key={dia}>
-            <span className="lbl">{etiquetaDia(dia)}</span>
-            {visibles
-              .filter((m) => m.fecha === dia)
-              .map((m) => (
-                <div key={m.id} className="nbs crow">
-                  <span className="min-w-0 flex-1">
-                    <b className="block truncate text-[13px] font-extrabold">{m.concepto}</b>
-                    <span className="text-[10.5px] font-bold text-muted-foreground">
-                      {subtitulo(m)}
+          dias.map((dia) => (
+            <Fragment key={dia}>
+              <span className="lbl">{etiquetaDia(dia)}</span>
+              {visibles
+                .filter((m) => m.fecha === dia)
+                .map((m) => (
+                  <div key={m.id} className="nbs crow">
+                    <span className="min-w-0 flex-1">
+                      <b className="block truncate text-[13px] font-extrabold">
+                        {m.concepto}
+                      </b>
+                      <span className="text-[10.5px] font-bold text-muted-foreground">
+                        {subtitulo(m)}
+                      </span>
                     </span>
-                  </span>
-                  <span
-                    className={cn(
-                      "whitespace-nowrap text-[13.5px] font-black",
-                      m.tipo === "gasto" ? "text-negative" : "text-positive",
-                    )}
-                  >
-                    {m.tipo === "gasto" ? "−" : "+"}
-                    {fmtMonto(m.monto)}
-                  </span>
-                  <button className="mini" onClick={() => setEditando(m)}>
-                    {lapiz}
-                  </button>
-                  <button className="mini" onClick={() => setBorrando(m)}>
-                    {basurita}
-                  </button>
-                </div>
-              ))}
-          </Fragment>
-        ))
-      )}
+                    <span
+                      className={cn(
+                        "whitespace-nowrap text-[13.5px] font-black",
+                        m.tipo === "gasto" ? "text-negative" : "text-positive",
+                      )}
+                    >
+                      {m.tipo === "gasto" ? "−" : "+"}
+                      {fmtMonto(m.monto)}
+                    </span>
+                    <button className="mini" onClick={() => setEditando(m)}>
+                      {lapiz}
+                    </button>
+                    <button className="mini" onClick={() => setBorrando(m)}>
+                      {basurita}
+                    </button>
+                  </div>
+                ))}
+            </Fragment>
+          ))
+        )}
       </div>
 
       {editando && (

@@ -13,7 +13,10 @@ export type PerfilHeader = {
 
 // Los perfiles se cargan UNA vez en el layout de (tabs) y viajan por contexto:
 // así el PageHeader de cualquier vista muestra al usuario real sin fetch propio.
-const PerfilesContext = createContext<{ perfiles: PerfilHeader[]; miId: string }>({
+const PerfilesContext = createContext<{
+  perfiles: PerfilHeader[];
+  miId: string;
+}>({
   perfiles: [],
   miId: "",
 });
@@ -32,5 +35,9 @@ export function PerfilesProvider({
   miId: string;
   children: React.ReactNode;
 }) {
-  return <PerfilesContext.Provider value={{ perfiles, miId }}>{children}</PerfilesContext.Provider>;
+  return (
+    <PerfilesContext.Provider value={{ perfiles, miId }}>
+      {children}
+    </PerfilesContext.Provider>
+  );
 }

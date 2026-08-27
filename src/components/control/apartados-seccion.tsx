@@ -9,7 +9,11 @@ import { useToast } from "@/components/toast";
 import { ConfirmarBorrado } from "@/components/confirmar-borrado";
 import { ApartadoDialogo } from "@/components/control/apartado-dialogo";
 import { PagarDialogo } from "@/components/control/pagar-dialogo";
-import { borrarApartado, guardarApartado, pagarApartado } from "@/app/(tabs)/metas/acciones";
+import {
+  borrarApartado,
+  guardarApartado,
+  pagarApartado,
+} from "@/app/(tabs)/metas/acciones";
 import type { Apartado, Categoria, Medio } from "@/lib/tipos";
 
 type Props = {
@@ -47,8 +51,12 @@ export function ApartadosSeccion({ apartados, categorias, medios }: Props) {
           <div key={a.id} className="nbs flex flex-col gap-2.5 p-3.5">
             <div className="flex items-center gap-2">
               {cat && <span className={cn("tag", cat.color)} />}
-              <b className="min-w-0 flex-1 truncate text-[15px] font-black">{a.nombre}</b>
-              <b className="whitespace-nowrap text-[13.5px] font-black">{fmtMonto(a.monto)}</b>
+              <b className="min-w-0 flex-1 truncate text-[15px] font-black">
+                {a.nombre}
+              </b>
+              <b className="whitespace-nowrap text-[13.5px] font-black">
+                {fmtMonto(a.monto)}
+              </b>
               <button className="mini" onClick={() => setDialogo(a)}>
                 {lapiz}
               </button>
@@ -63,7 +71,10 @@ export function ApartadosSeccion({ apartados, categorias, medios }: Props) {
         );
       })}
 
-      <button className="dock f-gg -mx-[18px] mt-auto" onClick={() => setDialogo("nuevo")}>
+      <button
+        className="dock f-gg -mx-[18px] mt-auto"
+        onClick={() => setDialogo("nuevo")}
+      >
         ＋ Nuevo apartado
       </button>
 

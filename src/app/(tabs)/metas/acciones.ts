@@ -8,9 +8,18 @@ import { fmtMonto } from "@/lib/formato";
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";
 const NO_BORRO = "No se pudo borrar. Intenta de nuevo.";
 
-export async function guardarMeta(datos: { id?: string; nombre: string; descripcion: string; objetivo: number }) {
+export async function guardarMeta(datos: {
+  id?: string;
+  nombre: string;
+  descripcion: string;
+  objetivo: number;
+}) {
   const { supabase, userId } = await conSesion();
-  const fila = { nombre: datos.nombre, descripcion: datos.descripcion, objetivo: datos.objetivo };
+  const fila = {
+    nombre: datos.nombre,
+    descripcion: datos.descripcion,
+    objetivo: datos.objetivo,
+  };
   const { error } = datos.id
     ? await supabase.from("metas").update(fila).eq("id", datos.id)
     : await supabase.from("metas").insert({ ...fila, user_id: userId });
@@ -29,7 +38,12 @@ export async function borrarMeta(id: string) {
 }
 
 // medioId opcional (aportes-medio-opcional.sql): sin medio = null
-export async function aportar(datos: { metaId: string; monto: number; medioId: string | null; fecha: string }) {
+export async function aportar(datos: {
+  metaId: string;
+  monto: number;
+  medioId: string | null;
+  fecha: string;
+}) {
   const { supabase, userId } = await conSesion();
 
   // El cliente ya avisa, pero puede estar desactualizado (aporte desde otro
@@ -39,7 +53,8 @@ export async function aportar(datos: { metaId: string; monto: number; medioId: s
     supabase.from("aportes").select("monto").eq("meta_id", datos.metaId),
   ]);
   if (!meta) return NO_GUARDO;
-  const restante = meta.objetivo - (previos ?? []).reduce((suma, a) => suma + a.monto, 0);
+  const restante =
+    meta.objetivo - (previos ?? []).reduce((suma, a) => suma + a.monto, 0);
   if (datos.monto > restante)
     return restante > 0
       ? `Solo faltan ${fmtMonto(restante)} para completar esta meta.`
@@ -75,10 +90,16 @@ export async function guardarApartado(datos: {
   categoriaId: string | null;
 }) {
   const { supabase, userId } = await conSesion();
-  const fila = { nombre: datos.nombre, monto: datos.monto, categoria_id: datos.categoriaId };
+  const fila = {
+    nombre: datos.nombre,
+    monto: datos.monto,
+    categoria_id: datos.categoriaId,
+  };
   const { error } = datos.id
     ? await supabase.from("apartados").update(fila).eq("id", datos.id)
-    : await supabase.from("apartados").insert({ ...fila, mes: datos.mes, user_id: userId });
+    : await supabase
+        .from("apartados")
+        .insert({ ...fila, mes: datos.mes, user_id: userId });
   if (error) return NO_GUARDO;
   revalidatePath("/metas");
   revalidatePath("/dash");
@@ -98,9 +119,15 @@ export async function borrarApartado(id: string) {
 
 // Mueve dinero entre medios sin crear gasto ni ingreso: el Dash no la ve,
 // solo cambia el saldo de las dos cards.
-export async function transferir(datos: { origenId: string; destinoId: string; monto: number; fecha: string }) {
+export async function transferir(datos: {
+  origenId: string;
+  destinoId: string;
+  monto: number;
+  fecha: string;
+}) {
   const { supabase, userId } = await conSesion();
-  if (datos.origenId === datos.destinoId) return "Elige un medio distinto al de origen.";
+  if (datos.origenId === datos.destinoId)
+    return "Elige un medio distinto al de origen.";
   const { error } = await supabase.from("transferencias").insert({
     user_id: userId,
     origen_id: datos.origenId,
@@ -160,7 +187,8 @@ export async function pagarApartado(datos: {
     .eq("id", datos.id);
   // si la liga falla el gasto ya existe: mejor avisar y dejar el apartado
   // visible (borrarlo a mano) que arriesgar un gasto duplicado reintentando
-  if (liga) return "El gasto se registró, pero el apartado no se pudo marcar — bórralo a mano.";
+  if (liga)
+    return "El gasto se registró, pero el apartado no se pudo marcar — bórralo a mano.";
 
   revalidatePath("/metas");
   revalidatePath("/dash");

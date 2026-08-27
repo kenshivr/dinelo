@@ -48,8 +48,8 @@ export function EliminarCuenta({ esAdmin }: { esAdmin: boolean }) {
           {esAdmin ? (
             <>
               <div className="nbs finput opacity-85">
-                La cuenta admin no se elimina desde la app: se hace desde el dashboard de
-                Supabase.
+                La cuenta admin no se elimina desde la app: se hace desde el
+                dashboard de Supabase.
               </div>
               <button className="btn sm" onClick={cerrar}>
                 Entendido
@@ -58,11 +58,12 @@ export function EliminarCuenta({ esAdmin }: { esAdmin: boolean }) {
           ) : (
             <>
               <div className="nbs finput opacity-85">
-                Se borran para siempre tus movimientos, metas, apartados, categorías, medios,
-                tu foto y tu cuenta.
+                Se borran para siempre tus movimientos, metas, apartados,
+                categorías, medios, tu foto y tu cuenta.
               </div>
               <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-                Esta acción no se puede deshacer. Escribe ELIMINAR para confirmar.
+                Esta acción no se puede deshacer. Escribe ELIMINAR para
+                confirmar.
               </span>
               <input
                 className="nbs finput outline-none"

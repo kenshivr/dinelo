@@ -13,10 +13,12 @@ const porCodigo: Record<string, string> = {
   email_address_invalid: "Ese correo no se ve bien. Revísalo.",
   signup_disabled: "Por ahora no estamos abriendo cuentas nuevas.",
   invalid_credentials: "Correo o contraseña incorrectos.",
-  email_not_confirmed: "Tu cuenta aún no está confirmada. Revisa tu correo y spam.",
+  email_not_confirmed:
+    "Tu cuenta aún no está confirmada. Revisa tu correo y spam.",
   user_banned: "Esta cuenta está suspendida.",
   // 429 al mandar correo = el anterior SÍ salió (el error que vio Sam)
-  over_email_send_rate_limit: "Ya te mandamos un enlace hace poco. Espera un minuto y revisa spam.",
+  over_email_send_rate_limit:
+    "Ya te mandamos un enlace hace poco. Espera un minuto y revisa spam.",
   over_request_rate_limit: "Demasiados intentos. Espera un minuto.",
   request_timeout: "El servidor tardó de más. Intenta de nuevo.",
   otp_expired: "El enlace expiró o ya se usó. Pide otro.",
@@ -26,7 +28,12 @@ const porCodigo: Record<string, string> = {
 };
 
 export function mensajeDeAuth(error: AuthError, donde: string): string {
-  console.error(`[auth:${donde}]`, error.code ?? "sin-codigo", error.status ?? 0, error.message);
+  console.error(
+    `[auth:${donde}]`,
+    error.code ?? "sin-codigo",
+    error.status ?? 0,
+    error.message,
+  );
   if (error.code && porCodigo[error.code]) return porCodigo[error.code];
 
   // sin código: decidir por el status (0 = la red ni llegó a Supabase)

@@ -9,9 +9,14 @@ export default function OfflinePage() {
       </div>
       <p className="mt-4 text-sm font-extrabold">Sin conexión 📡</p>
       <p className="text-xs font-bold text-muted-foreground">
-        DiNelo necesita internet para tus datos. Revisa tu señal y vuelve a intentarlo.
+        DiNelo necesita internet para tus datos. Revisa tu señal y vuelve a
+        intentarlo.
       </p>
-      <button type="button" className="btn f-y mt-2.5" onClick={() => location.reload()}>
+      <button
+        type="button"
+        className="btn f-y mt-2.5"
+        onClick={() => location.reload()}
+      >
         Reintentar
       </button>
     </main>

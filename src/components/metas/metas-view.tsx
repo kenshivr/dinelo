@@ -9,7 +9,12 @@ import { useToast } from "@/components/toast";
 import { ConfirmarBorrado } from "@/components/confirmar-borrado";
 import { MetaDialogo } from "@/components/metas/meta-dialogo";
 import { AportarDialogo } from "@/components/metas/aportar-dialogo";
-import { aportar, borrarAporte, borrarMeta, guardarMeta } from "@/app/(tabs)/metas/acciones";
+import {
+  aportar,
+  borrarAporte,
+  borrarMeta,
+  guardarMeta,
+} from "@/app/(tabs)/metas/acciones";
 import type { Aporte, Medio, Meta } from "@/lib/tipos";
 
 type Props = {
@@ -18,7 +23,10 @@ type Props = {
   medios: Medio[];
 };
 
-const formatoDia = new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "short" });
+const formatoDia = new Intl.DateTimeFormat("es-MX", {
+  day: "numeric",
+  month: "short",
+});
 
 export function MetasView({ metas, aportes, medios }: Props) {
   const toast = useToast();
@@ -34,7 +42,9 @@ export function MetasView({ metas, aportes, medios }: Props) {
   }
 
   function juntadoDe(metaId: string) {
-    return aportes.filter((a) => a.metaId === metaId).reduce((suma, a) => suma + a.monto, 0);
+    return aportes
+      .filter((a) => a.metaId === metaId)
+      .reduce((suma, a) => suma + a.monto, 0);
   }
 
   return (
@@ -59,9 +69,13 @@ export function MetasView({ metas, aportes, medios }: Props) {
           <div key={meta.id} className="nbs flex flex-col gap-2.5 p-3.5">
             <div className="flex items-center gap-2">
               <span className="min-w-0 flex-1">
-                <b className="block truncate text-[15px] font-black">{meta.nombre}</b>
+                <b className="block truncate text-[15px] font-black">
+                  {meta.nombre}
+                </b>
                 {meta.descripcion && (
-                  <span className="text-[11px] font-bold text-muted-foreground">{meta.descripcion}</span>
+                  <span className="text-[11px] font-bold text-muted-foreground">
+                    {meta.descripcion}
+                  </span>
                 )}
               </span>
               <button className="mini" onClick={() => setMetaDialogo(meta)}>
@@ -73,7 +87,10 @@ export function MetasView({ metas, aportes, medios }: Props) {
             </div>
 
             <div className="h-4 overflow-hidden rounded-full border-2">
-              <div className={cn("h-full", cumplida ? "f-gg" : "f-y")} style={{ width: `${pct}%` }} />
+              <div
+                className={cn("h-full", cumplida ? "f-gg" : "f-y")}
+                style={{ width: `${pct}%` }}
+              />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -100,7 +117,8 @@ export function MetasView({ metas, aportes, medios }: Props) {
                 className="self-start text-[11px] font-bold text-muted-foreground"
                 onClick={() => setAbierta(abierta === meta.id ? null : meta.id)}
               >
-                {deLaMeta.length} {deLaMeta.length === 1 ? "aporte" : "aportes"} {abierta === meta.id ? "▴" : "▾"}
+                {deLaMeta.length} {deLaMeta.length === 1 ? "aporte" : "aportes"}{" "}
+                {abierta === meta.id ? "▴" : "▾"}
               </button>
             )}
             {abierta === meta.id &&
@@ -109,7 +127,9 @@ export function MetasView({ metas, aportes, medios }: Props) {
                   <span className="w-14 text-[11px] font-bold text-muted-foreground">
                     {formatoDia.format(fechaDe(a.fecha)).replace(".", "")}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-xs font-extrabold">{nombreMedio(a.medioId)}</span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-extrabold">
+                    {nombreMedio(a.medioId)}
+                  </span>
                   <b className="text-xs font-extrabold">{fmtMonto(a.monto)}</b>
                   <button className="mini" onClick={() => setBorrandoAporte(a)}>
                     {basurita}
@@ -120,7 +140,10 @@ export function MetasView({ metas, aportes, medios }: Props) {
         );
       })}
 
-      <button className="dock f-gg -mx-[18px] mt-auto" onClick={() => setMetaDialogo("nueva")}>
+      <button
+        className="dock f-gg -mx-[18px] mt-auto"
+        onClick={() => setMetaDialogo("nueva")}
+      >
         ＋ Nueva meta
       </button>
 
@@ -130,7 +153,9 @@ export function MetasView({ metas, aportes, medios }: Props) {
           meta={metaDialogo === "nueva" ? null : metaDialogo}
           onGuardar={async (datos) => {
             const error = await guardarMeta(
-              metaDialogo === "nueva" ? datos : { ...datos, id: metaDialogo.id },
+              metaDialogo === "nueva"
+                ? datos
+                : { ...datos, id: metaDialogo.id },
             );
             if (!error) setMetaDialogo(null);
             return error;
@@ -177,7 +202,12 @@ export function MetasView({ metas, aportes, medios }: Props) {
       {borrandoAporte && (
         <ConfirmarBorrado
           titulo="¿Borrar este aporte?"
-          resumen={[fmtMonto(borrandoAporte.monto), nombreMedio(borrandoAporte.medioId)].filter(Boolean).join(" · ")}
+          resumen={[
+            fmtMonto(borrandoAporte.monto),
+            nombreMedio(borrandoAporte.medioId),
+          ]
+            .filter(Boolean)
+            .join(" · ")}
           onBorrar={async () => {
             const error = await borrarAporte(borrandoAporte.id);
             if (!error) setBorrandoAporte(null);

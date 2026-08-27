@@ -28,5 +28,9 @@ const suscribirNada = () => () => {};
 // La fecha de hoy es estado EXTERNO: en el server no existe ("") y en el cliente
 // se lee al hidratar — el HTML prerenderizado nunca congela una fecha vieja.
 export function useHoy() {
-  return useSyncExternalStore(suscribirNada, () => fechaLocal(new Date()), () => "");
+  return useSyncExternalStore(
+    suscribirNada,
+    () => fechaLocal(new Date()),
+    () => "",
+  );
 }

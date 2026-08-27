@@ -30,9 +30,9 @@ export function RecuperarForm({ correoInicial }: { correoInicial?: string }) {
         <span className="text-[42px]">💌</span>
         <b className="text-[15px] font-black">Revisa tu correo</b>
         <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-          Si la dirección existe, te mandamos un enlace para restablecer tu contraseña. Si no lo
-          ves, busca en spam o promociones. Ábrelo en este mismo teléfono y vuelves directo a la
-          app.
+          Si la dirección existe, te mandamos un enlace para restablecer tu
+          contraseña. Si no lo ves, busca en spam o promociones. Ábrelo en este
+          mismo teléfono y vuelves directo a la app.
         </span>
       </div>
     );
@@ -53,9 +53,17 @@ export function RecuperarForm({ correoInicial }: { correoInicial?: string }) {
         required
       />
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
-      <button type="submit" className="btn f-y mt-2.5 disabled:opacity-60" disabled={mandando}>
+      <button
+        type="submit"
+        className="btn f-y mt-2.5 disabled:opacity-60"
+        disabled={mandando}
+      >
         {mandando ? "Mandando…" : "Mandar enlace"}
       </button>
     </form>

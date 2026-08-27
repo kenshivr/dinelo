@@ -4,14 +4,19 @@ import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { sumarMes } from "@/lib/mes";
 import { movimientoDeFila, type Categoria, type Medio } from "@/lib/tipos";
 
-export default async function HistorialPage({ searchParams }: PageProps<"/cuenta/historial">) {
+export default async function HistorialPage({
+  searchParams,
+}: PageProps<"/cuenta/historial">) {
   const { mes: mesParam } = await searchParams;
   const supabase = await crearClienteServidor();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) redirect("/login");
 
   // Sin ?mes= el server arranca en SU mes actual (UTC); la vista corrige el borde.
-  const mesValido = typeof mesParam === "string" && /^\d{4}-\d{2}$/.test(mesParam) ? mesParam : null;
+  const mesValido =
+    typeof mesParam === "string" && /^\d{4}-\d{2}$/.test(mesParam)
+      ? mesParam
+      : null;
   const mes = mesValido ?? new Date().toISOString().slice(0, 7);
 
   const [primero, categorias, medios, movs] = await Promise.all([
@@ -22,11 +27,21 @@ export default async function HistorialPage({ searchParams }: PageProps<"/cuenta
       .eq("user_id", auth.user.id)
       .order("fecha", { ascending: true })
       .limit(1),
-    supabase.from("categorias").select("id, nombre, color").eq("user_id", auth.user.id).order("created_at"),
-    supabase.from("medios").select("id, nombre, emoji, tipo").eq("user_id", auth.user.id).order("created_at"),
+    supabase
+      .from("categorias")
+      .select("id, nombre, color")
+      .eq("user_id", auth.user.id)
+      .order("created_at"),
+    supabase
+      .from("medios")
+      .select("id, nombre, emoji, tipo")
+      .eq("user_id", auth.user.id)
+      .order("created_at"),
     supabase
       .from("movimientos")
-      .select("id, user_id, tipo, concepto, monto, categoria_id, medio_id, fecha")
+      .select(
+        "id, user_id, tipo, concepto, monto, categoria_id, medio_id, fecha",
+      )
       .eq("user_id", auth.user.id) // el Historial es personal: SOLO lo mío
       .gte("fecha", `${mes}-01`)
       .lt("fecha", `${sumarMes(mes, 1)}-01`)
@@ -41,7 +56,10 @@ export default async function HistorialPage({ searchParams }: PageProps<"/cuenta
       desdeMes={primero.data?.[0]?.fecha.slice(0, 7) ?? mes}
       movimientos={(movs.data ?? []).map(movimientoDeFila)}
       categorias={(categorias.data ?? []) as Categoria[]}
-      medios={(medios.data ?? []).map((m): Medio => ({ ...m, tipo: m.tipo ?? "" }))}
+      medios={(medios.data ?? []).map((m): Medio => ({
+        ...m,
+        tipo: m.tipo ?? "",
+      }))}
     />
   );
 }

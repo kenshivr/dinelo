@@ -1,6 +1,9 @@
 // Pesos mexicanos: comas en miles y centavos SIEMPRE visibles — $1,500.00.
 // (Decisión 2026-08-13: los 2 decimales van aunque sean .00, estilo estado de cuenta.)
-const formatoMonto = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" });
+const formatoMonto = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+});
 
 export const fmtMonto = (n: number) => formatoMonto.format(n);
 
@@ -13,8 +16,11 @@ export function limpiarMonto(texto: string) {
 
 export function conComas(crudo: string) {
   const [entera, decimales] = crudo.split(".");
-  const agrupada = entera ? Number(entera).toLocaleString("es-MX", { maximumFractionDigits: 0 }) : "";
+  const agrupada = entera
+    ? Number(entera).toLocaleString("es-MX", { maximumFractionDigits: 0 })
+    : "";
   return decimales !== undefined ? `${agrupada}.${decimales}` : agrupada;
 }
 
-export const capitalizar = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+export const capitalizar = (s: string) =>
+  s.charAt(0).toUpperCase() + s.slice(1);

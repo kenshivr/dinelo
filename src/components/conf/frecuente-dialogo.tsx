@@ -8,7 +8,11 @@ import type { Frecuente } from "@/lib/tipos";
 
 type Props = {
   frecuente: Frecuente | null; // null = nuevo
-  onGuardar: (datos: { nombre: string; emoji: string; tipo: "G" | "I" }) => Promise<string | null>;
+  onGuardar: (datos: {
+    nombre: string;
+    emoji: string;
+    tipo: "G" | "I";
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
@@ -23,7 +27,11 @@ export function FrecuenteDialogo({ frecuente, onGuardar, onCerrar }: Props) {
 
   async function guardar() {
     setGuardando(true);
-    const e = await onGuardar({ nombre: nombre.trim(), emoji: emoji.trim(), tipo });
+    const e = await onGuardar({
+      nombre: nombre.trim(),
+      emoji: emoji.trim(),
+      tipo,
+    });
     if (e) {
       setError(e);
       setGuardando(false);
@@ -31,7 +39,10 @@ export function FrecuenteDialogo({ frecuente, onGuardar, onCerrar }: Props) {
   }
 
   return (
-    <Dialogo titulo={frecuente ? "Editar frecuente" : "Nuevo frecuente"} onCerrar={onCerrar}>
+    <Dialogo
+      titulo={frecuente ? "Editar frecuente" : "Nuevo frecuente"}
+      onCerrar={onCerrar}
+    >
       <span className="lbl">Concepto</span>
       <input
         className="nbs finput outline-none"
@@ -45,15 +56,25 @@ export function FrecuenteDialogo({ frecuente, onGuardar, onCerrar }: Props) {
 
       <span className="lbl">Tipo</span>
       <div className="flex gap-2">
-        <button className={cn("chip", tipo === "G" && "f-y")} onClick={() => setTipo("G")}>
+        <button
+          className={cn("chip", tipo === "G" && "f-y")}
+          onClick={() => setTipo("G")}
+        >
           G · Gasto
         </button>
-        <button className={cn("chip", tipo === "I" && "f-y")} onClick={() => setTipo("I")}>
+        <button
+          className={cn("chip", tipo === "I" && "f-y")}
+          onClick={() => setTipo("I")}
+        >
           I · Ingreso
         </button>
       </div>
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>

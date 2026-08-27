@@ -4,7 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { registrar } from "@/app/registro/acciones";
-import { ParContrasenas, contrasenaLista } from "@/components/captura/par-contrasenas";
+import {
+  ParContrasenas,
+  contrasenaLista,
+} from "@/components/captura/par-contrasenas";
 
 const correoValido = (c: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.trim());
 
@@ -15,10 +18,16 @@ export function RegistroForm() {
   const [contrasena, setContrasena] = useState("");
   const [repetida, setRepetida] = useState("");
   const [creando, setCreando] = useState(false);
-  const [error, setError] = useState<{ mensaje: string; yaExiste: boolean } | null>(null);
+  const [error, setError] = useState<{
+    mensaje: string;
+    yaExiste: boolean;
+  } | null>(null);
   const [enviado, setEnviado] = useState(false);
 
-  const listo = nombre.trim() !== "" && correoValido(correo) && contrasenaLista(contrasena, repetida);
+  const listo =
+    nombre.trim() !== "" &&
+    correoValido(correo) &&
+    contrasenaLista(contrasena, repetida);
 
   async function crear(e: React.FormEvent) {
     e.preventDefault();
@@ -46,8 +55,9 @@ export function RegistroForm() {
         <span className="text-[42px]">💌</span>
         <b className="text-[15px] font-black">Revisa tu correo</b>
         <span className="text-xs font-bold leading-relaxed text-muted-foreground">
-          Te mandamos un enlace a <b>{correo}</b> para confirmar tu cuenta. Si no lo ves, busca en
-          spam o promociones. Ábrelo en este mismo teléfono y entras directo a la app.
+          Te mandamos un enlace a <b>{correo}</b> para confirmar tu cuenta. Si
+          no lo ves, busca en spam o promociones. Ábrelo en este mismo teléfono
+          y entras directo a la app.
         </span>
       </div>
     );
@@ -93,10 +103,16 @@ export function RegistroForm() {
           {error.mensaje}
           {error.yaExiste && (
             <div className="mt-1.5 flex justify-center gap-4">
-              <Link href={`/login?correo=${encodeURIComponent(correo)}`} className="underline">
+              <Link
+                href={`/login?correo=${encodeURIComponent(correo)}`}
+                className="underline"
+              >
                 Entrar
               </Link>
-              <Link href={`/recuperar?correo=${encodeURIComponent(correo)}`} className="underline">
+              <Link
+                href={`/recuperar?correo=${encodeURIComponent(correo)}`}
+                className="underline"
+              >
                 Recuperar contraseña
               </Link>
             </div>
@@ -104,7 +120,11 @@ export function RegistroForm() {
         </div>
       )}
 
-      <button type="submit" className="btn f-y mt-2.5 disabled:opacity-60" disabled={!listo || creando}>
+      <button
+        type="submit"
+        className="btn f-y mt-2.5 disabled:opacity-60"
+        disabled={!listo || creando}
+      >
         {creando ? "Creando cuenta…" : "Crear cuenta"}
       </button>
     </form>

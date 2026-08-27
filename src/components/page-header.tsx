@@ -40,7 +40,9 @@ function Avatar({ perfil }: { perfil: PerfilHeader }) {
 export function PageHeader({ title, conFecha = false, derecha }: Props) {
   const hoy = useHoy();
   const { mio } = usePerfiles();
-  const etiquetaHoy = hoy ? `Hoy · ${formatoHoy.format(fechaDe(hoy)).replaceAll(",", "")}` : "";
+  const etiquetaHoy = hoy
+    ? `Hoy · ${formatoHoy.format(fechaDe(hoy)).replaceAll(",", "")}`
+    : "";
 
   return (
     <>
@@ -54,7 +56,12 @@ export function PageHeader({ title, conFecha = false, derecha }: Props) {
       </header>
       <div className="flex items-baseline justify-between">
         <b className="text-lg font-black">{title}</b>
-        {derecha ?? (conFecha && <span className="text-xs font-bold text-muted-foreground">{etiquetaHoy}</span>)}
+        {derecha ??
+          (conFecha && (
+            <span className="text-xs font-bold text-muted-foreground">
+              {etiquetaHoy}
+            </span>
+          ))}
       </div>
     </>
   );

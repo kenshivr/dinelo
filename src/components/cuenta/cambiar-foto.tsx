@@ -13,9 +13,23 @@ async function redimensionar(archivo: File): Promise<Blob> {
   canvas.width = canvas.height = 256;
   canvas
     .getContext("2d")!
-    .drawImage(bitmap, (bitmap.width - lado) / 2, (bitmap.height - lado) / 2, lado, lado, 0, 0, 256, 256);
+    .drawImage(
+      bitmap,
+      (bitmap.width - lado) / 2,
+      (bitmap.height - lado) / 2,
+      lado,
+      lado,
+      0,
+      0,
+      256,
+      256,
+    );
   return new Promise((resolver, rechazar) =>
-    canvas.toBlob((b) => (b ? resolver(b) : rechazar(new Error("canvas vacío"))), "image/jpeg", 0.85),
+    canvas.toBlob(
+      (b) => (b ? resolver(b) : rechazar(new Error("canvas vacío"))),
+      "image/jpeg",
+      0.85,
+    ),
   );
 }
 

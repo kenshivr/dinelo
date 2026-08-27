@@ -19,7 +19,9 @@ export function CerrarSesion() {
       <button className="nbs crow text-left" onClick={() => setAbierto(true)}>
         <span className="text-[17px]">🚪</span>
         <span className="min-w-0 flex-1">
-          <b className="block truncate text-[13px] font-extrabold">Cerrar sesión</b>
+          <b className="block truncate text-[13px] font-extrabold">
+            Cerrar sesión
+          </b>
           <span className="text-[10.5px] font-bold text-muted-foreground">
             tus datos se quedan guardados
           </span>
@@ -28,7 +30,9 @@ export function CerrarSesion() {
 
       {abierto && (
         <Dialogo titulo="Cerrar sesión" onCerrar={() => setAbierto(false)}>
-          <div className="nbs finput opacity-85">¿Seguro que quieres salir?</div>
+          <div className="nbs finput opacity-85">
+            ¿Seguro que quieres salir?
+          </div>
           <div className="mt-1 flex gap-2.5">
             <button className="btn sm flex-1" onClick={() => setAbierto(false)}>
               Cancelar

@@ -9,7 +9,9 @@ const frecuentes: Frecuente[] = [
   { id: "f2", nombre: "Café", emoji: "☕", tipo: "G" },
 ];
 
-function montar(props: Partial<React.ComponentProps<typeof ConceptoCombobox>> = {}) {
+function montar(
+  props: Partial<React.ComponentProps<typeof ConceptoCombobox>> = {},
+) {
   const onChange = vi.fn();
   render(
     <ConceptoCombobox
@@ -54,6 +56,8 @@ describe("ConceptoCombobox", () => {
     montar({ frecuentes: [], tipo: "I" });
 
     await user.click(screen.getByRole("button", { name: "Mis frecuentes" }));
-    expect(screen.getByRole("link", { name: /ingreso frecuente/ })).toHaveAttribute("href", "/cuenta/configuracion");
+    expect(
+      screen.getByRole("link", { name: /ingreso frecuente/ }),
+    ).toHaveAttribute("href", "/cuenta/configuracion");
   });
 });

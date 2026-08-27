@@ -13,7 +13,13 @@ type Props = {
   onCerrar: () => void;
 };
 
-export function ConfirmarBorrado({ titulo, resumen, aviso, onBorrar, onCerrar }: Props) {
+export function ConfirmarBorrado({
+  titulo,
+  resumen,
+  aviso,
+  onBorrar,
+  onCerrar,
+}: Props) {
   const [borrando, setBorrando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,16 +35,28 @@ export function ConfirmarBorrado({ titulo, resumen, aviso, onBorrar, onCerrar }:
   return (
     <Dialogo titulo={titulo} onCerrar={onCerrar}>
       <div className="nbs finput opacity-85">{resumen}</div>
-      {aviso && <div className="nbs f-y px-3.5 py-2.5 text-xs font-extrabold">{aviso}</div>}
+      {aviso && (
+        <div className="nbs f-y px-3.5 py-2.5 text-xs font-extrabold">
+          {aviso}
+        </div>
+      )}
       <span className="text-xs font-bold leading-relaxed text-muted-foreground">
         Esta acción no se puede deshacer.
       </span>
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>
           Cancelar
         </button>
-        <button className="btn sm f-r flex-1 disabled:opacity-60" disabled={borrando} onClick={borrar}>
+        <button
+          className="btn sm f-r flex-1 disabled:opacity-60"
+          disabled={borrando}
+          onClick={borrar}
+        >
           Borrar
         </button>
       </div>

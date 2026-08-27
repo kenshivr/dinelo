@@ -7,7 +7,11 @@ export default function Cargando() {
     <>
       <PageHeader
         title={<Link href="/cuenta">‹ Informe</Link>}
-        derecha={<span className="text-xs font-bold text-muted-foreground">solo admin</span>}
+        derecha={
+          <span className="text-xs font-bold text-muted-foreground">
+            solo admin
+          </span>
+        }
       />
       <span className="lbl">La app hoy</span>
       <div className="grid grid-cols-2 gap-3">

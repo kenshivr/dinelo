@@ -17,7 +17,7 @@ export async function crearClienteServidor() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options),
             );
           } catch {
             // Un Server Component no puede escribir cookies (solo actions y el proxy).
@@ -25,6 +25,6 @@ export async function crearClienteServidor() {
           }
         },
       },
-    }
+    },
   );
 }

@@ -36,15 +36,25 @@ export function ParContrasenas({
   return (
     <>
       <span className="lbl">{etiquetaNueva}</span>
-      <CampoContrasena value={nueva} onChange={onNueva} placeholder={`mínimo ${MINIMO_CONTRASENA} caracteres`} />
+      <CampoContrasena
+        value={nueva}
+        onChange={onNueva}
+        placeholder={`mínimo ${MINIMO_CONTRASENA} caracteres`}
+      />
       <Pista estado={nueva === "" ? "neutro" : largoOk ? "ok" : "mal"}>
         {largoOk ? "✓" : "○"} mínimo {MINIMO_CONTRASENA} caracteres
       </Pista>
 
       <span className="lbl">{etiquetaRepetida}</span>
-      <CampoContrasena value={repetida} onChange={onRepetida} placeholder="otra vez, para confirmar" />
+      <CampoContrasena
+        value={repetida}
+        onChange={onRepetida}
+        placeholder="otra vez, para confirmar"
+      />
       {repetida !== "" && (
-        <Pista estado={coinciden ? "ok" : "mal"}>{coinciden ? "✓ coinciden" : "○ todavía no coinciden"}</Pista>
+        <Pista estado={coinciden ? "ok" : "mal"}>
+          {coinciden ? "✓ coinciden" : "○ todavía no coinciden"}
+        </Pista>
       )}
     </>
   );
@@ -89,14 +99,20 @@ export function CampoContrasena({
   );
 }
 
-function Pista({ estado, children }: { estado: "neutro" | "ok" | "mal"; children: React.ReactNode }) {
+function Pista({
+  estado,
+  children,
+}: {
+  estado: "neutro" | "ok" | "mal";
+  children: React.ReactNode;
+}) {
   return (
     <span
       className={cn(
         "-mt-1 self-start rounded-full border-2 px-2.5 py-1 text-[11px] font-extrabold",
         estado === "ok" && "f-gg",
         estado === "neutro" && "border-border text-muted-foreground",
-        estado === "mal" && "border-negative text-negative"
+        estado === "mal" && "border-negative text-negative",
       )}
     >
       {children}

@@ -10,14 +10,25 @@ type Props = {
   apartado: Apartado;
   categorias: Categoria[];
   medios: Medio[];
-  onPagar: (datos: { medioId: string | null; categoriaId: string | null }) => Promise<string | null>;
+  onPagar: (datos: {
+    medioId: string | null;
+    categoriaId: string | null;
+  }) => Promise<string | null>;
   onCerrar: () => void;
 };
 
 // Mismas reglas que la captura de Gastos: categoría y medio opcionales
 // (sin elegir → "Sin categoría" / "Sin medio").
-export function PagarDialogo({ apartado, categorias, medios, onPagar, onCerrar }: Props) {
-  const [categoriaId, setCategoriaId] = useState<string | null>(apartado.categoriaId);
+export function PagarDialogo({
+  apartado,
+  categorias,
+  medios,
+  onPagar,
+  onCerrar,
+}: Props) {
+  const [categoriaId, setCategoriaId] = useState<string | null>(
+    apartado.categoriaId,
+  );
   const [medioId, setMedioId] = useState<string | null>(null);
   const [pagando, setPagando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +47,9 @@ export function PagarDialogo({ apartado, categorias, medios, onPagar, onCerrar }
   return (
     <Dialogo titulo={`Pagar ${apartado.nombre}`} onCerrar={onCerrar}>
       <div className="nbs px-3.5 py-3 text-center">
-        <b className="block text-[21px] font-black tracking-tight">{fmtMonto(apartado.monto)}</b>
+        <b className="block text-[21px] font-black tracking-tight">
+          {fmtMonto(apartado.monto)}
+        </b>
         <span className="text-[10.5px] font-bold text-muted-foreground">
           se registra como gasto con la fecha de hoy
         </span>
@@ -80,13 +93,21 @@ export function PagarDialogo({ apartado, categorias, medios, onPagar, onCerrar }
         </span>
       )}
 
-      {error && <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">{error}</div>}
+      {error && (
+        <div className="nbs f-r px-3.5 py-2.5 text-center text-xs font-extrabold">
+          {error}
+        </div>
+      )}
 
       <div className="mt-1 flex gap-2.5">
         <button className="btn sm flex-1" onClick={onCerrar}>
           Cancelar
         </button>
-        <button className="btn sm f-gg flex-1 disabled:opacity-60" disabled={pagando} onClick={pagar}>
+        <button
+          className="btn sm f-gg flex-1 disabled:opacity-60"
+          disabled={pagando}
+          onClick={pagar}
+        >
           {pagando ? "Registrando…" : "✓ Ya lo pagué"}
         </button>
       </div>
