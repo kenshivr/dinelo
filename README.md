@@ -48,7 +48,12 @@ teléfono en una mano. Todo lo demás se construyó alrededor de eso.
 - **Tus datos son tuyos**: cada cuenta ve solo lo suyo, garantizado por RLS en la base, no por la app.
 - Sin conexión la app avisa en vez de romperse; con conexión, el teléfono es cache y Supabase es la fuente de verdad.
 
-<!-- Capturas: agregar 3-4 screenshots del teléfono (Gastos, Dash, Control, Cuenta) en docs/ y referenciarlas aquí -->
+<p align="center">
+  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Registrar gasto: Cine $450 con categoría Diversión" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: restante con semáforo y pastel por categoría" />
+  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: apartados pendientes con Ya lo pagué" />
+  <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Cuenta: perfil, historial y configuración" />
+</p>
 
 ## Cómo está hecha
 
@@ -93,6 +98,11 @@ bordes neutros.
 </p>
 
 La tab activa es un **círculo amarillo que sobresale del nav** y viaja contigo al cambiar de sección.
+
+<p align="center">
+  <img src="docs/capturas/login-claro.jpeg" width="30%" alt="Login en tema claro" />
+  <img src="docs/capturas/login-oscuro.jpeg" width="30%" alt="Login en tema oscuro" />
+</p>
 
 ## Correrla en local
 

@@ -48,7 +48,12 @@ phone in one hand. Everything else was built around that.
 - **Your data is yours**: every account sees only its own records, enforced by RLS at the database level, not by the app.
 - Offline, the app tells you instead of breaking; online, the phone is a cache and Supabase is the source of truth.
 
-<!-- Screenshots: add 3-4 phone screenshots (Expenses, Dash, Control, Account) in docs/ and reference them here -->
+<p align="center">
+  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Log expense: Cinema $450 with Fun category" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: remaining with traffic light and category pie" />
+  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: pending envelopes with Already paid it" />
+  <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Account: profile, history and settings" />
+</p>
 
 ## How it's built
 
@@ -93,6 +98,11 @@ and neutral borders switch.
 </p>
 
 The active tab is a **yellow circle popping out of the nav** that travels with you as you switch sections.
+
+<p align="center">
+  <img src="docs/capturas/login-claro.jpeg" width="30%" alt="Login in light theme" />
+  <img src="docs/capturas/login-oscuro.jpeg" width="30%" alt="Login in dark theme" />
+</p>
 
 ## Running it locally
 
