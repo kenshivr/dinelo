@@ -49,10 +49,10 @@ phone in one hand. Everything else was built around that.
 - Offline, the app tells you instead of breaking; online, the phone is a cache and Supabase is the source of truth.
 
 <p align="center">
-  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Log expense: Cinema $450 with Fun category" />
-  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: remaining with traffic light and category pie" />
-  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: pending envelopes with Already paid it" />
   <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Account: profile, history and settings" />
+  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: pending envelopes with Already paid it" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: remaining with traffic light and category pie" />
+  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Log expense: Cinema $450 with Fun category" />
 </p>
 
 ## How it's built

@@ -49,10 +49,10 @@ teléfono en una mano. Todo lo demás se construyó alrededor de eso.
 - Sin conexión la app avisa en vez de romperse; con conexión, el teléfono es cache y Supabase es la fuente de verdad.
 
 <p align="center">
-  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Registrar gasto: Cine $450 con categoría Diversión" />
-  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: restante con semáforo y pastel por categoría" />
-  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: apartados pendientes con Ya lo pagué" />
   <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Cuenta: perfil, historial y configuración" />
+  <img src="docs/capturas/control.jpeg" width="24%" alt="Control: apartados pendientes con Ya lo pagué" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: restante con semáforo y pastel por categoría" />
+  <img src="docs/capturas/gastos.jpeg" width="24%" alt="Registrar gasto: Cine $450 con categoría Diversión" />
 </p>
 
 ## Cómo está hecha
