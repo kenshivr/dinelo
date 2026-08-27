@@ -174,6 +174,9 @@ Long-pressing the icon (Android) opens "Log expense", "Log income" or the Dash d
 | **Neutral Spanish, informal "tú"**   | The app talks like a person, not like a bank, and reads naturally in any Spanish-speaking country.                        |
 | **No state management library**      | RSC + Server Actions + `revalidatePath` cover everything. Something will be added when a real user asks for it.           |
 
+> The big decisions are documented with context and tradeoffs in [`docs/adr`](docs/adr/README.md) (Spanish),
+> and the first real production bug has its own [postmortem](docs/postmortem-2026-08-20-registro.md) (Spanish).
+
 ## Status
 
 **v1 finished** (August 2026) and in production. Uncommitted ideas: push notifications,

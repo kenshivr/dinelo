@@ -173,6 +173,9 @@ Mantener apretado el ícono (Android) abre directo "Registrar gasto", "Registrar
 | **Español neutro, tuteo**        | La app habla como una persona, no como un banco, y se entiende en cualquier país.                                      |
 | **Sin librería de estado**       | RSC + Server Actions + `revalidatePath` cubren todo. Se agregará algo cuando un usuario real lo pida.                  |
 
+> Las decisiones grandes están documentadas con contexto y tradeoffs en [`docs/adr`](docs/adr/README.md),
+> y el primer bug real de producción tiene su [postmortem](docs/postmortem-2026-08-20-registro.md).
+
 ## Estado
 
 **v1 terminada** (agosto 2026) y en producción. Ideas sin compromiso: notificaciones push, pruebas
