@@ -3,18 +3,27 @@ import { SerwistProvider } from "@serwist/turbopack/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
+// LinkedIn pide ≥100 caracteres en la description
+const descripcion =
+  "Registra tus gastos e ingresos, organiza apartados y cumple tus metas de ahorro. DiNelo es una PWA gratuita: instálala en tu teléfono y úsala incluso sin conexión.";
+
 export const metadata: Metadata = {
   // Base absoluta para que og:image salga con URL completa (WhatsApp no resuelve relativas)
   metadataBase: new URL("https://dinelo.vercel.app"),
   title: "DiNelo",
-  description: "Gastos, ingresos y metas",
+  description: descripcion,
   applicationName: "DiNelo",
+  authors: [{ name: "Brayan Vidal Romero", url: "https://kenshivr.github.io/Brayan/" }],
+  creator: "Brayan Vidal Romero",
   openGraph: {
     title: "DiNelo",
-    description: "Gastos, ingresos y metas",
+    description: descripcion,
     url: "/",
     siteName: "DiNelo",
-    type: "website",
+    // "article" porque LinkedIn solo lee author/fecha de los tags article:* (el preview no cambia)
+    type: "article",
+    publishedTime: "2026-08-13T00:00:00.000Z",
+    authors: ["Brayan Vidal Romero"],
     locale: "es_MX",
   },
   appleWebApp: {
