@@ -22,7 +22,8 @@ export const metadata: Metadata = {
     siteName: "DiNelo",
     // "article" porque LinkedIn solo lee author/fecha de los tags article:* (el preview no cambia)
     type: "article",
-    publishedTime: "2026-08-13T00:00:00.000Z",
+    // Offset CDMX: con Z (UTC) el Inspector mostraba 12-ago 6pm al convertir la zona
+    publishedTime: "2026-08-13T00:00:00-06:00",
     authors: ["Brayan Vidal Romero"],
     locale: "es_MX",
   },
