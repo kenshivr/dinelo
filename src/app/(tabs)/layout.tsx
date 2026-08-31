@@ -32,9 +32,11 @@ export default async function TabsLayout({
           avatarUrl: p.avatar_url ?? null,
         }))}
       >
-        {/* marco fijo (h-dvh): el que scrollea es el main, no el document —
-            así el dock y el navbar no se despegan con el viewport dinámico móvil */}
-        <div className="mx-auto flex h-dvh w-full max-w-md flex-col">
+        {/* marco fijo con inset-0 (no h-dvh): al recargar en Android, dvh puede
+            medir ~50px de más y el dock del main queda hundido tras el navbar;
+            fixed estira al viewport real sin depender de la unidad. El que
+            scrollea sigue siendo el main, no el document. */}
+        <div className="fixed inset-0 mx-auto flex w-full max-w-md flex-col">
           <TabsMain>{children}</TabsMain>
           <NavBar />
         </div>

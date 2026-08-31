@@ -31,6 +31,27 @@ export async function cambiarCorreo(nuevo: string) {
   return error ? mensajeDeAuth(error, "cambiar-correo") : null;
 }
 
+// La inicial sigue al nombre (misma regla que el alta: primera letra en
+// mayúscula) porque el header y los avatares sin foto la muestran.
+export async function cambiarNombre(nuevo: string) {
+  const nombre = nuevo.trim();
+  if (!nombre) return "Escribe un nombre.";
+
+  const { supabase, userId } = await conSesion();
+  const { error } = await supabase
+    .from("profiles")
+    .update({ nombre, inicial: nombre[0].toUpperCase() })
+    .eq("id", userId);
+  if (error) {
+    console.error("No se pudo cambiar el nombre:", error);
+    return "No se pudo cambiar el nombre. Intenta de nuevo.";
+  }
+
+  // layout completo: nombre e inicial también viven en el header de las tabs
+  revalidatePath("/", "layout");
+  return null;
+}
+
 // Recibe la foto YA redimensionada por el teléfono (~15 KB) y la sube con la
 // sesión del server: el cliente browser iba como anon y el RLS lo rechazaba.
 // ?v= rompe el cache al reemplazar la foto (misma URL, contenido nuevo).

@@ -97,8 +97,9 @@ export default async function AdminPage() {
   const correos = new Map(
     (usuarios.data?.users ?? []).map((u) => [u.id, u.email ?? ""]),
   );
-  const cuentas: CuentaInforme[] = (perfiles.data ?? [])
-    .map((p): CuentaInforme => {
+  // el orden lo elige el cliente en CuentasLista (recientes | más uso)
+  const cuentas: CuentaInforme[] = (perfiles.data ?? []).map(
+    (p): CuentaInforme => {
       const r = resumen.get(p.id);
       return {
         id: p.id,
@@ -115,9 +116,8 @@ export default async function AdminPage() {
         medios: r?.medios ?? 0,
         esAdmin: p.id === adminId,
       };
-    })
-    // más activas primero (último registro desc, sin registros al final)
-    .sort((a, b) => (b.ultimoMov ?? "").localeCompare(a.ultimoMov ?? ""));
+    },
+  );
 
   // últimos 6 meses con el actual al final
   const altasPorMes = Array.from({ length: 6 }, (_, i) =>

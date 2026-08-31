@@ -5,6 +5,7 @@ import { chevronDer } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
 import { MisDatos } from "@/components/cuenta/mis-datos";
 import { CambiarFoto } from "@/components/cuenta/cambiar-foto";
+import { CambiarNombre } from "@/components/cuenta/cambiar-nombre";
 import { CerrarSesion } from "@/components/cuenta/cerrar-sesion";
 import { EliminarCuenta } from "@/components/cuenta/eliminar-cuenta";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
@@ -42,24 +43,30 @@ export default async function CuentaPage() {
         }
       />
 
-      <div className="nbs crow px-3.5 py-3">
-        {perfil.avatar_url ? (
-          // eslint-disable-next-line @next/next/no-img-element -- 46px; next/image pide config de dominio remoto
-          <img
-            src={perfil.avatar_url}
-            alt="tu foto"
-            className="av big object-cover"
-          />
-        ) : (
-          <span className={cn("av big", perfil.color)}>{perfil.inicial}</span>
-        )}
-        <span className="min-w-0 flex-1">
-          <b className="block text-[15.5px] font-black">{perfil.nombre}</b>
-          <span className="text-[11px] font-bold text-muted-foreground">
-            miembro desde {desde}
+      <div className="nbs px-3.5 py-3">
+        <div className="flex items-center gap-2.5">
+          {perfil.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element -- 46px; next/image pide config de dominio remoto
+            <img
+              src={perfil.avatar_url}
+              alt="tu foto"
+              className="av big object-cover"
+            />
+          ) : (
+            <span className={cn("av big", perfil.color)}>{perfil.inicial}</span>
+          )}
+          <span className="min-w-0 flex-1">
+            <b className="block text-[15.5px] font-black">{perfil.nombre}</b>
+            <span className="text-[11px] font-bold text-muted-foreground">
+              miembro desde {desde}
+            </span>
           </span>
-        </span>
-        <CambiarFoto />
+        </div>
+        {/* fila propia: los botones no le comen ancho al nombre */}
+        <div className="mt-2.5 flex gap-2">
+          <CambiarFoto />
+          <CambiarNombre actual={perfil.nombre} />
+        </div>
       </div>
 
       {/* sesión y cuenta viven pegadas a la card del perfil (ya no en el dock) */}

@@ -4,8 +4,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 
-// Grilla curada para una app de gastos, en filas temáticas de 8:
-// dinero ×2 · casa/transporte · casa/servicios · comida/salidas ×2 · vida ×2.
+// Grilla curada para una app de gastos, en bloques temáticos:
+// dinero · casa/transporte · casa/servicios · comida/salidas · vida.
 // El picker del SISTEMA no se puede abrir desde la web (no hay API), así que el menú es propio.
 const EMOJIS = [
   "💵",
@@ -29,6 +29,9 @@ const EMOJIS = [
   "🚗",
   "⛽",
   "🚌",
+  "🏍️",
+  "🚐",
+  "🚚",
   "✈️",
   "📱",
   "🔧",
@@ -60,6 +63,7 @@ const EMOJIS = [
   "💊",
   "🏋️",
   "📚",
+  "📏",
   "🎁",
   "🐶",
   "👶",

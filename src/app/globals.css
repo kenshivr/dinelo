@@ -203,6 +203,9 @@
   /* segmentado: amarillo = opción activa (mismo patrón que usará Conf → Tema) */
   .seg {
     display: flex;
+    /* hijo directo del main (flex-col): su overflow hidden anula el min-height
+       auto y flex lo aplasta a una línea cuando la vista no cabe en pantalla */
+    flex-shrink: 0;
     border: 2px solid var(--border);
     border-radius: 10px;
     overflow: hidden;

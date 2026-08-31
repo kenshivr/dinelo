@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/page-header";
-import { EliminarCuentaAdmin } from "@/components/admin/eliminar-cuenta-admin";
+import { CuentasLista } from "@/components/admin/cuentas-lista";
 import type { ColorBloque } from "@/lib/tipos";
 
-// Vista del informe de admin — server salvo el 🗑 por cuenta (cliente).
-// Muestra USO de la app (conteos y actividad), nunca montos de otras cuentas.
+// Vista del informe de admin — server salvo la lista de cuentas (cliente:
+// toggle de orden + 🗑). Muestra USO de la app, nunca montos de otras cuentas.
 
 export type CuentaInforme = {
   id: string;
@@ -42,10 +42,6 @@ const fmtMes = new Intl.DateTimeFormat("es-MX", {
   month: "short",
   year: "numeric",
 });
-const fmtDia = new Intl.DateTimeFormat("es-MX", {
-  day: "numeric",
-  month: "short",
-});
 
 // "ago. de 2026" → "ago 2026" (misma limpieza que "miembro desde" en Cuenta)
 function etiquetaMes(mes: string) {
@@ -53,10 +49,6 @@ function etiquetaMes(mes: string) {
     .format(new Date(`${mes}-15T00:00:00`))
     .replaceAll(".", "")
     .replace(" de ", " ");
-}
-
-function etiquetaDia(fecha: string) {
-  return fmtDia.format(new Date(`${fecha}T00:00:00`)).replaceAll(".", "");
 }
 
 export function InformeView({ informe }: { informe: Informe }) {
@@ -153,50 +145,7 @@ export function InformeView({ informe }: { informe: Informe }) {
       </div>
 
       <span className="lbl">Cuentas ({totales.cuentas})</span>
-      {cuentas.map((c) => (
-        <div key={c.id} className="nbs px-3.5 py-3">
-          <div className="flex items-center gap-2.5">
-            {c.avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element -- 32px; next/image pide config de dominio remoto
-              <img src={c.avatarUrl} alt="" className="av object-cover" />
-            ) : (
-              <span className={cn("av", c.color)}>{c.inicial}</span>
-            )}
-            <span className="min-w-0 flex-1">
-              <b className="flex items-center gap-1.5 text-[13.5px] font-black">
-                <span className="truncate">{c.nombre}</span>
-                {c.esAdmin && (
-                  <span className="f-y shrink-0 rounded-md border-2 border-[#111] px-1.5 text-[8.5px] font-black">
-                    ADMIN
-                  </span>
-                )}
-              </b>
-              <span className="block truncate text-[10.5px] font-bold text-muted-foreground">
-                {c.email}
-              </span>
-            </span>
-            {!c.esAdmin && (
-              <EliminarCuentaAdmin
-                id={c.id}
-                nombre={c.nombre}
-                email={c.email}
-              />
-            )}
-          </div>
-          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-[10.5px] font-bold text-muted-foreground">
-            <span>📒 {c.movs} movs</span>
-            <span>🎯 {c.metas} metas</span>
-            <span>📦 {c.apartados} apartados</span>
-            <span>💳 {c.medios} medios</span>
-          </div>
-          <div className="mt-1 text-[10.5px] font-bold text-muted-foreground">
-            desde {etiquetaMes(c.desde.slice(0, 7))} ·{" "}
-            {c.ultimoMov
-              ? `último registro ${etiquetaDia(c.ultimoMov)}`
-              : "sin registros"}
-          </div>
-        </div>
-      ))}
+      <CuentasLista cuentas={cuentas} />
     </>
   );
 }
