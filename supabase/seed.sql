@@ -263,6 +263,11 @@ create policy "reemplazar mi avatar" on storage.objects
   for update to authenticated
   using (bucket_id = 'avatares' and name = auth.uid()::text || '.jpg')
   with check (bucket_id = 'avatares' and name = auth.uid()::text || '.jpg');
--- necesaria aunque el bucket sea público: el upsert consulta storage.objects como el usuario
-create policy "ver avatares" on storage.objects for
-select to authenticated using (bucket_id = 'avatares');
+-- necesaria aunque el bucket sea público: el upsert consulta storage.objects
+-- como el usuario — pero solo su propio archivo, así que el SELECT se limita
+-- a ese (un SELECT amplio dejaría a cualquier sesión listar todo el bucket)
+create policy "ver mi avatar" on storage.objects for
+select to authenticated using (
+  bucket_id = 'avatares'
+  and name = auth.uid()::text || '.jpg'
+);

@@ -58,6 +58,11 @@ export async function cambiarNombre(nuevo: string) {
 export async function subirAvatar(datos: FormData) {
   const archivo = datos.get("archivo");
   if (!(archivo instanceof File)) return "No se pudo leer la foto.";
+  // el teléfono la manda de ~15 KB, pero la action es un POST que cualquier
+  // sesión puede armar a mano: mismo tope que el bucket (1 MB, solo JPEG)
+  if (archivo.type !== "image/jpeg") return "La foto debe ser JPEG.";
+  if (archivo.size > 1024 * 1024)
+    return "La foto pesa demasiado. Intenta de nuevo.";
 
   const { supabase, userId } = await conSesion();
   const { error } = await supabase.storage

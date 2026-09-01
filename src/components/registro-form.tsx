@@ -127,6 +127,18 @@ export function RegistroForm() {
       >
         {creando ? "Creando cuenta…" : "Crear cuenta"}
       </button>
+
+      <span className="text-center text-[10.5px] font-bold leading-relaxed text-muted-foreground">
+        Al crear tu cuenta aceptas los{" "}
+        <Link href="/terminos" className="underline">
+          Términos
+        </Link>{" "}
+        y el{" "}
+        <Link href="/privacidad" className="underline">
+          Aviso de privacidad
+        </Link>
+        .
+      </span>
     </form>
   );
 }

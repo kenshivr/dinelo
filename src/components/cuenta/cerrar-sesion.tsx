@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Dialogo } from "@/components/dialogo";
 import { salir } from "@/app/(tabs)/cuenta/acciones";
+import { limpiarCachesDelNavegador } from "@/lib/caches";
 
 // Fila "Cerrar sesión" + confirmación: un toque perdido no te saca de la app.
 export function CerrarSesion() {
@@ -11,6 +12,7 @@ export function CerrarSesion() {
 
   async function confirmar() {
     setSaliendo(true);
+    await limpiarCachesDelNavegador(); // el SW no debe conservar tus datos
     await salir(); // redirige a /login; este estado muere con la vista
   }
 

@@ -41,13 +41,16 @@ export async function proxy(request: NextRequest) {
     ruta.startsWith("/login") ||
     ruta.startsWith("/registro") ||
     ruta.startsWith("/recuperar");
-  // el destino de los enlaces de correo, el service worker y la página offline
-  // (el navegador los pide sin contexto de app) van SIN sesión
+  // el destino de los enlaces de correo, el service worker, la página offline
+  // (el navegador los pide sin contexto de app) y las páginas legales
+  // (linkeadas desde fuera de la app) van SIN sesión
   const esPublica =
     esEntrada ||
     ruta.startsWith("/auth") ||
     ruta.startsWith("/serwist") ||
-    ruta.startsWith("/~offline");
+    ruta.startsWith("/~offline") ||
+    ruta.startsWith("/privacidad") ||
+    ruta.startsWith("/terminos");
 
   if (!user && !esPublica) {
     const url = request.nextUrl.clone();

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Dialogo } from "@/components/dialogo";
 import { eliminarCuenta } from "@/app/(tabs)/cuenta/acciones";
+import { limpiarCachesDelNavegador } from "@/lib/caches";
 
 // Fila "Eliminar cuenta" + diálogo de confirmación fuerte: el botón rojo solo
 // se habilita al teclear ELIMINAR. La cuenta admin ve un aviso en lugar del
@@ -21,6 +22,7 @@ export function EliminarCuenta({ esAdmin }: { esAdmin: boolean }) {
 
   async function borrar() {
     setBorrando(true);
+    await limpiarCachesDelNavegador(); // el SW no debe conservar tus datos
     const e = await eliminarCuenta();
     // si salió bien la action redirige a /login y este estado muere con la vista
     if (e) {

@@ -37,8 +37,14 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         ¿No tienes cuenta? <b className="font-black">Regístrate</b>
       </Link>
 
-      <span className="mt-auto text-center text-[10.5px] font-bold text-muted-foreground">
+      <span className="mt-auto flex items-center justify-center gap-3 text-center text-[10.5px] font-bold text-muted-foreground">
         DiNelo v1
+        <Link href="/privacidad" className="underline">
+          Privacidad
+        </Link>
+        <Link href="/terminos" className="underline">
+          Términos
+        </Link>
       </span>
     </main>
   );
