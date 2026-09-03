@@ -24,6 +24,8 @@ type Props = {
   categorias: Categoria[];
   medios: Medio[];
   previos: { ingresos: number; gastos: number }; // totales del mes anterior, para la comparativa
+  restante: number; // saldo real al cierre del mes visible: inicial de los medios + TODO el historial
+  hayHistorial: boolean; // hay algo que sumar (movimientos o saldo inicial); si no, Restante no se muestra
   apartadosPendientes: number; // suma de apartados sin pagar hasta el mes visible
 };
 
@@ -53,6 +55,8 @@ export function DashView({
   categorias,
   medios,
   previos,
+  restante,
+  hayHistorial,
   apartadosPendientes,
 }: Props) {
   const hoy = useHoy();
@@ -80,6 +84,8 @@ export function DashView({
     .filter((m) => m.tipo === "ingreso")
     .reduce((s, m) => s + m.monto, 0);
   const totalGastos = gastosMes.reduce((s, m) => s + m.monto, 0);
+  // lo que el mes dejó (o se comió): el flujo es del mes, el Restante es de siempre
+  const netoMes = totalIngresos - totalGastos;
 
   // los gastos sin categoría forman su propio grupo (categoría opcional)
   const porCategoria = [
@@ -203,7 +209,7 @@ export function DashView({
 
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
-        {/* colores fuera del semáforo del Restante (verde/amarillo/rojo) a propósito */}
+        {/* colores fuera del verde/rojo del Restante y del semáforo de Libre a propósito */}
         <div className="grid grid-cols-2 gap-2.5">
           <Stat
             titulo="Ingresos"
@@ -219,6 +225,27 @@ export function DashView({
           />
         </div>
 
+        {/* Restante y Libre van sobre TODO el historial (2026-09-03): "cuánto tengo
+            hoy", no "cuánto me sobró del mes"; por eso se ven aunque el mes esté vacío */}
+        {hayHistorial && (
+          <>
+            <Stat
+              titulo="Restante"
+              monto={restante}
+              color={restante >= 0 ? "f-gg" : "f-r"}
+              pie={`${netoMes < 0 ? "−" : "+"}${fmtMonto(Math.abs(netoMes))} en ${nombre}`}
+            />
+            {apartadosPendientes > 0 && (
+              <TileSemaforo
+                titulo="Libre"
+                monto={restante - apartadosPendientes}
+                base={restante}
+                pie={`apartados pendientes ${fmtMonto(apartadosPendientes)}`}
+              />
+            )}
+          </>
+        )}
+
         {movimientos.length === 0 ? (
           <div className="nbs flex flex-col items-center gap-2 px-4 py-9 text-center">
             <span className="text-[42px]">🌵</span>
@@ -232,20 +259,6 @@ export function DashView({
           </div>
         ) : (
           <>
-            <TileSemaforo
-              titulo="Restante"
-              monto={totalIngresos - totalGastos}
-              ingresos={totalIngresos}
-            />
-            {apartadosPendientes > 0 && (
-              <TileSemaforo
-                titulo="Libre"
-                monto={totalIngresos - totalGastos - apartadosPendientes}
-                ingresos={totalIngresos}
-                pie={`apartados pendientes ${fmtMonto(apartadosPendientes)}`}
-              />
-            )}
-
             <div className="seg">
               <button
                 className={cn(tipoVista === "gasto" && "on")}
@@ -379,24 +392,22 @@ function Stat({
   );
 }
 
-// Semáforo del mes: ≥70% del ingreso verde fuerte (más que el f-g de Ingresos),
-// 40–69% amarillo, <40% rojo. Sin ingresos cuenta como 0%. Lo usan Restante
-// (ingresos − gastos reales) y Libre (además descuenta apartados pendientes).
+// Semáforo de Libre: qué parte del Restante sigue sin comprometer en apartados.
+// ≥70% verde fuerte (más que el f-g de Ingresos), 40–69% amarillo, <40% rojo;
+// con Restante en cero o negativo cuenta como 0%.
 function TileSemaforo({
   titulo,
   monto,
-  ingresos,
+  base,
   pie,
 }: {
   titulo: string;
   monto: number;
-  ingresos: number;
+  base: number;
   pie?: string;
 }) {
   const pct =
-    ingresos > 0
-      ? Math.max(0, Math.min(100, Math.round((monto / ingresos) * 100)))
-      : 0;
+    base > 0 ? Math.max(0, Math.min(100, Math.round((monto / base) * 100))) : 0;
   const color = pct >= 70 ? "f-gg" : pct >= 40 ? "f-y" : "f-r";
 
   return (
@@ -406,7 +417,7 @@ function TileSemaforo({
           {titulo}
         </span>
         <span className="text-[10px] font-extrabold">
-          {pct}% de tus ingresos
+          {pct}% de tu restante
         </span>
       </div>
       <div className="mt-0.5 text-[21px] font-black tracking-tight">

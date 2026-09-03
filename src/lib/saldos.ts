@@ -30,3 +30,20 @@ export function saldosPorMedio(
 
   return saldos;
 }
+
+// Restante del Dash: lo que hay en todos los medios más lo que no se pudo
+// atribuir a ninguno (movimiento sin medio o de un medio borrado). Una
+// transferencia entre dos medios vivos no mueve el total; con una punta borrada
+// sí, porque ese dinero entró o salió de lo que la app sigue viendo.
+export function saldoTotal(
+  medios: Medio[],
+  movimientos: MovimientoDeSaldo[],
+  transferencias: Pick<Transferencia, "origenId" | "destinoId" | "monto">[],
+): number {
+  const porMedio = saldosPorMedio(medios, movimientos, transferencias);
+  const enMedios = Object.values(porMedio).reduce((s, v) => s + v, 0);
+  const sinMedio = movimientos
+    .filter((m) => !m.medioId || !(m.medioId in porMedio))
+    .reduce((s, m) => s + (m.tipo === "ingreso" ? m.monto : -m.monto), 0);
+  return enMedios + sinMedio;
+}
