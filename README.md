@@ -37,7 +37,7 @@ teléfono en una mano. Todo lo demás se construyó alrededor de eso.
 | 💰 **Ingresos** | Mismo flujo, en verde. Nómina, venta, quincena…                                                                                                                                                                            |
 | 📊 **Dash**     | Ingresos vs gastos del mes, **Restante** (lo que tienes hoy, con todo tu historial) y **Libre** (menos apartados pendientes, con semáforo), pastel por categoría o concepto, gráfica por día y comparativa contra el mes anterior. |
 | 📌 **Control**  | **Apartados**: al cobrar repartes lo ya comprometido (renta, luz…) y el Dash te dice cuánto queda libre de verdad; "✓ Ya lo pagué" lo convierte en gasto real. **Metas**: ahorros con nombre, barra de progreso y aportes. |
-| 👤 **Cuenta**   | Historial con búsqueda y filtros (edita o borra lo que se te fue), Configuración (categorías, medios, frecuentes, tema claro/oscuro), foto, correo, contraseña y eliminar cuenta.                                          |
+| 👤 **Cuenta**   | Historial con búsqueda y filtros (edita o borra lo que se te fue), Configuración (categorías, medios y frecuentes en el orden que tú elijas, tema claro/oscuro), foto, correo, contraseña y eliminar cuenta.                                          |
 
 **Detalles que importan**
 
@@ -143,6 +143,13 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 # Solo para el informe de admin (Cuenta → Informe). Opcional.
 SUPABASE_SECRET_KEY=sb_secret_...
 ADMIN_USER_ID=uuid-de-tu-cuenta   # Authentication → Users, tras crear tu cuenta
+
+# Aviso por correo cuando alguien te escribe desde Cuenta → "Envíame un mensaje"
+# (Nodemailer + Gmail con contraseña de aplicación). Opcional: sin esto el
+# mensaje igual se guarda y lo ves en el Informe.
+CORREO_USUARIO=tu@gmail.com
+CORREO_PASSWORD=contraseña-de-aplicación
+CORREO_DESTINO=tu@gmail.com       # a dónde llega el aviso; si falta, al mismo CORREO_USUARIO
 ```
 
 ### 4. Arranca

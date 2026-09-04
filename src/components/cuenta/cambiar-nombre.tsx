@@ -39,7 +39,7 @@ export function CambiarNombre({ actual }: { actual: string }) {
         className="rounded-lg border-2 bg-card px-[11px] py-[7px] text-[11px] font-extrabold shadow-[2px_2px_0_var(--sh)]"
         onClick={abrir}
       >
-        ✏️ Cambiar nombre
+        ✏️ Cambiar Nombre
       </button>
 
       {abierto && (

@@ -1,5 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { capitalizar, conComas, fmtMonto, limpiarMonto } from "./formato";
+import {
+  capitalizar,
+  capitalizarPalabras,
+  conComas,
+  fmtMonto,
+  limpiarMonto,
+} from "./formato";
 
 describe("fmtMonto — pesos con centavos siempre visibles", () => {
   test("agrupa miles y muestra dos decimales aunque sean .00", () => {
@@ -61,5 +67,29 @@ describe("capitalizar", () => {
 
   test("cadena vacía no explota", () => {
     expect(capitalizar("")).toBe("");
+  });
+});
+
+describe("capitalizarPalabras — conceptos de gastos e ingresos", () => {
+  test("cada palabra arranca en mayúscula", () => {
+    expect(capitalizarPalabras("comida con amigos")).toBe("Comida Con Amigos");
+  });
+
+  test("el resto de cada palabra queda como se tecleó", () => {
+    expect(capitalizarPalabras("pago TDC")).toBe("Pago TDC");
+    expect(capitalizarPalabras("iPhone")).toBe("IPhone");
+  });
+
+  test("acentos y eñes también", () => {
+    expect(capitalizarPalabras("ñoquis árabes")).toBe("Ñoquis Árabes");
+  });
+
+  test("respeta espacios múltiples y de orilla sin agregar ni quitar", () => {
+    expect(capitalizarPalabras(" cine  y palomitas ")).toBe(" Cine  Y Palomitas ");
+  });
+
+  test("lo que no es letra no cambia; vacío sigue vacío", () => {
+    expect(capitalizarPalabras("$100 de gas")).toBe("$100 De Gas");
+    expect(capitalizarPalabras("")).toBe("");
   });
 });

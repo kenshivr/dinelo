@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { conComas, limpiarMonto } from "@/lib/formato";
+import { ChipCategoria } from "@/components/captura/chip-categoria";
 import { Dialogo } from "@/components/dialogo";
 import type { Apartado, Categoria } from "@/lib/tipos";
 
@@ -76,15 +76,14 @@ export function ApartadoDialogo({
           <span className="lbl">Categoría · opcional</span>
           <div className="flex flex-wrap gap-2">
             {categorias.map((c) => (
-              <button
+              <ChipCategoria
                 key={c.id}
-                className={cn("chip", categoriaId === c.id && "f-y")}
+                categoria={c}
+                activa={categoriaId === c.id}
                 onClick={() =>
                   setCategoriaId(categoriaId === c.id ? null : c.id)
                 }
-              >
-                {c.nombre}
-              </button>
+              />
             ))}
           </div>
         </>

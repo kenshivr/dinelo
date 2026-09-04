@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/page-header";
 import { CuentasLista } from "@/components/admin/cuentas-lista";
+import { ComentariosLista } from "@/components/admin/comentarios-lista";
 import type { ColorBloque } from "@/lib/tipos";
 
 // Vista del informe de admin — server salvo la lista de cuentas (cliente:
@@ -23,8 +24,21 @@ export type CuentaInforme = {
   esAdmin: boolean;
 };
 
+// mensaje que un usuario mandó desde Cuenta → "Envíame un mensaje" (2026-09-04)
+export type ComentarioInforme = {
+  id: string;
+  texto: string;
+  cuando: string; // ISO (created_at)
+  nombre: string;
+  email: string;
+  inicial: string;
+  color: ColorBloque;
+  avatarUrl: string | null;
+};
+
 export type Informe = {
   cuentas: CuentaInforme[];
+  comentarios: ComentarioInforme[]; // más nuevo primero
   totales: {
     cuentas: number;
     altasMes: number;
@@ -52,7 +66,7 @@ function etiquetaMes(mes: string) {
 }
 
 export function InformeView({ informe }: { informe: Informe }) {
-  const { cuentas, totales, adopcion, altasPorMes } = informe;
+  const { cuentas, comentarios, totales, adopcion, altasPorMes } = informe;
   const maxAltas = Math.max(1, ...altasPorMes.map((a) => a.n));
 
   return (
@@ -61,7 +75,7 @@ export function InformeView({ informe }: { informe: Informe }) {
         title={<Link href="/cuenta">‹ Informe</Link>}
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            solo admin
+            Solo Admin
           </span>
         }
       />
@@ -143,6 +157,15 @@ export function InformeView({ informe }: { informe: Informe }) {
           </div>
         ))}
       </div>
+
+      <span className="lbl">Comentarios ({comentarios.length})</span>
+      {comentarios.length > 0 ? (
+        <ComentariosLista comentarios={comentarios} />
+      ) : (
+        <div className="nbs px-3.5 py-4 text-center text-[11.5px] font-bold text-muted-foreground">
+          Nadie te ha escrito todavía.
+        </div>
+      )}
 
       <span className="lbl">Cuentas ({totales.cuentas})</span>
       <CuentasLista cuentas={cuentas} />

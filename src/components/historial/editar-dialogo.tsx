@@ -4,6 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { conComas, limpiarMonto } from "@/lib/formato";
+import { ChipCategoria } from "@/components/captura/chip-categoria";
 import { Dialogo } from "@/components/dialogo";
 import type { Categoria, Medio, Movimiento } from "@/lib/tipos";
 
@@ -61,6 +62,7 @@ export function EditarDialogo({
         className="nbs finput outline-none"
         value={concepto}
         onChange={(e) => setConcepto(e.target.value)}
+        autoCapitalize="words"
       />
 
       <span className="lbl">Monto</span>
@@ -79,15 +81,14 @@ export function EditarDialogo({
           <span className="lbl">Categoría · opcional</span>
           <div className="flex flex-wrap gap-2">
             {categorias.map((c) => (
-              <button
+              <ChipCategoria
                 key={c.id}
-                className={cn("chip", categoriaId === c.id && "f-y")}
+                categoria={c}
+                activa={categoriaId === c.id}
                 onClick={() =>
                   setCategoriaId(categoriaId === c.id ? null : c.id)
                 }
-              >
-                {c.nombre}
-              </button>
+              />
             ))}
           </div>
         </>

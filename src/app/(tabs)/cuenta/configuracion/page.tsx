@@ -16,16 +16,19 @@ export default async function ConfPage() {
         .from("categorias")
         .select("id, nombre, color")
         .eq("user_id", auth.user.id)
+        .order("orden", { nullsFirst: false })
         .order("created_at"),
       supabase
         .from("medios")
         .select("id, nombre, emoji, tipo, saldo_inicial")
         .eq("user_id", auth.user.id)
+        .order("orden", { nullsFirst: false })
         .order("created_at"),
       supabase
         .from("frecuentes")
         .select("id, nombre, emoji, tipo")
         .eq("user_id", auth.user.id)
+        .order("orden", { nullsFirst: false })
         .order("created_at"),
       supabase
         .from("movimientos")

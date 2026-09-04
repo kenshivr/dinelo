@@ -61,6 +61,10 @@ export type Frecuente = {
   emoji: string;
   tipo: "G" | "I";
 };
+// Mensaje al admin desde Cuenta (2026-09-04): el tope lo comparten el contador
+// del diálogo, la validación de la action y el check de la tabla comentarios
+export const TOPE_COMENTARIO = 1000;
+
 export type Meta = {
   id: string;
   nombre: string;

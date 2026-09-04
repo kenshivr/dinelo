@@ -1,7 +1,23 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { borrarCuentaCompleta, conAdmin } from "@/lib/supabase/admin";
+import {
+  borrarCuentaCompleta,
+  conAdmin,
+  crearClienteAdmin,
+} from "@/lib/supabase/admin";
+
+// El admin borra un comentario ya atendido (nadie más puede leerlos ni borrarlos).
+export async function borrarComentarioAdmin(id: string) {
+  await conAdmin();
+  const { error } = await crearClienteAdmin()
+    .from("comentarios")
+    .delete()
+    .eq("id", id);
+  if (error) return "No se pudo borrar. Intenta de nuevo.";
+  revalidatePath("/cuenta/admin");
+  return null;
+}
 
 // Solo el admin borra cuentas ajenas desde el informe; la suya no (moriría el
 // informe — se haría desde el dashboard de Supabase).

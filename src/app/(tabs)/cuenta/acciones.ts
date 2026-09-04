@@ -2,10 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { avisarComentario } from "@/lib/correo";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 import { borrarCuentaCompleta } from "@/lib/supabase/admin";
 import { mensajeDeAuth } from "@/lib/supabase/errores";
 import { conSesion } from "@/lib/supabase/sesion";
+import { TOPE_COMENTARIO } from "@/lib/tipos";
 
 export async function salir() {
   const supabase = await crearClienteServidor();
@@ -90,6 +92,39 @@ export async function subirAvatar(datos: FormData) {
 
   // layout completo: el avatar también vive en el header de TODAS las tabs
   revalidatePath("/", "layout");
+  return null;
+}
+
+// Mensaje/idea/comentario para el admin (2026-09-04). Se guarda SIEMPRE en la
+// base (lo lista el Informe); el correo es un aviso extra que no bloquea ni
+// falla el envío. Devuelve error solo si no se pudo guardar.
+export async function enviarComentario(texto: string) {
+  const limpio = texto.trim();
+  if (!limpio) return "Escribe algo antes de enviar.";
+  if (limpio.length > TOPE_COMENTARIO)
+    return `Máximo ${TOPE_COMENTARIO} caracteres.`;
+
+  const { supabase, userId } = await conSesion();
+  const { error } = await supabase
+    .from("comentarios")
+    .insert({ user_id: userId, texto: limpio });
+  if (error) {
+    console.error("No se pudo guardar el comentario:", error);
+    return "No se pudo enviar. Intenta de nuevo.";
+  }
+
+  // quién escribe: el nombre vive en el perfil, el correo en Auth
+  const [{ data: perfil }, { data: auth }] = await Promise.all([
+    supabase.from("profiles").select("nombre").eq("id", userId).single(),
+    supabase.auth.getUser(),
+  ]);
+  await avisarComentario({
+    nombre: perfil?.nombre ?? "Alguien",
+    correo: auth.user?.email ?? "",
+    texto: limpio,
+  });
+
+  revalidatePath("/cuenta/admin"); // el Informe lista los comentarios
   return null;
 }
 

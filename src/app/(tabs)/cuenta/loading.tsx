@@ -8,7 +8,7 @@ export default function Cargando() {
         title="Cuenta"
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            tu perfil
+            Tu Perfil
           </span>
         }
       />

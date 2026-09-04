@@ -37,7 +37,7 @@ function montar() {
   return {
     concepto: screen.getByPlaceholderText("Cine, Comida, Ropa…"),
     monto: screen.getByPlaceholderText("0"),
-    registrar: screen.getByRole("button", { name: "Registrar gasto" }),
+    registrar: screen.getByRole("button", { name: "Registrar Gasto" }),
   };
 }
 

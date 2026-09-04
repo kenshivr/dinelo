@@ -9,7 +9,7 @@ export default function Cargando() {
         title={<Link href="/cuenta">‹ Configuración</Link>}
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            desde Cuenta
+            Desde Cuenta
           </span>
         }
       />

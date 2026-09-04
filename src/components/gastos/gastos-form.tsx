@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { chevron } from "@/components/icons";
 import { PageHeader } from "@/components/page-header";
+import { ChipCategoria } from "@/components/captura/chip-categoria";
 import { ConceptoCombobox } from "@/components/captura/concepto-combobox";
 import { MontoInput } from "@/components/captura/monto-input";
 import { CategoriaDialogo } from "@/components/conf/categoria-dialogo";
@@ -79,7 +80,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
 
   return (
     <>
-      <PageHeader title="Registrar gasto" conFecha />
+      <PageHeader title="Registrar Gasto" conFecha />
 
       <ConceptoCombobox
         ref={conceptoRef}
@@ -108,13 +109,12 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
       {categorias.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {categorias.map((c) => (
-            <button
+            <ChipCategoria
               key={c.id}
-              className={cn("chip", categoriaId === c.id && "f-y")}
+              categoria={c}
+              activa={categoriaId === c.id}
               onClick={() => setCategoriaId(categoriaId === c.id ? null : c.id)}
-            >
-              {c.nombre}
-            </button>
+            />
           ))}
           {/* size fijo (no estira con la fila): círculo de verdad, no óvalo */}
           <button
@@ -190,7 +190,7 @@ export function GastosForm({ categorias, medios, frecuentes }: Props) {
         disabled={registrando}
         onClick={registrar}
       >
-        {registrando ? "Registrando…" : "Registrar gasto"}
+        {registrando ? "Registrando…" : "Registrar Gasto"}
       </button>
     </>
   );

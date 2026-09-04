@@ -9,7 +9,7 @@ export default function Cargando() {
         title={<Link href="/cuenta">‹ Informe</Link>}
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            solo admin
+            Solo Admin
           </span>
         }
       />

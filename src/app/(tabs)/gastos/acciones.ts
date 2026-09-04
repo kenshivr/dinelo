@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { capitalizarPalabras } from "@/lib/formato";
 import { conSesion } from "@/lib/supabase/sesion";
 import type { ColorBloque } from "@/lib/tipos";
 
@@ -16,7 +17,7 @@ export async function registrarGasto(datos: {
   const { error } = await supabase.from("movimientos").insert({
     user_id: userId,
     tipo: "gasto",
-    concepto: datos.concepto,
+    concepto: capitalizarPalabras(datos.concepto),
     monto: datos.monto,
     categoria_id: datos.categoriaId,
     medio_id: datos.medioId,

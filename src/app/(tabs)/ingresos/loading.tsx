@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/page-header";
 export default function Cargando() {
   return (
     <>
-      <PageHeader title="Registrar ingreso" conFecha />
+      <PageHeader title="Registrar Ingreso" conFecha />
       <div className="ske h-11" />
       <div className="ske mx-auto mt-1 h-16 w-40" />
       <span className="lbl">¿A dónde entra?</span>

@@ -26,14 +26,15 @@ type Props = {
 };
 
 const SUBTITULO = {
-  apartados: "dinero comprometido",
-  metas: "ahorros con nombre",
-  medios: "dónde está tu dinero",
+  medios: "Dónde Está Tu Dinero",
+  apartados: "Dinero Comprometido",
+  metas: "Ahorros con Nombre",
 } as const;
 
-// El tab Control agrupa el dinero con destino: apartados (comprometido del mes),
-// metas (ahorro a largo plazo) y medios (cuánto hay en cada lugar), con el
-// mismo patrón de segmentado del Dash.
+// El tab Control agrupa el dinero con destino: medios (cuánto hay en cada lugar),
+// apartados (comprometido del mes) y metas (ahorro a largo plazo), con el
+// mismo patrón de segmentado del Dash. Orden y entrada por Medios: pedido de
+// Brayan (2026-09-04) — es la misma cuenta que el Restante del Dash.
 export function ControlView({
   apartados,
   categorias,
@@ -43,8 +44,8 @@ export function ControlView({
   saldos,
   transferencias,
 }: Props) {
-  const [vista, setVista] = useState<"apartados" | "metas" | "medios">(
-    "apartados",
+  const [vista, setVista] = useState<"medios" | "apartados" | "metas">(
+    "medios",
   );
 
   return (
@@ -60,6 +61,12 @@ export function ControlView({
 
       <div className="seg">
         <button
+          className={cn(vista === "medios" && "on")}
+          onClick={() => setVista("medios")}
+        >
+          Medios
+        </button>
+        <button
           className={cn(vista === "apartados" && "on")}
           onClick={() => setVista("apartados")}
         >
@@ -71,28 +78,22 @@ export function ControlView({
         >
           Metas
         </button>
-        <button
-          className={cn(vista === "medios" && "on")}
-          onClick={() => setVista("medios")}
-        >
-          Medios
-        </button>
       </div>
 
-      {vista === "apartados" ? (
-        <ApartadosSeccion
-          apartados={apartados}
-          categorias={categorias}
-          medios={medios}
-        />
-      ) : vista === "metas" ? (
-        <MetasView metas={metas} aportes={aportes} medios={medios} />
-      ) : (
+      {vista === "medios" ? (
         <MediosSeccion
           medios={medios}
           saldos={saldos}
           transferencias={transferencias}
         />
+      ) : vista === "apartados" ? (
+        <ApartadosSeccion
+          apartados={apartados}
+          categorias={categorias}
+          medios={medios}
+        />
+      ) : (
+        <MetasView metas={metas} aportes={aportes} medios={medios} />
       )}
     </>
   );

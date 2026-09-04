@@ -61,7 +61,7 @@ export function CambiarFoto() {
         disabled={subiendo}
         onClick={() => input.current?.click()}
       >
-        {subiendo ? "Subiendo…" : "📷 Cambiar foto"}
+        {subiendo ? "Subiendo…" : "📷 Cambiar Foto"}
       </button>
       <input
         ref={input}

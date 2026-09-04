@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { conSesion } from "@/lib/supabase/sesion";
-import { fmtMonto } from "@/lib/formato";
+import { capitalizarPalabras, fmtMonto } from "@/lib/formato";
 
 // Las actions devuelven el mensaje de error a mostrar, o null si todo salió bien.
 const NO_GUARDO = "No se pudo guardar. Intenta de nuevo.";
@@ -171,7 +171,8 @@ export async function pagarApartado(datos: {
     .insert({
       user_id: userId,
       tipo: "gasto",
-      concepto: apartado.nombre,
+      concepto: capitalizarPalabras(apartado.nombre), // el gasto sigue la regla de conceptos
+
       monto: apartado.monto,
       categoria_id: datos.categoriaId,
       medio_id: datos.medioId,

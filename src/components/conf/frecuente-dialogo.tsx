@@ -49,6 +49,7 @@ export function FrecuenteDialogo({ frecuente, onGuardar, onCerrar }: Props) {
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
         placeholder="Renta, Quincena…"
+        autoCapitalize="words"
       />
 
       <span className="lbl">Emoji</span>

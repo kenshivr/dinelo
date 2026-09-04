@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import {
   InformeView,
+  type ComentarioInforme,
   type CuentaInforme,
   type Informe,
 } from "@/components/admin/informe-view";
@@ -22,7 +23,7 @@ export default async function AdminPage() {
           title={<Link href="/cuenta">‹ Informe</Link>}
           derecha={
             <span className="text-xs font-bold text-muted-foreground">
-              solo admin
+              Solo Admin
             </span>
           }
         />
@@ -42,18 +43,30 @@ export default async function AdminPage() {
   }
 
   const admin = crearClienteAdmin();
-  const [usuarios, perfiles, movs, metas, apartados, medios, frecuentes] =
-    await Promise.all([
-      admin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
-      admin
-        .from("profiles")
-        .select("id, nombre, inicial, color, avatar_url, created_at"),
-      admin.from("movimientos").select("user_id, fecha"), // solo lo mínimo: el informe cuenta, no espía montos
-      admin.from("metas").select("user_id"),
-      admin.from("apartados").select("user_id"),
-      admin.from("medios").select("user_id"),
-      admin.from("frecuentes").select("user_id"),
-    ]);
+  const [
+    usuarios,
+    perfiles,
+    movs,
+    metas,
+    apartados,
+    medios,
+    frecuentes,
+    comentarios,
+  ] = await Promise.all([
+    admin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
+    admin
+      .from("profiles")
+      .select("id, nombre, inicial, color, avatar_url, created_at"),
+    admin.from("movimientos").select("user_id, fecha"), // solo lo mínimo: el informe cuenta, no espía montos
+    admin.from("metas").select("user_id"),
+    admin.from("apartados").select("user_id"),
+    admin.from("medios").select("user_id"),
+    admin.from("frecuentes").select("user_id"),
+    admin
+      .from("comentarios")
+      .select("id, user_id, texto, created_at")
+      .order("created_at", { ascending: false }),
+  ]);
   // todos nacen con 2 medios base (trigger de seed.sql): los frecuentes sí dicen quién entendió la app
   const conFrecuentes = new Set((frecuentes.data ?? []).map((f) => f.user_id));
 
@@ -119,6 +132,27 @@ export default async function AdminPage() {
     },
   );
 
+  // bandeja de mensajes: cada comentario con quién lo mandó (perfil + correo de Auth)
+  const porId = new Map(cuentas.map((c) => [c.id, c]));
+  const mensajes: ComentarioInforme[] = (comentarios.data ?? []).flatMap(
+    (m) => {
+      const c = porId.get(m.user_id);
+      if (!c) return []; // sin perfil no hay a quién atribuirlo (no debería pasar: cascade)
+      return [
+        {
+          id: m.id,
+          texto: m.texto,
+          cuando: m.created_at,
+          nombre: c.nombre,
+          email: c.email,
+          inicial: c.inicial,
+          color: c.color,
+          avatarUrl: c.avatarUrl,
+        },
+      ];
+    },
+  );
+
   // últimos 6 meses con el actual al final
   const altasPorMes = Array.from({ length: 6 }, (_, i) =>
     sumarMes(mesActual, i - 5),
@@ -129,6 +163,7 @@ export default async function AdminPage() {
 
   const informe: Informe = {
     cuentas,
+    comentarios: mensajes,
     totales: {
       cuentas: cuentas.length,
       altasMes: altasPorMes[5].n,

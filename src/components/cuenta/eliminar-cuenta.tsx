@@ -37,7 +37,7 @@ export function EliminarCuenta({ esAdmin }: { esAdmin: boolean }) {
         <span className="text-[17px]">🗑️</span>
         <span className="min-w-0 flex-1">
           <b className="block truncate text-[13px] font-extrabold text-negative">
-            Eliminar cuenta
+            Eliminar Cuenta
           </b>
           <span className="text-[10.5px] font-bold text-muted-foreground">
             borra tus datos y tu cuenta para siempre

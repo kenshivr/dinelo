@@ -51,6 +51,18 @@ describe("ConceptoCombobox", () => {
     expect(screen.queryByText(/Renta/)).not.toBeInTheDocument();
   });
 
+  test("cuando lo escrito es un frecuente, su emoji acompaña al texto", () => {
+    montar({ value: "café" }); // sin importar mayúsculas
+    expect(screen.getByText("☕")).toBeInTheDocument();
+    expect(screen.queryByText("🏠")).not.toBeInTheDocument();
+  });
+
+  test("un concepto que no es frecuente va sin emoji", () => {
+    montar({ value: "Tacos" });
+    expect(screen.queryByText("☕")).not.toBeInTheDocument();
+    expect(screen.queryByText("🏠")).not.toBeInTheDocument();
+  });
+
   test("sin frecuentes invita a crear uno del tipo correcto", async () => {
     const user = userEvent.setup();
     montar({ frecuentes: [], tipo: "I" });

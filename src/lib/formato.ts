@@ -24,3 +24,11 @@ export function conComas(crudo: string) {
 
 export const capitalizar = (s: string) =>
   s.charAt(0).toUpperCase() + s.slice(1);
+
+// "comida con amigos" → "Comida Con Amigos": cada palabra arranca en mayúscula y
+// el resto queda como se tecleó ("iPhone" no se toca, "TDC" sigue en mayúsculas).
+// Regla para conceptos de gastos/ingresos (2026-09-04): se aplica al GUARDAR, en
+// las server actions, para que todos los caminos (captura, editar, frecuentes,
+// pagar apartado) escriban igual.
+export const capitalizarPalabras = (s: string) =>
+  s.replace(/(^|\s)(\S)/g, (_, sep: string, letra: string) => sep + letra.toUpperCase());

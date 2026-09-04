@@ -27,6 +27,14 @@ export function ConceptoCombobox({
 }: Props) {
   const [abierto, setAbierto] = useState(false);
 
+  // Si lo escrito ES un frecuente (elegido de la lista o tecleado igual), su
+  // emoji acompaña al texto a la izquierda. Derivado del valor, sin estado
+  // aparte: editar el texto lo quita solo. El emoji NO forma parte del concepto.
+  const texto = value.trim().toLowerCase();
+  const frecuente = texto
+    ? frecuentes.find((f) => f.nombre.trim().toLowerCase() === texto)
+    : undefined;
+
   return (
     <>
       <div
@@ -35,11 +43,17 @@ export function ConceptoCombobox({
           error && "border-negative",
         )}
       >
+        {frecuente && (
+          <span className="mr-2 text-base" aria-hidden>
+            {frecuente.emoji}
+          </span>
+        )}
         <input
           ref={ref}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
+          autoCapitalize="words"
           className="w-full bg-transparent py-3 text-sm font-extrabold outline-none placeholder:text-muted-foreground"
         />
         {/* la lista solo se abre a propósito: escribir no la dispara */}

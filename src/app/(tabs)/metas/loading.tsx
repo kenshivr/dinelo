@@ -8,7 +8,7 @@ export default function Cargando() {
         title="Metas"
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            ahorros con nombre
+            Ahorros con Nombre
           </span>
         }
       />

@@ -28,6 +28,7 @@ export default async function DashPage({ searchParams }: PageProps<"/dash">) {
         .from("categorias")
         .select("id, nombre, color")
         .eq("user_id", auth.user.id)
+        .order("orden", { nullsFirst: false })
         .order("created_at"),
       supabase
         .from("medios")

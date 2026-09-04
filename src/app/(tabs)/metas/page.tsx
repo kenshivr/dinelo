@@ -44,11 +44,13 @@ export default async function ControlPage() {
       .from("categorias")
       .select("id, nombre, color")
       .eq("user_id", auth.user.id)
+      .order("orden", { nullsFirst: false })
       .order("created_at"),
     supabase
       .from("medios")
       .select("id, nombre, emoji, tipo, saldo_inicial")
       .eq("user_id", auth.user.id)
+      .order("orden", { nullsFirst: false })
       .order("created_at"),
     // solo lo que el saldo necesita; lo "Sin medio" no se puede atribuir y se queda fuera
     supabase

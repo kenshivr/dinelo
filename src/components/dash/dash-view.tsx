@@ -84,8 +84,6 @@ export function DashView({
     .filter((m) => m.tipo === "ingreso")
     .reduce((s, m) => s + m.monto, 0);
   const totalGastos = gastosMes.reduce((s, m) => s + m.monto, 0);
-  // lo que el mes dejó (o se comió): el flujo es del mes, el Restante es de siempre
-  const netoMes = totalIngresos - totalGastos;
 
   // los gastos sin categoría forman su propio grupo (categoría opcional)
   const porCategoria = [
@@ -226,14 +224,14 @@ export function DashView({
         </div>
 
         {/* Restante y Libre van sobre TODO el historial (2026-09-03): "cuánto tengo
-            hoy", no "cuánto me sobró del mes"; por eso se ven aunque el mes esté vacío */}
+            hoy", no "cuánto me sobró del mes"; por eso se ven aunque el mes esté vacío.
+            Restante sin pie a propósito (2026-09-04): es un saldo, no un flujo del mes */}
         {hayHistorial && (
           <>
             <Stat
               titulo="Restante"
               monto={restante}
               color={restante >= 0 ? "f-gg" : "f-r"}
-              pie={`${netoMes < 0 ? "−" : "+"}${fmtMonto(Math.abs(netoMes))} en ${nombre}`}
             />
             {apartadosPendientes > 0 && (
               <TileSemaforo
@@ -276,13 +274,13 @@ export function DashView({
 
             <div className="nbs flex flex-col gap-2 px-3.5 py-3">
               <span className="text-xs font-black">
-                {tipoVista === "gasto" ? "Por categoría" : "Por concepto"}
+                {tipoVista === "gasto" ? "Por Categoría" : "Por Concepto"}
               </span>
               <GraficaPastel rebanadas={rebanadas()} vacio={sinDatos} />
             </div>
             <div className="nbs flex flex-col gap-2 px-3.5 py-3">
               <span className="flex items-center gap-1.5 text-xs font-black">
-                Por día
+                Por Día
                 <span className="ml-auto text-[10.5px] font-extrabold text-muted-foreground">
                   {fmtMonto(valoresDia.reduce((s, v) => s + v, 0))}
                 </span>
@@ -298,7 +296,7 @@ export function DashView({
 
             {porCategoria.length > 0 && (
               <div className="nbs flex flex-col gap-[9px] px-3.5 py-3">
-                <span className="text-xs font-black">Gastos por categoría</span>
+                <span className="text-xs font-black">Gastos por Categoría</span>
                 {porCategoria.map((c) => (
                   <div
                     key={c.id}
@@ -324,7 +322,7 @@ export function DashView({
             )}
 
             <div className="nbs flex flex-col gap-[9px] px-3.5 py-3">
-              <span className="text-xs font-black">Movimientos recientes</span>
+              <span className="text-xs font-black">Movimientos Recientes</span>
               {recientes.map((m) => {
                 return (
                   <div

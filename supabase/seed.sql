@@ -52,6 +52,8 @@ create table public.categorias (
             'f-n'
         )
     ),
+    -- posición elegida en Configuración › Ordenar (2026-09-04); null = al final, por created_at
+    orden integer,
     created_at timestamptz not null default now()
 );
 
@@ -63,6 +65,7 @@ create table public.medios (
     tipo text,
     -- punto de partida del saldo en Control › Medios (la app arranca a medio camino)
     saldo_inicial numeric(10, 2) not null default 0,
+    orden integer, -- Configuración › Ordenar (2026-09-04); null = al final
     created_at timestamptz not null default now()
 );
 
@@ -73,6 +76,7 @@ create table public.frecuentes (
     nombre text not null,
     emoji text not null,
     tipo text not null check (tipo in ('G', 'I')),
+    orden integer, -- Configuración › Ordenar (2026-09-04); null = al final
     created_at timestamptz not null default now()
 );
 
@@ -149,6 +153,15 @@ create table public.transferencias (
 
 create index transferencias_user_idx on public.transferencias (user_id, created_at desc);
 
+-- Mensajes al admin desde Cuenta → "Envíame un mensaje" (2026-09-04). Solo se
+-- insertan; los lee el Informe con la secret key. Caen con la cuenta (cascade).
+create table public.comentarios (
+    id uuid primary key default gen_random_uuid (),
+    user_id uuid not null references public.profiles (id) on delete cascade,
+    texto text not null check (char_length(texto) between 1 and 1000),
+    created_at timestamptz not null default now()
+);
+
 -- ═══ RLS: solo lo propio, solo autenticados (el rol anon no ve nada) ══════
 
 alter table public.profiles enable row level security;
@@ -207,6 +220,13 @@ with
     check (user_id = auth.uid ());
 
 create policy "mis transferencias" on public.transferencias for all to authenticated using (user_id = auth.uid ())
+with
+    check (user_id = auth.uid ());
+
+alter table public.comentarios enable row level security;
+
+-- solo mandar el propio: nadie lee comentarios desde la app
+create policy "mandar mi comentario" on public.comentarios for insert to authenticated
 with
     check (user_id = auth.uid ());
 

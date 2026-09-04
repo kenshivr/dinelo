@@ -13,12 +13,14 @@ export default async function IngresosPage() {
       .from("medios")
       .select("id, nombre, emoji, tipo")
       .eq("user_id", auth.user.id)
+      .order("orden", { nullsFirst: false })
       .order("created_at"),
     supabase
       .from("frecuentes")
       .select("id, nombre, emoji, tipo")
       .eq("user_id", auth.user.id)
       .eq("tipo", "I")
+      .order("orden", { nullsFirst: false })
       .order("created_at"),
   ]);
 

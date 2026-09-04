@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/page-header";
 import { MisDatos } from "@/components/cuenta/mis-datos";
 import { CambiarFoto } from "@/components/cuenta/cambiar-foto";
 import { CambiarNombre } from "@/components/cuenta/cambiar-nombre";
+import { ComentarioFila } from "@/components/cuenta/comentario-fila";
 import { CerrarSesion } from "@/components/cuenta/cerrar-sesion";
 import { EliminarCuenta } from "@/components/cuenta/eliminar-cuenta";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
@@ -38,7 +39,7 @@ export default async function CuentaPage() {
         title="Cuenta"
         derecha={
           <span className="text-xs font-bold text-muted-foreground">
-            tu perfil
+            Tu Perfil
           </span>
         }
       />
@@ -58,7 +59,7 @@ export default async function CuentaPage() {
           <span className="min-w-0 flex-1">
             <b className="block text-[15.5px] font-black">{perfil.nombre}</b>
             <span className="text-[11px] font-bold text-muted-foreground">
-              miembro desde {desde}
+              Miembro Desde {desde}
             </span>
           </span>
         </div>
@@ -69,7 +70,11 @@ export default async function CuentaPage() {
         </div>
       </div>
 
-      {/* sesión y cuenta viven pegadas a la card del perfil (ya no en el dock) */}
+      {/* justo bajo el perfil (pedido 2026-09-04): que se vea que se puede escribir al admin */}
+      <span className="lbl">Comentarios</span>
+      <ComentarioFila />
+
+      {/* sesión y cuenta (ya no en el dock) */}
       <CerrarSesion />
       <EliminarCuenta esAdmin={auth.user.id === process.env.ADMIN_USER_ID} />
 

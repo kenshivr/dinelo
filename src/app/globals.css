@@ -275,6 +275,22 @@
   .seg button:active {
     translate: 0 1px;
   }
+
+  /* chip de categoría (2026-09-04, pedido de Brayan; componente captura/chip-categoria
+     usado en Gastos, Editar movimiento, Pagar apartado y Nuevo apartado): borde,
+     letra y sombra en el color PROPIO de la categoría sobre el fondo de chip; --cat
+     llega inline desde el JSX (hex de colorBloque). El chip elegido NO lleva esta
+     clase: se rellena con su f-* y vuelve al negro Bloque, como cualquier selección.
+     OJO: en tema claro la letra de colores pálidos (f-g, f-n, f-y…) queda por
+     debajo de 2:1 sobre blanco — decisión de Brayan con los números a la vista. */
+  .chip-cat {
+    color: var(--cat);
+    border-color: var(--cat);
+    box-shadow: 2px 2px 0 var(--cat);
+  }
+  .chip-cat:active:not(:disabled) {
+    box-shadow: 1px 1px 0 var(--cat);
+  }
   /* el dock no tiene sombra (va pegado al nav): solo baja */
   .dock:active:not(:disabled) {
     translate: 0 2px;

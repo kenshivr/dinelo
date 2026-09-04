@@ -70,7 +70,7 @@ export function IngresosForm({ medios, frecuentes }: Props) {
 
   return (
     <>
-      <PageHeader title="Registrar ingreso" conFecha />
+      <PageHeader title="Registrar Ingreso" conFecha />
 
       <ConceptoCombobox
         ref={conceptoRef}
@@ -144,7 +144,7 @@ export function IngresosForm({ medios, frecuentes }: Props) {
         disabled={registrando}
         onClick={registrar}
       >
-        {registrando ? "Registrando…" : "Registrar ingreso"}
+        {registrando ? "Registrando…" : "Registrar Ingreso"}
       </button>
     </>
   );

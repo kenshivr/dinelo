@@ -22,7 +22,7 @@ export function CerrarSesion() {
         <span className="text-[17px]">🚪</span>
         <span className="min-w-0 flex-1">
           <b className="block truncate text-[13px] font-extrabold">
-            Cerrar sesión
+            Cerrar Sesión
           </b>
           <span className="text-[10.5px] font-bold text-muted-foreground">
             tus datos se quedan guardados

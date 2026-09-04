@@ -75,7 +75,7 @@ export function ApartadosSeccion({ apartados, categorias, medios }: Props) {
         className="dock f-gg -mx-[18px] mt-auto"
         onClick={() => setDialogo("nuevo")}
       >
-        ＋ Nuevo apartado
+        ＋ Nuevo Apartado
       </button>
 
       {dialogo && (

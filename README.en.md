@@ -37,7 +37,7 @@ phone in one hand. Everything else was built around that.
 | 💰 **Income**   | Same flow, in green. Payroll, a sale, payday…                                                                                                                                                                           |
 | 📊 **Dash**     | Income vs expenses for the month, **Remaining** (what you have today, across your whole history) and **Free** (minus pending set-asides, with a traffic light), pie chart by category or concept, daily chart and a comparison against last month. |
 | 📌 **Control**  | **Envelopes**: when you get paid, you split what's already committed (rent, utilities…) and the Dash tells you what's truly free; "✓ Already paid it" turns it into a real expense. **Goals**: named savings with a progress bar and contributions. |
-| 👤 **Account**  | History with search and filters (edit or delete what slipped), Settings (categories, payment methods, frequents, light/dark theme), photo, email, password and account deletion.                                         |
+| 👤 **Account**  | History with search and filters (edit or delete what slipped), Settings (categories, payment methods and frequents in the order you choose, light/dark theme), photo, email, password and account deletion.                                         |
 
 **Details that matter**
 
@@ -144,6 +144,13 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 # Only for the admin report (Account → Report). Optional.
 SUPABASE_SECRET_KEY=sb_secret_...
 ADMIN_USER_ID=uuid-of-your-account   # Authentication → Users, after creating your account
+
+# Email notice when someone writes to you from Account → "Send me a message"
+# (Nodemailer + Gmail app password). Optional: without it the message is still
+# saved and shows up in the Report.
+CORREO_USUARIO=you@gmail.com
+CORREO_PASSWORD=app-password
+CORREO_DESTINO=you@gmail.com         # where the notice goes; defaults to CORREO_USUARIO
 ```
 
 ### 4. Start it

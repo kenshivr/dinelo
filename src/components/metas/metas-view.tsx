@@ -144,7 +144,7 @@ export function MetasView({ metas, aportes, medios }: Props) {
         className="dock f-gg -mx-[18px] mt-auto"
         onClick={() => setMetaDialogo("nueva")}
       >
-        ＋ Nueva meta
+        ＋ Nueva Meta
       </button>
 
       {metaDialogo && (

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { capitalizarPalabras } from "@/lib/formato";
 import { conSesion } from "@/lib/supabase/sesion";
 
 // Devuelve el mensaje de error a mostrar, o null si todo salió bien.
@@ -15,7 +16,7 @@ export async function registrarIngreso(datos: {
   const { error } = await supabase.from("movimientos").insert({
     user_id: userId,
     tipo: "ingreso",
-    concepto: datos.concepto,
+    concepto: capitalizarPalabras(datos.concepto),
     monto: datos.monto,
     medio_id: datos.medioId,
     fecha: datos.fecha,
