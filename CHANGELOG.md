@@ -6,6 +6,13 @@ Todos los cambios notables de DiNelo se documentan aquí. El formato sigue
 
 ## [Unreleased]
 
+### Cambiado
+
+- Dash: **Restante** pasa a llamarse **Saldo** y es la suma de todos los
+  ingresos menos la de todos los gastos, sin importar el mes que se esté
+  viendo. Antes se cortaba al cierre del mes visible y sumaba el saldo inicial
+  de los medios. **Libre** sigue siendo Saldo menos apartados pendientes.
+
 ## [1.1.0] - 2026-09-04
 
 ### Añadido

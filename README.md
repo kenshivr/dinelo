@@ -35,7 +35,7 @@ teléfono en una mano. Todo lo demás se construyó alrededor de eso.
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 💸 **Gastos**   | Concepto, monto y listo. Categoría y medio de pago son opcionales. Alta rápida de categorías sin salir de la pantalla.                                                                                                     |
 | 💰 **Ingresos** | Mismo flujo, en verde. Nómina, venta, quincena…                                                                                                                                                                            |
-| 📊 **Dash**     | Ingresos vs gastos del mes, **Restante** (lo que tienes hoy, con todo tu historial) y **Libre** (menos apartados pendientes, con semáforo), pastel por categoría o concepto, gráfica por día y comparativa contra el mes anterior. |
+| 📊 **Dash**     | Ingresos vs gastos del mes, **Saldo** (todos tus ingresos menos todos tus gastos, sin importar el mes que veas) y **Libre** (menos apartados pendientes, con semáforo), pastel por categoría o concepto, gráfica por día y comparativa contra el mes anterior. |
 | 📌 **Control**  | **Apartados**: al cobrar repartes lo ya comprometido (renta, luz…) y el Dash te dice cuánto queda libre de verdad; "✓ Ya lo pagué" lo convierte en gasto real. **Metas**: ahorros con nombre, barra de progreso y aportes. |
 | 👤 **Cuenta**   | Historial con búsqueda y filtros (edita o borra lo que se te fue), Configuración (categorías, medios y frecuentes en el orden que tú elijas, tema claro/oscuro), foto, correo, contraseña y eliminar cuenta.                                          |
 
@@ -51,7 +51,7 @@ teléfono en una mano. Todo lo demás se construyó alrededor de eso.
 <p align="center">
   <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Cuenta: perfil, historial y configuración" />
   <img src="docs/capturas/control.jpeg" width="24%" alt="Control: apartados pendientes con Ya lo pagué" />
-  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: restante con semáforo y pastel por categoría" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: saldo y pastel por categoría" />
   <img src="docs/capturas/gastos.jpeg" width="24%" alt="Registrar gasto: Cine $450 con categoría Diversión" />
 </p>
 

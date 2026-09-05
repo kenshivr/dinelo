@@ -35,7 +35,7 @@ phone in one hand. Everything else was built around that.
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 💸 **Expenses** | Concept, amount, done. Category and payment method are optional. Quick category creation without leaving the screen.                                                                                                    |
 | 💰 **Income**   | Same flow, in green. Payroll, a sale, payday…                                                                                                                                                                           |
-| 📊 **Dash**     | Income vs expenses for the month, **Remaining** (what you have today, across your whole history) and **Free** (minus pending set-asides, with a traffic light), pie chart by category or concept, daily chart and a comparison against last month. |
+| 📊 **Dash**     | Income vs expenses for the month, **Balance** (all your income minus all your expenses, whatever month you're viewing) and **Free** (minus pending set-asides, with a traffic light), pie chart by category or concept, daily chart and a comparison against last month. |
 | 📌 **Control**  | **Envelopes**: when you get paid, you split what's already committed (rent, utilities…) and the Dash tells you what's truly free; "✓ Already paid it" turns it into a real expense. **Goals**: named savings with a progress bar and contributions. |
 | 👤 **Account**  | History with search and filters (edit or delete what slipped), Settings (categories, payment methods and frequents in the order you choose, light/dark theme), photo, email, password and account deletion.                                         |
 
@@ -51,7 +51,7 @@ phone in one hand. Everything else was built around that.
 <p align="center">
   <img src="docs/capturas/cuenta.jpeg" width="24%" alt="Account: profile, history and settings" />
   <img src="docs/capturas/control.jpeg" width="24%" alt="Control: pending envelopes with Already paid it" />
-  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: remaining with traffic light and category pie" />
+  <img src="docs/capturas/dash.jpeg" width="24%" alt="Dash: balance and category pie" />
   <img src="docs/capturas/gastos.jpeg" width="24%" alt="Log expense: Cinema $450 with Fun category" />
 </p>
 

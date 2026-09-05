@@ -24,8 +24,8 @@ type Props = {
   categorias: Categoria[];
   medios: Medio[];
   previos: { ingresos: number; gastos: number }; // totales del mes anterior, para la comparativa
-  restante: number; // saldo real al cierre del mes visible: inicial de los medios + TODO el historial
-  hayHistorial: boolean; // hay algo que sumar (movimientos o saldo inicial); si no, Restante no se muestra
+  saldo: number; // ingresos − gastos de TODO el historial: no depende del mes visible
+  hayHistorial: boolean; // hay movimientos que sumar; si no, Saldo no se muestra
   apartadosPendientes: number; // suma de apartados sin pagar hasta el mes visible
 };
 
@@ -55,7 +55,7 @@ export function DashView({
   categorias,
   medios,
   previos,
-  restante,
+  saldo,
   hayHistorial,
   apartadosPendientes,
 }: Props) {
@@ -207,7 +207,7 @@ export function DashView({
 
       {/* mientras llega el mes pedido, lo visible pulsa como "cargando" */}
       <div className={cn("flex flex-col gap-3", cambiando && "animate-pulse")}>
-        {/* colores fuera del verde/rojo del Restante y del semáforo de Libre a propósito */}
+        {/* colores fuera del verde/rojo del Saldo y del semáforo de Libre a propósito */}
         <div className="grid grid-cols-2 gap-2.5">
           <Stat
             titulo="Ingresos"
@@ -223,21 +223,21 @@ export function DashView({
           />
         </div>
 
-        {/* Restante y Libre van sobre TODO el historial (2026-09-03): "cuánto tengo
-            hoy", no "cuánto me sobró del mes"; por eso se ven aunque el mes esté vacío.
-            Restante sin pie a propósito (2026-09-04): es un saldo, no un flujo del mes */}
+        {/* Saldo y Libre van sobre TODO el historial, sin importar el mes visible
+            (2026-09-05): "cuánto tengo", no "cuánto me sobró del mes"; por eso se ven
+            aunque el mes esté vacío. Saldo sin pie a propósito: es un saldo, no un flujo */}
         {hayHistorial && (
           <>
             <Stat
-              titulo="Restante"
-              monto={restante}
-              color={restante >= 0 ? "f-gg" : "f-r"}
+              titulo="Saldo"
+              monto={saldo}
+              color={saldo >= 0 ? "f-gg" : "f-r"}
             />
             {apartadosPendientes > 0 && (
               <TileSemaforo
                 titulo="Libre"
-                monto={restante - apartadosPendientes}
-                base={restante}
+                monto={saldo - apartadosPendientes}
+                base={saldo}
                 pie={`apartados pendientes ${fmtMonto(apartadosPendientes)}`}
               />
             )}
@@ -390,9 +390,9 @@ function Stat({
   );
 }
 
-// Semáforo de Libre: qué parte del Restante sigue sin comprometer en apartados.
+// Semáforo de Libre: qué parte del Saldo sigue sin comprometer en apartados.
 // ≥70% verde fuerte (más que el f-g de Ingresos), 40–69% amarillo, <40% rojo;
-// con Restante en cero o negativo cuenta como 0%.
+// con Saldo en cero o negativo cuenta como 0%.
 function TileSemaforo({
   titulo,
   monto,
@@ -414,9 +414,7 @@ function TileSemaforo({
         <span className="text-[9.5px] font-black uppercase tracking-[0.1em]">
           {titulo}
         </span>
-        <span className="text-[10px] font-extrabold">
-          {pct}% de tu restante
-        </span>
+        <span className="text-[10px] font-extrabold">{pct}% de tu saldo</span>
       </div>
       <div className="mt-0.5 text-[21px] font-black tracking-tight">
         {fmtMonto(monto)}

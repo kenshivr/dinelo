@@ -34,7 +34,8 @@ const SUBTITULO = {
 // El tab Control agrupa el dinero con destino: medios (cuánto hay en cada lugar),
 // apartados (comprometido del mes) y metas (ahorro a largo plazo), con el
 // mismo patrón de segmentado del Dash. Orden y entrada por Medios: pedido de
-// Brayan (2026-09-04) — es la misma cuenta que el Restante del Dash.
+// Brayan (2026-09-04). Cada medio arranca de su saldo inicial; el Saldo del
+// Dash, en cambio, es solo ingresos − gastos (2026-09-05).
 export function ControlView({
   apartados,
   categorias,

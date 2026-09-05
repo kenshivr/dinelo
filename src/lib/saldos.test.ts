@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { saldosPorMedio, saldoTotal } from "./saldos";
+import { saldoActual, saldosPorMedio, type MovimientoDeSaldo } from "./saldos";
 import type { Medio } from "./tipos";
 
 const medio = (id: string, saldoInicial = 0): Medio => ({
@@ -69,58 +69,33 @@ describe("saldosPorMedio — inicial + movimientos + transferencias", () => {
   });
 });
 
-describe("saldoTotal — Restante del Dash sobre todo el historial", () => {
-  test("suma los saldos de los medios y lo registrado Sin medio", () => {
-    const total = saldoTotal(
-      [medio("banco", 1000), medio("efectivo", 200)],
-      [
-        { tipo: "ingreso", monto: 500, medioId: "banco" },
-        { tipo: "gasto", monto: 300, medioId: null },
-      ],
-      [],
-    );
-    expect(total).toBe(1400);
+describe("saldoActual — Saldo del Dash: ingresos − gastos de todo el historial", () => {
+  test("sin movimientos es cero", () => {
+    expect(saldoActual([])).toBe(0);
   });
 
-  test("una transferencia entre dos medios vivos no cambia el total", () => {
-    const total = saldoTotal(
-      [medio("banco", 1000), medio("efectivo")],
-      [],
-      [{ origenId: "banco", destinoId: "efectivo", monto: 300 }],
-    );
-    expect(total).toBe(1000);
+  test("suma todos los ingresos y resta todos los gastos", () => {
+    const saldo = saldoActual([
+      { tipo: "ingreso", monto: 1000 },
+      { tipo: "ingreso", monto: 250 },
+      { tipo: "gasto", monto: 300 },
+    ]);
+    expect(saldo).toBe(950);
   });
 
-  test("con una punta borrada el dinero sí entra o sale del total", () => {
-    const entra = saldoTotal(
-      [medio("efectivo")],
-      [],
-      [{ origenId: null, destinoId: "efectivo", monto: 300 }],
-    );
-    const sale = saldoTotal(
-      [medio("banco", 500)],
-      [],
-      [{ origenId: "banco", destinoId: null, monto: 100 }],
-    );
-    expect(entra).toBe(300);
-    expect(sale).toBe(400);
+  test("el medio no importa: lo Sin medio o de un medio borrado cuenta igual", () => {
+    const movimientos: MovimientoDeSaldo[] = [
+      { tipo: "ingreso", monto: 500, medioId: null },
+      { tipo: "gasto", monto: 100, medioId: "viejo" },
+    ];
+    expect(saldoActual(movimientos)).toBe(400);
   });
 
-  test("un gasto de un medio que ya no existe igual resta", () => {
-    const total = saldoTotal(
-      [medio("banco", 500)],
-      [{ tipo: "gasto", monto: 100, medioId: "viejo" }],
-      [],
-    );
-    expect(total).toBe(400);
-  });
-
-  test("gastar más de lo que hay deja el total en negativo", () => {
-    const total = saldoTotal(
-      [medio("banco", 100)],
-      [{ tipo: "gasto", monto: 250, medioId: "banco" }],
-      [],
-    );
-    expect(total).toBe(-150);
+  test("gastar más de lo que entró deja el saldo en negativo", () => {
+    const saldo = saldoActual([
+      { tipo: "ingreso", monto: 100 },
+      { tipo: "gasto", monto: 250 },
+    ]);
+    expect(saldo).toBe(-150);
   });
 });
