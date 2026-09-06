@@ -3,3 +3,8 @@ allowBuilds:
   esbuild: true
   sharp: false
   unrs-resolver: false
+
+# @serwist/turbopack fija browserslist 4.28.6 exacta (alerta alta de Dependabot).
+# Se levanta al parche seguro hasta que serwist actualice su pin.
+overrides:
+  browserslist: ^4.28.7
