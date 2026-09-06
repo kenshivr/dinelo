@@ -6,12 +6,20 @@ Todos los cambios notables de DiNelo se documentan aquí. El formato sigue
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-06
+
 ### Cambiado
 
 - Dash: **Restante** pasa a llamarse **Saldo** y es la suma de todos los
   ingresos menos la de todos los gastos, sin importar el mes que se esté
   viendo. Antes se cortaba al cierre del mes visible y sumaba el saldo inicial
   de los medios. **Libre** sigue siendo Saldo menos apartados pendientes.
+
+### Seguridad
+
+- Dependencias: `qs` sube a 6.16.0 y `browserslist` a 4.28.7 o superior, las
+  tres alertas de Dependabot. Como `@serwist/turbopack` fija browserslist en
+  4.28.6, la versión se levanta con un override en `pnpm-workspace.yaml`.
 
 ## [1.1.0] - 2026-09-04
 
@@ -66,6 +74,7 @@ Primera versión estable: registro de gastos e ingresos, Dash, Control
 (apartados, metas y medios con saldo), Historial con búsqueda y filtros,
 Configuración, cuenta con foto, PWA instalable y offline, e informe de admin.
 
-[Unreleased]: https://github.com/kenshivr/dinelo/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/kenshivr/dinelo/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/kenshivr/dinelo/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/kenshivr/dinelo/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/kenshivr/dinelo/releases/tag/v1.0.0
