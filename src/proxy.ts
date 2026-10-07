@@ -1,10 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { destinoSinSesion, esEntrada, esPublica } from "@/lib/rutas";
 
 // Corre antes de cada request (en Next 16 middleware pasó a llamarse proxy).
 // Hace DOS cosas: refrescar la sesión (getUser renueva el token vencido y lo
 // escribe en cookies — un Server Component no puede) y cuidar la puerta:
-// sin sesión todo redirige a /login; con sesión /login redirige a /gastos.
+// sin sesión todo redirige a /login (la raíz sirve la landing); con sesión
+// /login redirige a /gastos. Qué es público vive en lib/rutas.ts.
 export async function proxy(request: NextRequest) {
   let respuesta = NextResponse.next({ request });
 
@@ -35,31 +37,17 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const ruta = request.nextUrl.pathname;
-  // pantallas de entrada: con sesión no tienen sentido (y /registro encima
-  // pisaría la sesión actual con una cuenta nueva) → a /gastos
-  const esEntrada =
-    ruta.startsWith("/login") ||
-    ruta.startsWith("/registro") ||
-    ruta.startsWith("/recuperar");
-  // el destino de los enlaces de correo, el service worker, la página offline
-  // (el navegador los pide sin contexto de app) y las páginas legales
-  // (linkeadas desde fuera de la app) van SIN sesión
-  const esPublica =
-    esEntrada ||
-    ruta.startsWith("/auth") ||
-    ruta.startsWith("/serwist") ||
-    ruta.startsWith("/~offline") ||
-    ruta.startsWith("/privacidad") ||
-    ruta.startsWith("/terminos");
 
-  if (!user && !esPublica) {
+  if (!user && !esPublica(ruta)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    // La raíz se REESCRIBE (no redirige): el login se sirve en "/" sin salto
-    // extra — el 307 costaba ~800ms de LCP en móvil. Rutas profundas sí
-    // redirigen para que la URL visible sea /login.
+    // La raíz se REESCRIBE (no redirige): sin sesión "/" sirve la landing
+    // (1.2.0; antes servía el login) sin salto extra — el 307 costaba ~800ms
+    // de LCP en móvil. Rutas profundas sí redirigen para que la URL visible
+    // sea /login.
+    const destino = destinoSinSesion(ruta);
+    url.pathname = destino.pathname;
     const redireccion =
-      ruta === "/"
+      destino.modo === "rewrite"
         ? NextResponse.rewrite(url, { request })
         : NextResponse.redirect(url);
     // conservar las cookies que setAll haya escrito (p. ej. limpieza de sesión vencida)
@@ -69,7 +57,7 @@ export async function proxy(request: NextRequest) {
     return redireccion;
   }
 
-  if (user && esEntrada) {
+  if (user && esEntrada(ruta)) {
     const url = request.nextUrl.clone();
     url.pathname = "/gastos";
     const redireccion = NextResponse.redirect(url);

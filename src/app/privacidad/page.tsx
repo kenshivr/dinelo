@@ -42,8 +42,8 @@ export default function PrivacidadPage() {
         <p>
           DiNelo la desarrolla y opera su autor de forma independiente. Para
           cualquier tema de privacidad escribe a{" "}
-          <a href="mailto:vidal.fullstack@gmail.com" className="underline">
-            vidal.fullstack@gmail.com
+          <a href="mailto:dineloapp@gmail.com" className="underline">
+            dineloapp@gmail.com
           </a>
           .
         </p>

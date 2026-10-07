@@ -18,6 +18,12 @@ Una app para anotar un gasto en segundos, con una mano, y saber cuánto te queda
 
 <p align="center"><a href="README.en.md">🌐 Read this in English</a></p>
 
+<p align="center">
+  <a href="https://www.instagram.com/dineloapp/">Instagram @dineloapp</a> ·
+  <a href="https://www.tiktok.com/@dinelo979">TikTok @dinelo979</a> ·
+  <a href="mailto:dineloapp@gmail.com">dineloapp@gmail.com</a>
+</p>
+
 ---
 
 ## ¿Qué es?
@@ -158,7 +164,7 @@ CORREO_DESTINO=tu@gmail.com       # a dónde llega el aviso; si falta, al mismo 
 pnpm dev
 ```
 
-Abre `http://localhost:3000`, crea tu cuenta desde **Regístrate** y registra el primer gasto.
+Abre `http://localhost:3004`, crea tu cuenta desde **Regístrate** y registra el primer gasto.
 
 > El service worker está apagado en desarrollo a propósito. Lo offline y la instalación se prueban en producción.
 
@@ -195,7 +201,8 @@ Mantener apretado el ícono (Android) abre directo "Registrar gasto", "Registrar
 
 ## Estado
 
-**v1 terminada** (agosto 2026) y en producción. Ideas sin compromiso: notificaciones push, pruebas
+**v1 terminada** (agosto 2026) y en producción. **1.2.0** (octubre 2026) suma la landing pública en
+[dinelo.vercel.app](https://dinelo.vercel.app) (`/landing`, servida en `/` sin sesión) y las redes oficiales. Ideas sin compromiso: notificaciones push, pruebas
 E2E con Playwright y dominio propio.
 
 ---

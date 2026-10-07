@@ -6,6 +6,29 @@ Todos los cambios notables de DiNelo se documentan aquí. El formato sigue
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-07
+
+### Añadido
+
+- **Landing pública** en `/landing`: qué es la app, cómo funciona, una demo de
+  "Registrar gasto" con mini Dash, las funciones (Apartados, Metas, Historial,
+  tema claro u oscuro), capturas reales, pasos para instalarla en iPhone y
+  Android, preguntas frecuentes y pie con las páginas públicas y las redes.
+  Sin sesión, `/` la sirve directo (reescritura, sin redirect); con sesión `/`
+  sigue yendo a `/gastos`. Lleva título y `og:image` propios, JSON-LD
+  (`SoftwareApplication` gratis + `FAQPage`) y entra al sitemap.
+- `lib/rutas.ts`: la puerta del proxy (qué es público y a dónde va cada ruta
+  sin sesión) como funciones puras con pruebas.
+- `llms.txt` describe la landing, las páginas públicas y las redes.
+- Landing: botón para cambiar entre tema claro y oscuro en la cabecera, para
+  verla sin cuenta en los dos temas.
+
+### Cambiado
+
+- Redes oficiales de la app: Instagram @dineloapp, TikTok @dinelo979 y correo
+  dineloapp@gmail.com. Privacidad y Términos ya escriben a ese correo.
+- Capturas de la app en `public/landing/` (webp) para la landing.
+
 ## [1.1.1] - 2026-09-06
 
 ### Cambiado

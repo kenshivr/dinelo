@@ -1,0 +1,143 @@
+/* Landing pública (1.2.0, odd/tasks/landing.md). Solo lo que Tailwind y las
+   clases Bloque de la app no cubren: encabezado pegajoso, marcador amarillo
+   del titular, marco de teléfono, revelado de secciones, preguntas y
+   movimiento de controles. Todo el movimiento se apaga con reduced motion. */
+
+.landing-cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--background);
+  border-bottom: 2px solid var(--border);
+}
+
+/* marcador: la palabra clave del titular va sobre un bloque amarillo, como
+   en las piezas de redes. Negro siempre, también en tema oscuro. */
+.landing-raiz h1 em,
+.landing-raiz h2 em {
+  font-style: normal;
+  color: #111;
+  padding: 0 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background: linear-gradient(
+    transparent 10%,
+    #facc15 10%,
+    #facc15 90%,
+    transparent 90%
+  );
+}
+.landing-raiz h2 em.rosa {
+  background: linear-gradient(
+    transparent 10%,
+    #f9a8d4 10%,
+    #f9a8d4 90%,
+    transparent 90%
+  );
+}
+.landing-raiz h2 em.verde {
+  background: linear-gradient(
+    transparent 10%,
+    #4ade80 10%,
+    #4ade80 90%,
+    transparent 90%
+  );
+}
+.landing-raiz h2 em.azul {
+  background: linear-gradient(
+    transparent 10%,
+    #93c5fd 10%,
+    #93c5fd 90%,
+    transparent 90%
+  );
+}
+
+/* teléfono: marco negro con sombra dura; la captura llena el marco */
+.marco-tel {
+  border: 3px solid #111;
+  border-radius: 28px;
+  box-shadow: 8px 8px 0 var(--sh);
+  overflow: hidden;
+  background: #111;
+}
+.marco-tel img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* chips y bloques que flotan sobre el teléfono del hero */
+.flota {
+  position: absolute;
+}
+
+/* revelado: visible por defecto; "pendiente" lo agrega revelar.tsx tras montar */
+.aparece[data-estado="pendiente"] {
+  opacity: 0;
+  translate: 0 16px;
+}
+.aparece[data-estado="visto"] {
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* preguntas: el marcador nativo sale y el chevron gira al abrir */
+.landing-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+.landing-faq summary::-webkit-details-marker {
+  display: none;
+}
+.landing-faq details[open] summary svg {
+  rotate: 180deg;
+}
+
+/* barras del mini Dash de la demo */
+.barra-demo {
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* menú móvil: siempre montado; abre con fundido, desplazamiento y altura */
+.landing-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  translate: 0 -8px;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease-out,
+    translate 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.3s;
+}
+.landing-menu[data-abierto="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  translate: 0 0;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* anclas: desplazamiento suave solo si el usuario no pidió menos movimiento */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.landing-raiz) {
+    scroll-behavior: smooth;
+  }
+  .landing-faq summary svg {
+    transition: rotate 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aparece[data-estado] {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+  .landing-menu,
+  .barra-demo {
+    transition: none;
+  }
+}

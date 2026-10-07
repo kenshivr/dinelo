@@ -1,12 +1,21 @@
 # DiNelo
 
-> App web (PWA) para registrar gastos, ingresos y metas de ahorro personales. El contenido del usuario vive detrás de un login: solo las páginas de acceso son públicas.
+> App web (PWA) gratuita para registrar gastos e ingresos en tres toques y saber cuánto te queda de verdad. Se instala desde el navegador, sin tienda ni anuncios, funciona sin conexión y es de código abierto (MIT). El contenido del usuario vive detrás de un login: solo la landing y las páginas de acceso son públicas.
 
 ## Páginas públicas
 
-- [Iniciar sesión](https://dinelo.vercel.app/login): entrada a la app
+- [Landing](https://dinelo.vercel.app/): qué es, cómo funciona, cómo instalarla y preguntas frecuentes
 - [Crear cuenta](https://dinelo.vercel.app/registro): registro de usuario
+- [Iniciar sesión](https://dinelo.vercel.app/login): entrada a la app
 - [Recuperar contraseña](https://dinelo.vercel.app/recuperar): restablecer el acceso
+- [Aviso de privacidad](https://dinelo.vercel.app/privacidad)
+- [Términos y condiciones](https://dinelo.vercel.app/terminos)
+
+## Redes y contacto
+
+- Instagram: https://www.instagram.com/dineloapp/
+- TikTok: https://www.tiktok.com/@dinelo979
+- Correo: dineloapp@gmail.com
 
 ## Código
 

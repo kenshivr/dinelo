@@ -105,8 +105,8 @@ export default function TerminosPage() {
       <Seccion titulo="Ley aplicable y contacto">
         <p>
           Estos términos se rigen por las leyes de México. Dudas:{" "}
-          <a href="mailto:vidal.fullstack@gmail.com" className="underline">
-            vidal.fullstack@gmail.com
+          <a href="mailto:dineloapp@gmail.com" className="underline">
+            dineloapp@gmail.com
           </a>
           .
         </p>

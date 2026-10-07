@@ -18,6 +18,12 @@ An app to log an expense in seconds, one-handed, and know how much you truly hav
 
 <p align="center"><a href="README.md">🌐 Léelo en español</a></p>
 
+<p align="center">
+  <a href="https://www.instagram.com/dineloapp/">Instagram @dineloapp</a> ·
+  <a href="https://www.tiktok.com/@dinelo979">TikTok @dinelo979</a> ·
+  <a href="mailto:dineloapp@gmail.com">dineloapp@gmail.com</a>
+</p>
+
 ---
 
 ## What is it?
@@ -159,7 +165,7 @@ CORREO_DESTINO=you@gmail.com         # where the notice goes; defaults to CORREO
 pnpm dev
 ```
 
-Open `http://localhost:3000`, create your account from **Regístrate** and log your first expense.
+Open `http://localhost:3004`, create your account from **Regístrate** and log your first expense.
 
 > The service worker is off in development on purpose. Offline mode and installation are tested in production.
 
@@ -196,7 +202,8 @@ Long-pressing the icon (Android) opens "Log expense", "Log income" or the Dash d
 
 ## Status
 
-**v1 finished** (August 2026) and in production. Uncommitted ideas: push notifications,
+**v1 finished** (August 2026) and in production. **1.2.0** (October 2026) adds the public landing at
+[dinelo.vercel.app](https://dinelo.vercel.app) (`/landing`, served at `/` without a session) and the official social accounts. Uncommitted ideas: push notifications,
 E2E tests with Playwright and a custom domain.
 
 ---
