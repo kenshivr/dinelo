@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { fechaDe, useHoy } from "@/lib/fechas";
 import { usePerfiles, type PerfilHeader } from "@/components/perfiles-provider";
@@ -47,7 +48,7 @@ export function PageHeader({ title, conFecha = false, derecha }: Props) {
   return (
     <>
       <header className="flex items-center justify-between pt-1">
-        <span className="text-[21px] font-black tracking-tighter">DiNelo</span>
+        <Logo tamano="chico" />
         {mio && (
           <Link href="/cuenta" aria-label="Tu cuenta">
             <Avatar perfil={mio} />

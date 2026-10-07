@@ -6,6 +6,12 @@ Todos los cambios notables de DiNelo se documentan aquí. El formato sigue
 
 ## [Unreleased]
 
+### Añadido
+
+- El logo DiNelo (el bloque amarillo del login, registro, recuperar,
+  restablecer, privacidad, términos y offline, y el texto del encabezado de las
+  tabs) es un enlace a la landing: componente `components/logo.tsx`.
+
 ## [1.2.0] - 2026-10-07
 
 ### Añadido

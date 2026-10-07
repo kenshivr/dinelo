@@ -57,3 +57,4 @@ gh release create v1.2.0 --title "DiNelo 1.2.0" --notes-file "C:\Users\Admon\Dow
 ## Siguiente paso
 Brayan revisa la landing en localhost:3004 (claro y oscuro) y en el teléfono; commit, push, tag y release; luego PageSpeed de `/` para confirmar 100.
 - 7-oct (ajustes de Brayan): badge 65% de Metas en amarillo (se perdia en oscuro), gap-7 entre telefonos y etiquetas en "Asi se ve", boton de tema claro/oscuro en la cabecera (TemaBoton, next-themes + useHidratado, test RED→GREEN). 112 tests, lint y tsc OK; verificado con captura del dev server.
+- 7-oct (cierre): logo → /landing en toda la app: `src/components/logo.tsx` (grande/chico) + logo.test.tsx (RED→GREEN), usado en login, registro, recuperar, restablecer, privacidad, términos, ~offline y page-header. /landing es pública también con sesión (no rebota). 114 tests, lint, tsc OK. Documentado en CHANGELOG, release-1.2.0.md y DINELO.md.
