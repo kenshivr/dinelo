@@ -11,6 +11,9 @@ Todos los cambios notables de DiNelo se documentan aquí. El formato sigue
 - El logo DiNelo (el bloque amarillo del login, registro, recuperar,
   restablecer, privacidad, términos y offline, y el texto del encabezado de las
   tabs) es un enlace a la landing: componente `components/logo.tsx`.
+- `favicon.ico` en `src/app` (16, 32 y 48 px, generado del icono de 512): Next
+  lo sirve en `/favicon.ico` para Vercel y los servicios que solo buscan esa
+  ruta; antes respondía 404 y Vercel mostraba el logo de Next.
 
 ## [1.2.0] - 2026-10-07
 
